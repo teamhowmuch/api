@@ -4,22 +4,15 @@ phases:
   install:
     commands:
       - n 14
-      - echo node -v
       - node -v
-      - echo npm -v
       - npm -v
-      - echo install yarn...
       - npm install -g yarn
-      - echo yarn -v
       - yarn -v
   pre_build:
     commands:
-      - echo installing dependencies
       - yarn install
   build:
     commands:
-      - echo Build started on `date`
-      - echo yarn build
       - yarn run build
   post_build:
     commands:
