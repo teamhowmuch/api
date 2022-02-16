@@ -5,7 +5,7 @@ phases:
     commands:
       - echo update npm...
       - npm install -g n
-      - n latest
+      - n 14
       - npm update -g npm
       - echo node -v
       - node -v
