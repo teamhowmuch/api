@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo node -v
+      - node -v
+      - echo installing yarn...
+      - npm install -g yarn
+      - echo yarn -v
+      - yarn -v
+  pre_build:
+    commands:
+      - echo installing dependencies
+      - yarn install
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo yarn build
+      - yarn run build
+  post_build:
+    commands:
+      - Build completed on `date`
+artifacts:
+  files:
+    - dist/**
