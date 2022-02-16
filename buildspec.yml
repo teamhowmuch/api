@@ -16,4 +16,4 @@ phases:
       - yarn run build
 artifacts:
   files:
-    - **
+    - '**/*'
