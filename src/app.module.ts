@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { HealthController } from './health.controller';
 import { AuthModule } from './auth/auth.module';
 import { BankConnectionsModule } from './bank-connections/bank-connections.module';
+import { EmissionsModule } from './emissions/emissions.module';
 import * as Entities from './entity';
 import { BullModule } from '@nestjs/bull';
 import { TransactionModule } from './transaction/transaction.module';
@@ -37,6 +38,7 @@ import { TransactionModule } from './transaction/transaction.module';
     AuthModule,
     BankConnectionsModule,
     TransactionModule,
+    EmissionsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
