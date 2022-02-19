@@ -10,16 +10,10 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { isNotEmpty, IsNotEmpty, isString, IsString } from 'class-validator';
-import { JwtAuthGuard, AuthenticatedRequest } from 'src/auth/jwt-auth.guard';
+import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { BankConnectionsService } from './bank-connections.service';
-
-export class CreateRedirectDto {
-  @IsNotEmpty()
-  @IsString()
-  bankId: string;
-}
+import { CreateRedirectDto } from './dto/create-redirect.dto';
 
 @Controller('bank-connections')
 export class BankConnectionsController {

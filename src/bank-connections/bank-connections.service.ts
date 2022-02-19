@@ -6,7 +6,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { NordigenService } from './nordigen.service';
 import { Bank } from './models/bank';
-import { BankConnectionDto } from './models/bank-connection.dto';
+import { BankConnectionDto } from './dto/bank-connection.dto';
 import { Transaction } from './models/transaction';
 
 const NORDIGEN_REDIR_URL = 'exp://192.168.178.20:19000';

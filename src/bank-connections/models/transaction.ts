@@ -7,5 +7,6 @@ export interface Transaction {
   bankTransactionCode: string;
   bookingDate: Date;
   valueDate: Date;
+  creditorName: string;
   remittanceInformationUnstructured: string;
 }
