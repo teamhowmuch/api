@@ -1,27 +1,49 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class DetermineEmissionsService {}
+export class EmissionsService {
 
-function ConvertFuelExpenditureToLiters(fuelExpenditure: number) {
-    let fuelInLiters;
-    const fuelPricePerLiter = 1.95;
-    fuelInLiters = fuelExpenditure / fuelPricePerLiter;
-    //input money amount of fuel
-    //divide by price. For now: hardcoded price estimate
-    //output: fuel in liters
-    return fuelInLiters;
-}
-
-function CalculateEmissionsForFuel(fuelInLiters: number, fuelType: string) {
-    //input: Fuel in liters
-    let EmissionsPerLiterFuel: number;
-    if (fuelType == 'diesel') {
-        EmissionsPerLiterFuel = 5;
-    } else if (fuelType == 'gasoline') {
-        EmissionsPerLiterFuel = 3;
+    GetInfoFromExpenditure(){
+        //not sure if this is needed
+        //get the expenditure/transaction object from somewhere / the queue
+        //get the required info
     }
-    return fuelInLiters * EmissionsPerLiterFuel;
+
+    DetermineAdditionalInformation(expenditureCategory: string){
+        //input: expenditure category
+        //array of if loop and in it for each cateogry the additional information that can/should be asked to user
+        //return: an array of information
+        
+        let additionalInformation: string[];
+
+        if (expenditureCategory=="fuel") {
+            additionalInformation.push('fuelType')
+        }
+
+        return additionalInformation;
+    }
+
+    ConvertFuelExpenditureToLiters(fuelExpenditure: number) {
+        let fuelInLiters;
+        const fuelPricePerLiter = 1.95;
+        fuelInLiters = fuelExpenditure / fuelPricePerLiter;
+        //input money amount of fuel
+        //divide by price. For now: hardcoded price estimate
+        //output: fuel in liters
+        return fuelInLiters;
+    }
+
+    CalculateEmissionsForFuel(fuelInLiters: number, fuelType: string) {
+        //input: Fuel in liters
+        let EmissionsPerLiterFuel: number;
+        if (fuelType == 'diesel') {
+            EmissionsPerLiterFuel = 5;
+        } else if (fuelType == 'gasoline') {
+            EmissionsPerLiterFuel = 3;
+        }
+        return fuelInLiters * EmissionsPerLiterFuel;
+    }
+
 }
 
 /** 
@@ -36,7 +58,7 @@ functie1: "determine_if_additional_input_required"
 output: json object met inpout die nog ontbreekt (True or False) en if True, doorsturen naar die informatie aan de gebruiker vragen
 */ 
 
-/** Voorbeeld van een binnenkomende transactie / input1 */
+/** Voorbeeld van een binnenkomende transactie / input1 
 Transaction {
     transactionId: 628234309835;
     transactionAmount: {
@@ -46,10 +68,11 @@ Transaction {
     bankTransactionCode: eenofanderestring;
     bookingDate: Date;
     valueDate: Date;
-    remittanceInformationUnstructured: string; /** ??? */
+    remittanceInformationUnstructured: string; /** ??? 
   }
+*/ 
 
-  /** Voorbeeld van data in onze database / input2 */
+  /** Voorbeeld van data in onze database / input2 
   Userservice {
       userId: number;
       ...:
@@ -60,3 +83,5 @@ Transaction {
   Neededinfo {
       transactionamount;
   }
+
+  */
