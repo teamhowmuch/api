@@ -3,6 +3,27 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class DetermineEmissionsService {}
 
+function ConvertFuelExpenditureToLiters(fuelExpenditure: number) {
+    let fuelInLiters;
+    const fuelPricePerLiter = 1.95;
+    fuelInLiters = fuelExpenditure / fuelPricePerLiter;
+    //input money amount of fuel
+    //divide by price. For now: hardcoded price estimate
+    //output: fuel in liters
+    return fuelInLiters;
+}
+
+function CalculateEmissionsForFuel(fuelInLiters: number, fuelType: string) {
+    //input: Fuel in liters
+    let EmissionsPerLiterFuel: number;
+    if (fuelType == 'diesel') {
+        EmissionsPerLiterFuel = 5;
+    } else if (fuelType == 'gasoline') {
+        EmissionsPerLiterFuel = 3;
+    }
+    return fuelInLiters * EmissionsPerLiterFuel;
+}
+
 /** 
 functie1: "determine_if_additional_input_required"
     input1: json file met transaction data
