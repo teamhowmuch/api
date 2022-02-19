@@ -1,4 +1,5 @@
 export interface Transaction {
+  additionalInformation: string;
   transactionId: string;
   transactionAmount: {
     currency: string;
@@ -7,5 +8,6 @@ export interface Transaction {
   bankTransactionCode: string;
   bookingDate: Date;
   valueDate: Date;
+  creditorName: string;
   remittanceInformationUnstructured: string;
 }

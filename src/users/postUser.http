@@ -1,0 +1,26 @@
+POST {{host}}/auth/request-otp
+Content-Type: application/json
+
+{
+  "email": "wilgert@wilgert.nl"
+}
+
+
+###
+POST {{host}}/auth/login
+Accepts: application/json
+Content-Type: application/json
+
+{
+    "email": "wilgert@wilgert.nl",
+    "password": "15463"
+}
+
+> {%
+  client.global.set("bearer_token", response.body.json.access_token);
+%}
+
+###
+GET {{host}}/users
+Accepts: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndpbGdlcnRAd2lsZ2VydC5ubCIsInN1YiI6MywiaWF0IjoxNjQ1Mjc3MTc0LCJleHAiOjE2NDUyODMxNzR9.I2Y784zPLEuVc8m8I2NiKEPg-PFh1GE9tCO5s_U1ZmQ

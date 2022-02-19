@@ -9,6 +9,8 @@ import { AuthModule } from './auth/auth.module';
 import { BankConnectionsModule } from './bank-connections/bank-connections.module';
 import { EmissionsModule } from './emissions/emissions.module';
 import * as Entities from './entity';
+import { BullModule } from '@nestjs/bull';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -25,9 +27,17 @@ import * as Entities from './entity';
         process.env.NODE_ENV !== 'production' && process.env.DB_SYNC === 'true',
       // logging:true
     }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+        password: process.env.REDIS_PASSWORD,
+      },
+    }),
     UsersModule,
     AuthModule,
     BankConnectionsModule,
+    TransactionModule,
     EmissionsModule,
   ],
   controllers: [AppController, HealthController],
