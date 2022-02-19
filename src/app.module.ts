@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { BankConnectionsModule } from './bank-connections/bank-connections.module';
 import * as Entities from './entity';
 import { BullModule } from '@nestjs/bull';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -35,7 +36,7 @@ import { BullModule } from '@nestjs/bull';
     UsersModule,
     AuthModule,
     BankConnectionsModule,
-    TransactionsModule,
+    TransactionModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
