@@ -1,22 +1,15 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
-import { User } from 'src/entity/User';
 import { UserBankConnection } from 'src/entity/UserBankConnection';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
-import { Bank, Transaction, NordigenService } from './nordigen.service';
+import { NordigenService } from './nordigen.service';
+import { Bank } from './models/bank';
+import { BankConnectionDto } from './models/bank-connection.dto';
+import { Transaction } from './models/transaction';
 
 const NORDIGEN_REDIR_URL = 'exp://192.168.178.20:19000';
-
-export interface BankConnectionDto {
-  id: number;
-  provider: string;
-  status: 'CR' | 'EX' | 'GA' | 'GC' | 'LN' | 'RJ' | 'SA' | 'SU' | 'UA';
-  accounts: string[];
-  created_at: Date;
-  link: string;
-}
 
 @Injectable()
 export class BankConnectionsService {

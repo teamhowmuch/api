@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import axios, { AxiosError, Method as HttpMethod } from 'axios';
+import axios, { AxiosError } from 'axios';
+import { Bank } from './models/bank';
+import { GetTransactionsResponse } from './models/getTransactionsResponse';
 
 interface AuthTokenData {
   access: string;
@@ -30,15 +32,6 @@ export interface AgreementsResponseDto {
   access_scope: string[];
   accepted: string;
   institution_id: string;
-}
-
-export interface Bank {
-  id: string;
-  name: string;
-  bic: string;
-  transaction_total_days: string;
-  countries: string[];
-  logo: string;
 }
 
 @Injectable()
@@ -213,23 +206,4 @@ export class NordigenService {
     );
     return res.data.transactions;
   }
-}
-
-export interface Transaction {
-  transactionId: string;
-  transactionAmount: {
-    currency: string;
-    amount: number;
-  };
-  bankTransactionCode: string;
-  bookingDate: Date;
-  valueDate: Date;
-  remittanceInformationUnstructured: string;
-}
-
-export interface GetTransactionsResponse {
-  transactions: {
-    booked: Transaction[];
-    pending: Partial<Transaction>[];
-  };
 }
