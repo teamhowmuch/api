@@ -9,6 +9,6 @@ import { NordigenService } from './nordigen.service';
 @Module({
   imports: [TypeOrmModule.forFeature([UserBankConnection]), UsersModule],
   controllers: [BankConnectionsController],
-  providers: [BankConnectionsService, NordigenService]
+  providers: [BankConnectionsService, NordigenService],
 })
 export class BankConnectionsModule {}
