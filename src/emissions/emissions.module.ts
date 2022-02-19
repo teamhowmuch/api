@@ -22,6 +22,6 @@ export class EmissionsModule {
 
 // let emissionsForExpenditure: number = emissionsForFuelInLiters;
 
-// return emissionsForExpenditure;
+// return emissionsForExpenditure; // label (raw or validated)
 
 }
