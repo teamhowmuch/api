@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { HealthController } from './health.controller';
 import { AuthModule } from './auth/auth.module';
 import { BankConnectionsModule } from './bank-connections/bank-connections.module';
+import { EmissionsModule } from './emissions/emissions.module';
 import * as Entities from './entity';
 
 @Module({
@@ -27,6 +28,7 @@ import * as Entities from './entity';
     UsersModule,
     AuthModule,
     BankConnectionsModule,
+    EmissionsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
