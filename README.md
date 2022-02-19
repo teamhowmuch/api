@@ -28,7 +28,14 @@ Hello World
 ## Create a local user account
 
 ```sh
-$ curl -X POST -H "Content-Type: application/json" \
+curl -X POST -H "Content-Type: application/json" \
     -d '{"email": "egbert@egbertpot.nl"}' \
     http://localhost:3010/users
+```
+
+## Trigger the transaction-impport job using REST endpoint
+
+```sh
+curl -X POST -H "Content-Type: application/json" \
+    http://localhost:3010/import
 ```
