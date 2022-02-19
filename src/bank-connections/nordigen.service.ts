@@ -10,11 +10,6 @@ interface AuthTokenData {
 
 let authToken: AuthTokenData;
 
-interface NordigenKeys {
-  secretKey: string;
-  secretId: string;
-}
-
 export interface Requisition {
   id: string;
   redirect: string;
@@ -137,6 +132,8 @@ export class NordigenService {
   }
 
   async listBanks(country = 'nl') {
+    await this.generateToken();
+
     const endpoint = 'institutions';
     const res = await this.getRequest<Bank[]>(endpoint, { country });
     return res.data;
@@ -155,6 +152,8 @@ export class NordigenService {
     userLanguage?: string;
     reference?: string;
   }) {
+    await this.generateToken();
+
     const payload = {
       redirect: redirectUrl,
       reference: reference,
@@ -168,7 +167,6 @@ export class NordigenService {
   }
 
   async getRequisition(requisitionId: string): Promise<Requisition> {
-    await this.generateToken();
 
     const res = await this.getRequest<Requisition>(
       `requisitions/${requisitionId}`,
