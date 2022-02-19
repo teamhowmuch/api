@@ -63,6 +63,75 @@ echo $JWT
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVnYmVydEBlZ2JlcnRwb3QubmwiLCJzdWIiOjEsImlhdCI6MTY0NTI4NTQ0OSwiZXhwIjoxNjQ1MjkxNDQ5fQ.GprmLY2m9eNzdqZ1O6rqsFF6hFEzQeRUMgrbmws_Wio
 ```
 
+## List banks
+
+```sh
+curl -X GET -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $JWT" \
+    http://localhost:3010/banks-connections
+```
+
+```
+curl -XGET -H "Content-Type: application/json" -H "Authorization: Bearer $JWT" http://localhost:3010/bank-connections/list-banks
+```
+
+```json
+[
+    {
+        "id": "ABNAMRO_ABNANL2A",
+        "name": "ABN AMRO Bank",
+        "bic": "ABNANL2A",
+        "transaction_total_days": "540",
+        "countries": [
+            "NL"
+        ],
+        "logo": "https://cdn.nordigen.com/ais/ABNAMRO_FTSBDEFAXXX.png"
+    },
+(...)
+```
+
+```sh
+curl -XPOST -H "Content-Type: application/json" -H "Authorization: Bearer $JWT" \
+    -d '{"bankId": "SANDBOXFINANCE_SFIN0000"}' \
+    http://localhost:3010/bank-connections
+```
+
+```json
+{
+  "id": 1,
+  "provider": "nordigen",
+  "created_at": "2022-02-19T15:13:50.930Z",
+  "status": "CR",
+  "link": "https://ob.nordigen.com/psd2/start/63b46158-ce26-4912-b46d-da6c41de7e09/SANDBOXFINANCE_SFIN0000",
+  "accounts": []
+}
+```
+
+User visits the URL in `link` and gives consent via the process of the bank.
+
+Check if we now have access
+
+```sh
+curl -XPATCH -H "Content-Type: application/json" -H "Authorization: Bearer $JWT" \
+    http://localhost:3010/bank-connections/1/requisition
+```
+
+```json
+{
+  "id": 1,
+  "provider": "nordigen",
+  "created_at": "2022-02-19T15:13:50.930Z",
+  "status": "LN",
+  "link": "https://ob.nordigen.com/psd2/start/63b46158-ce26-4912-b46d-da6c41de7e09/SANDBOXFINANCE_SFIN0000",
+  "accounts": [
+    "1048f194-cb13-4cee-a55c-5ef6d8661341",
+    "582a6ea9-81c7-4def-952d-85709d9432cf"
+  ]
+}
+```
+
+Please note the `status` attribute which has now been changed from `CR` to `LN`
+
 ## Trigger the transaction-impport job using REST endpoint
 
 ```sh
