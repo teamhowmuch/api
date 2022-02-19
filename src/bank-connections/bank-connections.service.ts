@@ -31,6 +31,14 @@ export class BankConnectionsService {
     );
   }
 
+  async getActiveAccounts(userId: number) {
+    const bankConnections = await this.listBankConnections(userId);
+    return bankConnections.reduce<string[]>(
+      (acc, connection) => acc.concat(connection.accounts),
+      [],
+    );
+  }
+
   async getBankConnection(id: number): Promise<UserBankConnection> {
     const res = await this.bankConnectionRepo.findOne({ where: { id } });
     return res;
