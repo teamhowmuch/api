@@ -37,26 +37,26 @@ output: json object met inpout die nog ontbreekt (True or False) en if True, doo
 */ 
 
 /** Voorbeeld van een binnenkomende transactie / input1 */
-Transaction {
-    transactionId: 628234309835;
-    transactionAmount: {
-      currency: euro;
-      amount: 15;
-    };
-    bankTransactionCode: eenofanderestring;
-    bookingDate: Date;
-    valueDate: Date;
-    remittanceInformationUnstructured: string; /** ??? */
-  }
+// Transaction {
+//     transactionId: 628234309835;
+//     transactionAmount: {
+//       currency: euro;
+//       amount: 15;
+//     };
+//     bankTransactionCode: eenofanderestring;
+//     bookingDate: Date;
+//     valueDate: Date;
+//     remittanceInformationUnstructured: string; /** ??? */
+//   }
 
-  /** Voorbeeld van data in onze database / input2 */
-  Userservice {
-      userId: number;
-      ...:
-      ...:
-      energytype: category;
-  }
+//   /** Voorbeeld van data in onze database / input2 */
+//   Userservice {
+//       userId: number;
+//       ...:
+//       ...:
+//       energytype: category;
+//   }
 
-  Neededinfo {
-      transactionamount;
-  }
+//   Neededinfo {
+//       transactionamount;
+//   }

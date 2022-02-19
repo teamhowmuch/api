@@ -39,4 +39,10 @@ export class TransactionsService {
 
     return true;
   }
+
+  async testMethod() {
+    const x = await this.transactionQueue.getNextJob()
+    console.log(x)
+    return true
+  }
 }

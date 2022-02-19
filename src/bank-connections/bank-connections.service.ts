@@ -120,13 +120,10 @@ export class BankConnectionsService {
   ): Promise<Transaction[]> {
     const bankConnection = await this.bankConnectionRepo.findOne({
       where: {
-        id: bankConnectionId,
-        user: {
-          id: userId,
-        },
+        id: bankConnectionId
       },
     });
-
+    console.log(bankConnection);
     const transactions: Transaction[] = [];
     for (const accountId of bankConnection.requisition_data.accounts) {
       const transactionsRes = await this.nordigenService.getAccountTransactions(

@@ -14,4 +14,11 @@ export class ImportController {
     } = req;
     return this.transactionsService.importTransactions(userId);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  testMethod() {
+    console.log('x')
+   return this.transactionsService.testMethod()
+  }
 }
