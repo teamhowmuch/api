@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
-import { DetermineEmissionsServiceService } from './determine-emissions-service.service';
+import { DetermineEmissionsService } from './determine-emissions.service';
 
 @Module({
-  providers: [DetermineEmissionsServiceService]
+  providers: [DetermineEmissionsService]
 })
-export class EmissionsModule {}
+export class EmissionsModule {
+
+// 
+
+
+
+}
