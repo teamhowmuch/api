@@ -1,4 +1,5 @@
 export interface Transaction {
+  additionalInformation: string;
   transactionId: string;
   transactionAmount: {
     currency: string;
