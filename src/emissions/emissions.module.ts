@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { EmissionsService } from './emissions.service';
+import { EmissionEventsProducerService } from './emission-events-producer.service';
 
 @Module({
-  providers: [EmissionsService]
+  providers: [EmissionsService, EmissionEventsProducerService]
 })
 export class EmissionsModule {
 
