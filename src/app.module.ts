@@ -11,7 +11,6 @@ import { EmissionsModule } from './emissions/emissions.module';
 import * as Entities from './entity';
 import { BullModule } from '@nestjs/bull';
 import { TransactionModule } from './transaction/transaction.module';
-import { EmissionEventProducerService } from './emission-event-producer/emission-event-producer.service';
 
 @Module({
   imports: [
@@ -42,6 +41,6 @@ import { EmissionEventProducerService } from './emission-event-producer/emission
     EmissionsModule,
   ],
   controllers: [AppController, HealthController],
-  providers: [AppService, EmissionEventProducerService],
+  providers: [AppService],
 })
 export class AppModule {}

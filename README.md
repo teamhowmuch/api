@@ -2,8 +2,11 @@
 
 ## Prerequisites
 
-1. Install Node Version Manager `nvm`
-2. Install the latest `LTS` version of Node
+1. Install Node Version Manager `nvm` : 
+    1. See https://github.com/nvm-sh/nvm for installation instructions
+    2. Add nvm to bash or ZShell profile: https://stackoverflow.com/questions/16904658/node-version-manager-install-nvm-command-not-found
+2. Install the latest `LTS` version of Node 
+    1. `nvm install node`
 3. Start the PostgreSQL database from the `dev-db` git repository (use `docker-compose up`)
 4. Install `yarn`
 
@@ -49,6 +52,8 @@ curl -X POST -H "Content-Type: application/json" \
 {"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVnYmVydEBlZ2JlcnRwb3QubmwiLCJzdWIiOjEsImlhdCI6MTY0NTI4NTQ0OSwiZXhwIjoxNjQ1MjkxNDQ5fQ.GprmLY2m9eNzdqZ1O6rqsFF6hFEzQeRUMgrbmws_Wio"}
 ```
 
+Before you perform the next step, first request a new OTP (as you can use the OTP only one time ;-)
+
 ```sh
 curl -X POST -H "Content-Type: application/json" \
     -d '{"email": "egbert@egbertpot.nl", "password": "<the OTP on your commandline>"}' \
@@ -64,6 +69,8 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVnYmVydEBlZ2JlcnRwb3QubmwiLCJ
 ```
 
 ## List banks
+
+<!--- this next command doesn't work for PB. Gets {"statusCode":404,"message":"Cannot GET /banks-connections","error":"Not Found --->
 
 ```sh
 curl -X GET -H "Content-Type: application/json" \
@@ -138,3 +145,18 @@ Please note the `status` attribute which has now been changed from `CR` to `LN`
 curl -X POST -H "Content-Type: application/json" \
     http://localhost:3010/import
 ```
+
+## install redis locally
+
+`brew install redis` 
+
+start redis server: `redis-server /usr/local/etc/redis.conf` 
+
+download a redis client:
+- for Mac: 
+    - (Red)[https://apps.apple.com/us/app/red-ui-for-redis/id1491764008?mt=12]
+    - (Medis 2)[https://apps.apple.com/us/app/medis-2-gui-for-redis/id1579200037?mt=12]
+
+
+
+
