@@ -1,7 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { Transaction } from '../bank-connections/models/transaction';
+import { EmissifiedTransaction } from './models/emissified-transaction';
 
 @Injectable()
 export class EmissionsService {
+
+    emissify(data: Transaction): Promise<EmissifiedTransaction>{
+        //let emissifiedTransaction = {name: 'test', 'id': 5};
+        let promise = new Promise((resolve,reject) => {
+            if (data.transactionId) {       //dummy check
+                resolve({'name':'test'});   //dummy resolver
+            } else {
+                reject('transaction does not contain transaction id') //dummy reason
+            }
+        });
+        return promise;
+    }
 
     GetInfoFromExpenditure(){
         //not sure if this is needed
