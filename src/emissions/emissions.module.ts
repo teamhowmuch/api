@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { EmissionsService } from './emissions.service';
-import { EmissionEventsProducerService } from './emission-events-producer.service';
+import { EmissionsProcessor } from './emissions.processor';
 
 @Module({
-  providers: [EmissionsService, EmissionEventsProducerService]
+  providers: [EmissionsService, EmissionsProcessor]
 })
+
 export class EmissionsModule {
 
 // here subscribe to queue ? 
