@@ -6,27 +6,26 @@ import { EmissifiedTransaction } from './models/emissified-transaction';
 @Injectable()
 export class EmissionsService {
 
-    emissify(data: EnrichedTransaction): Promise<EmissifiedTransaction>{
-        //let emissifiedTransaction = {name: 'test', 'id': 5};
-        let promise = new Promise<EmissifiedTransaction>((resolve,reject) => {
-            if (data.transactionId) {       //dummy check
-                //resolve({'name':'test'});   //dummy resolver
-                let amount = Math.abs(data.transactionAmount.amount); //dummy clause. amounts that are spend are negative in the bank transactions
+    async emissify(data: EnrichedTransaction): Promise<EmissifiedTransaction>{
+        let emissifiedData: EmissifiedTransaction
+        if (data.transactionId) {       //dummy check
+            if(data.transactionAmount.amount < 0) { //amounts that are spend are negative in the bank transactions
                 //assuming it's all fuel category here
-                let fuelInLiters = this.ConvertFuelExpenditureToLiters(amount); //should add the amount here
+                let fuelInLiters = this.ConvertFuelExpenditureToLiters(data.transactionAmount.amount); //should add the amount here
                 //assuming user drives gasoline
                 let emissionsforFuel = this.CalculateEmissionsForFuel(fuelInLiters,'gasoline');
-                
-                let emissifiedData: EmissifiedTransaction = { //I have the feeling this can be done much more efficiently: exend object with extra data to make it fit new interface
+                emissifiedData = { //I have the feeling this can be done much more efficiently: exend object with extra data to make it fit new interface
                     ...data,
                     emissions : emissionsforFuel,
                 };
-                resolve(emissifiedData);
             } else {
-                reject('transaction does not contain transaction id') //dummy reason
+                console.log('this transaction is positive so probably an incoming payment');
             }
-        });
-        return promise;
+            
+        } else {
+            console.log('transaction does not contain transaction id') //dummy reason
+        }
+        return emissifiedData;
     }
 
     DetermineAdditionalInformation(expenditureCategory: string){
