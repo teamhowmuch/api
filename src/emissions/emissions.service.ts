@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Transaction } from '../bank-connections/models/transaction';
+//import { Transaction } from '../bank-connections/models/transaction';
+import { EnrichedTransaction } from '../transaction/models/enriched-transaction';
 import { EmissifiedTransaction } from './models/emissified-transaction';
 
 @Injectable()
 export class EmissionsService {
 
-    emissify(data: Transaction): Promise<EmissifiedTransaction>{
+    emissify(data: EnrichedTransaction): Promise<EmissifiedTransaction>{
         //let emissifiedTransaction = {name: 'test', 'id': 5};
         let promise = new Promise<EmissifiedTransaction>((resolve,reject) => {
             if (data.transactionId) {       //dummy check
@@ -28,7 +29,7 @@ export class EmissionsService {
                     valueDate : data.valueDate,
                     creditorName : data.creditorName,
                     remittanceInformationUnstructured : data.remittanceInformationUnstructured,
-                    //classificationLabel
+                    classificationLabel: data.classificationLabel,
                     emissions : emissionsforFuel,
                 };
                 resolve(emissifiedData);
@@ -63,9 +64,9 @@ export class EmissionsService {
         //should be extended with fuel type as additional input
         //and perhaps just merge with calculateEmissionsForFuel function
 
-        let fuelInLiters;
+        let fuelInLiters: number;
         const fuelPricePerLiter = 1.95; //hardcoded dummy value
-        fuelInLiters = fuelExpenditure / fuelPricePerLiter;
+        fuelInLiters = Math.round(fuelExpenditure / fuelPricePerLiter); //determine later on how to round
         
         return fuelInLiters;
     }

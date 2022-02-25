@@ -11,6 +11,10 @@ export class ClassifyProcessor {
   @Process()
   async classifyTransaction(job: Job<Transaction>) {
     const enriched = await this.classifyService.classify(job.data);
-    this.enrichedQueue.add(enriched);
+    //if (enriched) {
+      console.log('in processing classified transaction');
+      console.log(enriched);
+      this.enrichedQueue.add(enriched);
+    //}
   }
 }
