@@ -9,7 +9,23 @@ export class EmissionsService {
         //let emissifiedTransaction = {name: 'test', 'id': 5};
         let promise = new Promise((resolve,reject) => {
             if (data.transactionId) {       //dummy check
-                resolve({'name':'test'});   //dummy resolver
+                //resolve({'name':'test'});   //dummy resolver
+                let amount = data.transactionAmount.amount;
+                //assuming fuel category here
+                let fuelInLiters = this.ConvertFuelExpenditureToLiters(amount); //should add the amount here
+                //assuming user drives gasoline
+                let emissionsforFuel = this.CalculateEmissionsForFuel(fuelInLiters,'gasoline');
+                let emissifiedData = <EmissifiedTransaction>{};
+                //let emissifiedData = {};
+                emissifiedData.emissions = emissionsforFuel;
+                //emissifiedData.add('emissions', emissionsforFuel);
+                emissifiedData.valueDate = data.valueDate;
+                emissifiedData.transactionAmount = data.transactionAmount;
+                emissifiedData.creditorName = data.creditorName
+                emissifiedData.transactionId = data.transactionId;
+                emissifiedData.additionalInformation = data.additionalInformation;
+                //emissifiedData = {...data}
+                resolve(emissifiedData);
             } else {
                 reject('transaction does not contain transaction id') //dummy reason
             }
