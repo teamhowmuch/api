@@ -118,6 +118,9 @@ export class BankConnectionsService {
     bankConnectionId: number,
     userId: number,
   ): Promise<Transaction[]> {
+    console.log('getting transactions');
+    console.log(bankConnectionId,userId);
+
     const bankConnection = await this.bankConnectionRepo.findOne({
       where: {
         id: bankConnectionId

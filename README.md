@@ -70,8 +70,6 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVnYmVydEBlZ2JlcnRwb3QubmwiLCJ
 
 ## List banks
 
-<!--- this next command doesn't work for PB. Gets {"statusCode":404,"message":"Cannot GET /banks-connections","error":"Not Found --->
-
 ```sh
 curl -X GET -H "Content-Type: application/json" \
     -H "Authorization: Bearer $JWT" \
@@ -115,6 +113,7 @@ curl -XPOST -H "Content-Type: application/json" -H "Authorization: Bearer $JWT" 
 ```
 
 User visits the URL in `link` and gives consent via the process of the bank.
+You can just use dummy userID and PIN (ie: 1 and 1)
 
 Check if we now have access
 

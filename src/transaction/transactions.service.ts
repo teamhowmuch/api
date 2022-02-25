@@ -17,9 +17,13 @@ export class TransactionsService {
   }
 
   async importTransactions(userId: number) {
+    console.log("In importing transactions service");
+
     const connections = await this.bankConnectionService.listBankConnections(
       userId,
     );
+
+    console.log(connections);
 
     const transactions: Transaction[] = [];
 
@@ -41,6 +45,7 @@ export class TransactionsService {
   }
 
   async testMethod() {
+    const job = this.addToQueue();
     const x = await this.transactionQueue.getNextJob()
     console.log(x)
     return true

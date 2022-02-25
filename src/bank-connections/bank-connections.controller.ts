@@ -59,14 +59,22 @@ export class BankConnectionsController {
     @Param('id', ParseIntPipe) connectionId: number,
     @Req() req: AuthenticatedRequest,
   ) {
+    console.log('getting transactions for this id');
+    console.log(connectionId);
+
     const {
       user: { id: userId },
     } = req;
+
+    console.log(req.user)
 
     const res = await this.bankConnections.getTransactions(
       connectionId,
       userId,
     );
+
+    console.log(res);
+
     return res;
   }
 }

@@ -21,4 +21,11 @@ export class ImportController {
     console.log('x')
    return this.transactionsService.testMethod()
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/test')
+  testTransaction() {
+    console.log('transaction test method called')
+   return "test method is working" //this.transactionsService.testMethod()
+  }
 }
