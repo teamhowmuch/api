@@ -1,14 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from 'src/entity/User';
-import { UsersService } from 'src/users/users.service';
-import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MoreThan, Repository } from 'typeorm';
-import { UserOtp } from 'src/entity/UserOtp';
-import { generatePin, hashOtp } from './otp';
-import { subMinutes } from 'date-fns';
-import { compare } from 'bcrypt';
-import { notify } from 'node-notifier';
+import { Injectable, NotFoundException } from '@nestjs/common'
+import { User } from 'src/entity/User'
+import { UsersService } from 'src/users/users.service'
+import { JwtService } from '@nestjs/jwt'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
+import { UserOtp } from 'src/entity/UserOtp'
+import { generatePin, hashOtp } from './otp'
+import { subMinutes } from 'date-fns'
+import { compare } from 'bcrypt'
+import { notify } from 'node-notifier'
 
 @Injectable()
 export class AuthService {
@@ -20,34 +20,34 @@ export class AuthService {
   ) {}
 
   private async createNewOtp(user: User): Promise<{ otp: string }> {
-    let userOtp = await this.userOtpRepository.findOne({ user: user });
+    let userOtp = await this.userOtpRepository.findOne({ user: user })
 
     if (!userOtp) {
-      userOtp = new UserOtp();
+      userOtp = new UserOtp()
     }
 
-    const { pin, hashed } = await generatePin();
-    userOtp.otp_hashed = hashed;
-    userOtp.user = user;
-    userOtp.used = false;
-    await this.userOtpRepository.save(userOtp);
+    const { pin, hashed } = await generatePin()
+    userOtp.otp_hashed = hashed
+    userOtp.user = user
+    userOtp.used = false
+    await this.userOtpRepository.save(userOtp)
 
-    return { otp: pin };
+    return { otp: pin }
   }
 
   private async sendOtp(otp: string): Promise<void> {
-    notify(`Your OTP is ${otp}`);
-    console.log('Your OTP is', otp);
+    notify(`Your OTP is ${otp}`)
+    console.log('Your OTP is', otp)
   }
 
   async requestOtp(email: string): Promise<{ otp: string }> {
-    const user = await this.usersService.findOne({ email });
+    const user = await this.usersService.findOne({ email })
     if (user) {
-      const { otp } = await this.createNewOtp(user);
-      await this.sendOtp(otp);
-      return;
+      const { otp } = await this.createNewOtp(user)
+      await this.sendOtp(otp)
+      return
     } else {
-      throw new NotFoundException(`user with email ${email} not found`);
+      throw new NotFoundException(`user with email ${email} not found`)
     }
   }
 
@@ -55,32 +55,32 @@ export class AuthService {
     email: string,
     userEnteredOtp: string,
   ): Promise<User> {
-    const user = await this.usersService.findOne({ email });
+    const user = await this.usersService.findOne({ email })
     if (!user) {
-      return null;
+      return null
     }
 
-    const otpValidAfter = subMinutes(new Date(), 3000);
-    const storedOtp = await this.userOtpRepository.findOne({ user });
+    const otpValidAfter = subMinutes(new Date(), 3000)
+    const storedOtp = await this.userOtpRepository.findOne({ user })
 
     if (storedOtp) {
-      const compared = await compare(userEnteredOtp, storedOtp.otp_hashed);
+      const compared = await compare(userEnteredOtp, storedOtp.otp_hashed)
       if (compared && storedOtp.used === false) {
-        storedOtp.used = true;
-        await this.userOtpRepository.save(storedOtp);
-        return user;
+        storedOtp.used = true
+        await this.userOtpRepository.save(storedOtp)
+        return user
       } else {
-        return null;
+        return null
       }
     } else {
-      return null;
+      return null
     }
   }
 
   async login(user: any) {
-    const payload = { email: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id }
     return {
       access_token: this.jwtService.sign(payload),
-    };
+    }
   }
 }

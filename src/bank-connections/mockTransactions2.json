@@ -1,0 +1,25 @@
+{
+    "transactions": {
+        "booked": [
+            {
+                "bookingDate": "2022-02-24",
+                "creditorAccount": {
+                    "currency": "EUR",
+                    "iban": "NL15RABO0142175013"
+                },
+                "debtorAccount": {
+                    "iban": "NL87INGB0660657112"
+                },
+                "debtorName": "Hr LM Fernandez Correa",
+                "entryReference": "9351",
+                "remittanceInformationUnstructured": "HomeExpenses",
+                "transactionAmount": {
+                    "amount": "442.00",
+                    "currency": "EUR"
+                },
+                "valueDate": "2022-02-24"
+            }
+        ],
+        "pending": []
+    }
+}

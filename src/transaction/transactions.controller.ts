@@ -1,6 +1,31 @@
-import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { TransactionsService } from './transactions.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common'
+import { Type } from 'class-transformer'
+import { IsDate, IsOptional } from 'class-validator'
+import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { DateFilter } from 'src/bank-connections/nordigen.service'
+import { TransactionsService } from './transactions.service'
+
+class TriggerImportDto {
+  @Type(() => Date)
+  @IsDate()
+  @IsOptional()
+  readonly dateFrom?: Date
+
+  @Type(() => Date)
+  @IsDate()
+  @IsOptional()
+  readonly dateTo?: Date
+}
 
 @Controller('transactions')
 export class ImportController {
@@ -8,17 +33,11 @@ export class ImportController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  triggerImport(@Req() req: AuthenticatedRequest) {
+  triggerImport(@Req() req: AuthenticatedRequest, @Body() body: TriggerImportDto) {
     const {
       user: { id: userId },
-    } = req;
-    return this.transactionsService.importTransactions(userId);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  testMethod() {
-    console.log('x')
-   return this.transactionsService.testMethod()
+    } = req
+  
+    return this.transactionsService.importUserTransaction(userId, body)
   }
 }

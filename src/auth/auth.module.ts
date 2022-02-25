@@ -17,7 +17,7 @@ import { UserOtp } from 'src/entity/UserOtp';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '6000s' },
+      signOptions: { expiresIn: '60000s' },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
