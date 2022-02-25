@@ -18,18 +18,7 @@ export class EmissionsService {
                 let emissionsforFuel = this.CalculateEmissionsForFuel(fuelInLiters,'gasoline');
                 
                 let emissifiedData: EmissifiedTransaction = { //I have the feeling this can be done much more efficiently: exend object with extra data to make it fit new interface
-                    additionalInformation : data.additionalInformation,
-                    transactionId : data.transactionId,
-                    transactionAmount: {
-                      currency : data.transactionAmount.currency,
-                      amount: data.transactionAmount.amount,
-                    },
-                    bankTransactionCode : data.bankTransactionCode,
-                    bookingDate : data.bookingDate,
-                    valueDate : data.valueDate,
-                    creditorName : data.creditorName,
-                    remittanceInformationUnstructured : data.remittanceInformationUnstructured,
-                    classificationLabel: data.classificationLabel,
+                    ...data,
                     emissions : emissionsforFuel,
                 };
                 resolve(emissifiedData);

@@ -14,17 +14,7 @@ export class ClassifyService {
           console.log('Inferrend Coffee expenditure, adding label')
           //add label
           resolve( {
-            additionalInformation : data.additionalInformation,
-            transactionId : data.transactionId,
-            transactionAmount: {
-              currency : data.transactionAmount.currency,
-              amount: data.transactionAmount.amount,
-            },
-            bankTransactionCode : data.bankTransactionCode,
-            bookingDate : data.bookingDate,
-            valueDate : data.valueDate,
-            creditorName : data.creditorName,
-            remittanceInformationUnstructured : data.remittanceInformationUnstructured,
+            ...data,
             classificationLabel: 'fuel'
           } )
         }
