@@ -1,15 +1,6 @@
+import { EnrichedTransaction } from "../../transaction/models/enriched-transaction";
+
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface EmissifiedTransaction {
-    additionalInformation: string;
-    transactionId: string;
-    transactionAmount: {
-      currency: string;
-      amount: number;
-    };
-    bankTransactionCode: string;
-    bookingDate: Date;
-    valueDate: Date;
-    creditorName: string;
-    remittanceInformationUnstructured: string;
+export interface EmissifiedTransaction extends EnrichedTransaction {
     emissions: number;
 }

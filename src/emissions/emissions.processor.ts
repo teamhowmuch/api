@@ -12,7 +12,7 @@ export class EmissionsProcessor {
   @Process()
   async emissifyTransaction(job: Job<Transaction>) {
     const emissified = await this.emissionsService.emissify(job.data);
-    console.log(`logging emissified: ${emissified}`);
+    console.log(`logging emissified: ${JSON.stringify(emissified)}`);
     this.emissifiedQueue.add(emissified);
   }
 }
