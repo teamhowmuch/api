@@ -7,6 +7,6 @@ export class ClassifyService {
   async classify(data: Transaction): Promise<EnrichedTransaction> {
     console.log("classifying transaction");
     console.log(data);
-    return {};
+    return data;
   }
 }
