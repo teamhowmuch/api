@@ -1,5 +1,5 @@
 import { Transaction as TransactionData } from 'src/bank-connections/models/transaction'
-import { TransactionCategory } from 'src/transaction/categories'
+import { TransactionCategory } from 'src/transactions/categories'
 import {
   Entity,
   Column,
@@ -7,7 +7,12 @@ import {
   UpdateDateColumn,
   ManyToOne,
   PrimaryColumn,
+  RelationId,
+  JoinColumn,
+  OneToOne,
 } from 'typeorm'
+import { TransactionConfirmation } from './TransactionConfirmation'
+import { User } from './User'
 import { UserBankConnection } from './UserBankConnection'
 
 export enum TransactionType {
@@ -53,4 +58,16 @@ export class Transaction {
     nullable: false,
   })
   bankConnection: UserBankConnection
+
+  // -----
+  // Relations
+  @ManyToOne((type) => User, (user) => user)
+  @JoinColumn({ name: 'userId' })
+  user: User
+
+  @Column()
+  userId: number
+
+  @OneToOne((type) => TransactionConfirmation, (confirmation) => confirmation.transactionId)
+  confirmationId: number
 }

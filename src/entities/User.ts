@@ -6,6 +6,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export interface OnboardingData {
+  completed: boolean
+  completed_at: Date
+  timeTakenS: number
+}
+
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -16,6 +22,9 @@ export class User {
 
   @Column({ default: true })
   active: boolean;
+
+  @Column({type: 'json', nullable: true})
+  onboardingData: OnboardingData
 
   @CreateDateColumn()
   created_at: Date;

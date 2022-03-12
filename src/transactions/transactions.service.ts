@@ -5,11 +5,11 @@ import { InjectQueue } from '@nestjs/bull'
 import { BankConnectionsService } from 'src/bank-connections/bank-connections.service'
 import { Transaction } from 'src/bank-connections/models/transaction'
 import { DateFilter, NordigenService } from 'src/bank-connections/nordigen.service'
-import { Transaction as TransactionEntity } from '../entity/Transaction'
+import { Transaction as TransactionEntity } from '../entities/Transaction'
 import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
-import { UserBankConnection } from 'src/entity/UserBankConnection'
+import { UserBankConnection } from 'src/entities/UserBankConnection'
 
 @Injectable()
 export class TransactionsService {
@@ -29,8 +29,11 @@ export class TransactionsService {
     accountId: string,
     dateFilter?: DateFilter,
   ): Promise<Transaction[]> {
-    const transactions = await this.nordigenService.getAccountTransactions(accountId, dateFilter)
-    // const transactions = await this.nordigenService.mockGetAccountTransactions(accountId, dateFilter)
+    // const transactions = await this.nordigenService.getAccountTransactions(accountId, dateFilter)
+    const transactions = await this.nordigenService.mockGetAccountTransactions(
+      accountId,
+      dateFilter,
+    )
     return transactions.booked
   }
 
@@ -40,13 +43,14 @@ export class TransactionsService {
     accountId: string,
     dateFilter?: DateFilter,
   ) {
-    
     const account = bankConnection.account_details_data.find((el) => (el.nordigenId = accountId))
     if (!account) {
       throw new NotFoundException(`No account with id ${accountId}`)
     }
 
-    this.logger.debug(`importing transactions for bankAccount ${accountId} - ${bankConnection.requisition_data.institution_id}`)
+    this.logger.debug(
+      `importing transactions for bankAccount ${accountId} - ${bankConnection.requisition_data.institution_id}`,
+    )
 
     const transactions = await this.fetchAccountTransactions(accountId, dateFilter)
     for (const transaction of transactions) {

@@ -1,7 +1,7 @@
 import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, Repository } from 'typeorm';
-import { User } from '../entity/User';
+import { User } from '../entities/User';
 
 @Injectable()
 export class UsersService {

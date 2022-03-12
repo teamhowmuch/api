@@ -1,12 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common'
 import axios, { AxiosError } from 'axios'
-import { format, formatISO } from 'date-fns'
+import { formatISO } from 'date-fns'
 import { Bank } from './models/bank'
 import { AccountDetails } from './models/AccountDetails'
 import { GetTransactionsResponse } from './models/getTransactionsResponse'
 import { SupportedBank } from './constants'
-import { readFile, readFileSync } from 'fs'
-import mockTransactions from './mockTransactions3.json'
+import mockTransactions from './mockTransactions4.json'
 
 interface AuthTokenData {
   access: string

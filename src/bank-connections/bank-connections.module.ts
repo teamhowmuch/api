@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Transaction } from 'src/entity/Transaction';
-import { UserBankConnection } from 'src/entity/UserBankConnection';
+import { Transaction } from 'src/entities/Transaction';
+import { UserBankConnection } from 'src/entities/UserBankConnection';
 import { UsersModule } from 'src/users/users.module';
 import { BankConnectionsController } from './bank-connections.controller';
 import { BankConnectionsService } from './bank-connections.service';

@@ -9,7 +9,7 @@ import { Transaction } from '../bank-connections/models/transaction'
 import { Job, Queue } from 'bull'
 import { CleanService } from './clean.service'
 import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
-import { Transaction as TransactionEntity } from 'src/entity/Transaction'
+import { Transaction as TransactionEntity } from 'src/entities/Transaction'
 import { randomUUID } from 'crypto'
 import { TransactionsService } from './transactions.service'
 import { Logger } from '@nestjs/common'
@@ -41,7 +41,8 @@ export class StructureProcessor {
       entity.id = transaction.transactionId || transaction.endToEndId || hash.hash(transaction)
       entity.bank_data = transaction
       entity.bankConnection = bankConnection
-
+      entity.userId = bankConnection.user.id
+      console.log(entity.user, entity.userId)
       await this.transactionsService.saveTransaction(entity)
       this.categoriseQueue.add({ entity, account, bankConnection, transaction })
     } catch (error) {

@@ -1,8 +1,13 @@
-import { categoriseTransaction, CategoriseTransactionData } from '../queues'
-import { Process, Processor } from '@nestjs/bull'
+import {
+  categoriseTransaction,
+  CategoriseTransactionData,
+  purchasesFromTransactions,
+  PurchasesFromTransactionsData,
+} from '../queues'
+import { InjectQueue, Process, Processor } from '@nestjs/bull'
 
-import { Job } from 'bull'
-import { Transaction as TransactionEntity } from 'src/entity/Transaction'
+import { Job, Queue } from 'bull'
+import { Transaction as TransactionEntity } from 'src/entities/Transaction'
 
 import { TransactionsService } from './transactions.service'
 import { Logger } from '@nestjs/common'
@@ -25,7 +30,11 @@ function creditorNameToCategory(creditorName: string): TransactionCategory {
 @Processor(categoriseTransaction)
 export class CategoriseProcessor {
   private readonly logger = new Logger(CategoriseProcessor.name)
-  constructor(private transactionsService: TransactionsService) {}
+  constructor(
+    private transactionsService: TransactionsService,
+    @InjectQueue(purchasesFromTransactions)
+    private purchasesQueue: Queue<PurchasesFromTransactionsData>,
+  ) {}
 
   @Process()
   async categorise(job: Job<CategoriseTransactionData>) {
@@ -35,9 +44,13 @@ export class CategoriseProcessor {
     const category = creditorNameToCategory(transaction.creditorName)
     entity.category = category
     entity.categorized_at = new Date()
-    this.logger.debug(
-      `Category ${category.padEnd(15)} from ${transaction.creditorName}`,
-    )
+    this.logger.debug(`Category ${category.padEnd(15)} from ${transaction.creditorName}`)
     await this.transactionsService.saveTransaction(entity)
+    this.purchasesQueue.add(category, { transaction: entity })
+    console.log('pushed to category', category)
+  }
+
+  private async postCategorise(entity: TransactionCategory) {
+    // this.
   }
 }

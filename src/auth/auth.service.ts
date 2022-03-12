@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
-import { User } from 'src/entity/User'
+import { User } from 'src/entities/User'
 import { UsersService } from 'src/users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
-import { UserOtp } from 'src/entity/UserOtp'
+import { UserOtp } from 'src/entities/UserOtp'
 import { generatePin, hashOtp } from './otp'
 import { subMinutes } from 'date-fns'
 import { compare } from 'bcrypt'
 import { notify } from 'node-notifier'
+import { MailService } from './mail.service'
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(UserOtp)
     private userOtpRepository: Repository<UserOtp>,
+    private mailService: MailService
   ) {}
 
   private async createNewOtp(user: User): Promise<{ otp: string }> {
@@ -35,8 +37,9 @@ export class AuthService {
     return { otp: pin }
   }
 
-  private async sendOtp(otp: string): Promise<void> {
+  private async sendOtp(email: string, otp: string): Promise<void> {
     notify(`Your OTP is ${otp}`)
+    // this.mailService.sendOtp(email, otp)
     console.log('Your OTP is', otp)
   }
 
@@ -44,7 +47,7 @@ export class AuthService {
     const user = await this.usersService.findOne({ email })
     if (user) {
       const { otp } = await this.createNewOtp(user)
-      await this.sendOtp(otp)
+      await this.sendOtp(email, otp)
       return
     } else {
       throw new NotFoundException(`user with email ${email} not found`)

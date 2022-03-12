@@ -1,8 +1,9 @@
 import { AccountDetails } from './bank-connections/models/AccountDetails'
 import { Transaction } from './bank-connections/models/transaction'
-import { UserBankConnection } from './entity/UserBankConnection'
-import { Transaction as TransactionEntity } from 'src/entity/Transaction'
+import { UserBankConnection } from './entities/UserBankConnection'
+import { Transaction as TransactionEntity } from 'src/entities/Transaction'
 
+// -----
 export const cleanTransaction = 'cleanTransaction'
 export interface CleanTransactionData {
   bankConnection: UserBankConnection
@@ -10,6 +11,7 @@ export interface CleanTransactionData {
   transaction: Transaction
 }
 
+// -----
 export const categoriseTransaction = 'categoriseTransaction'
 export interface CategoriseTransactionData {
   bankConnection: UserBankConnection
@@ -18,4 +20,10 @@ export interface CategoriseTransactionData {
   entity: TransactionEntity
 }
 
-export const flatList = [cleanTransaction, categoriseTransaction]
+// -----
+export const purchasesFromTransactions = 'purchasesFromTransactions'
+export interface PurchasesFromTransactionsData {
+  transaction: TransactionEntity
+}
+
+export const flatList = [cleanTransaction, categoriseTransaction, purchasesFromTransactions]

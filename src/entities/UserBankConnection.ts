@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm'
 import { User } from './User'
 
@@ -45,6 +46,10 @@ export class UserBankConnection {
   @UpdateDateColumn()
   updated_at: Date
 
-  @ManyToOne(() => User, (user) => user.id, { nullable: false })
+  @ManyToOne(() => User, (user) => user)
+  @JoinColumn({ name: 'userId' })
   user: User
+
+  @Column()
+  userId: number
 }

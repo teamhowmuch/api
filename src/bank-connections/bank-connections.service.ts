@@ -1,7 +1,7 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { randomUUID } from 'crypto'
-import { RequisitionStatus, UserBankConnection } from 'src/entity/UserBankConnection'
+import { RequisitionStatus, UserBankConnection } from 'src/entities/UserBankConnection'
 import { UsersService } from 'src/users/users.service'
 import { Repository } from 'typeorm'
 import { DEFAULT_REQUISITION_VALIDITY, NordigenService } from './nordigen.service'

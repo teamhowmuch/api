@@ -8,9 +8,12 @@ import { HealthController } from './health.controller'
 import { AuthModule } from './auth/auth.module'
 import { BankConnectionsModule } from './bank-connections/bank-connections.module'
 import { EmissionsModule } from './emissions/emissions.module'
-import * as Entities from './entity'
+import * as Entities from './entities'
 import { BullModule } from '@nestjs/bull'
-import { TransactionModule } from './transaction/transaction.module'
+import { TransactionModule } from './transactions/transaction.module'
+import { PurchasesModule } from './purchases/purchases.module';
+import { ProductsModule } from './products/products.module';
+import { EmissionEventsModule } from './emission-events/emission-events.module';
 
 @Module({
   imports: [
@@ -38,6 +41,9 @@ import { TransactionModule } from './transaction/transaction.module'
     BankConnectionsModule,
     TransactionModule,
     EmissionsModule,
+    PurchasesModule,
+    ProductsModule,
+    EmissionEventsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
