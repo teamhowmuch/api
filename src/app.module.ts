@@ -11,6 +11,7 @@ import { EmissionsModule } from './emissions/emissions.module';
 import * as Entities from './entity';
 import { BullModule } from '@nestjs/bull';
 import { TransactionModule } from './transaction/transaction.module';
+import { SensorsModule } from './sensors/sensors.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { TransactionModule } from './transaction/transaction.module';
     BankConnectionsModule,
     TransactionModule,
     EmissionsModule,
+    SensorsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
