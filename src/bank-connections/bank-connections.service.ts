@@ -56,7 +56,7 @@ export class BankConnectionsService {
   async listBankConnections(userId: number): Promise<UserBankConnection[]> {
     const user = this.usersService.findOne({ id: userId })
     const bankConnections = await this.bankConnectionRepo.find({
-      where: user,
+      where: { userId },
       loadRelationIds: true,
     })
     return bankConnections
@@ -86,7 +86,7 @@ export class BankConnectionsService {
 
     const agreement = await this.nordigenService.createAgreement({
       institutionId,
-      maxHistoricalDays: Math.min(transactionDaysTotal, 365)
+      maxHistoricalDays: Math.min(transactionDaysTotal, 365),
     })
 
     const requisition = await this.nordigenService.createRequisition({

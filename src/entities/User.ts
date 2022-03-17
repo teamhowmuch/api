@@ -1,10 +1,5 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { FuelType } from 'src/products/carfuel/carfuel.service'
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
 export interface OnboardingData {
   completed: boolean
@@ -15,20 +10,23 @@ export interface OnboardingData {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  email: string;
+  email: string
 
   @Column({ default: true })
-  active: boolean;
+  active: boolean
 
-  @Column({type: 'json', nullable: true})
-  onboardingData: OnboardingData
+  @Column({ type: 'json', nullable: true })
+  onboarding_data: OnboardingData
+
+  @Column({type: 'enum', enum: FuelType, nullable: true})
+  car_fuel_type?: FuelType
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at: Date
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updated_at: Date
 }

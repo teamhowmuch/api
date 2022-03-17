@@ -1,28 +1,31 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
-import { cleanTransaction, CleanTransactionData } from '../queues'
 import { Queue } from 'bull'
 import { InjectQueue } from '@nestjs/bull'
 import { BankConnectionsService } from 'src/bank-connections/bank-connections.service'
 import { Transaction } from 'src/bank-connections/models/transaction'
 import { DateFilter, NordigenService } from 'src/bank-connections/nordigen.service'
 import { Transaction as TransactionEntity } from '../entities/Transaction'
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
 import { UserBankConnection } from 'src/entities/UserBankConnection'
+import { transaction, TransactionData } from 'src/queues'
 
 @Injectable()
 export class TransactionsService {
   private readonly logger = new Logger(TransactionsService.name)
 
   constructor(
-    @InjectQueue(cleanTransaction)
-    private cleanQueue: Queue<CleanTransactionData>,
+    @InjectQueue(transaction)
+    private transactionQueue: Queue<TransactionData>,
     private bankConnectionService: BankConnectionsService,
     private nordigenService: NordigenService,
     @InjectRepository(TransactionEntity)
     private transactionRepo: Repository<TransactionEntity>,
   ) {}
+
+  async findOne(options: FindManyOptions<TransactionEntity>) {
+    return this.transactionRepo.findOne(options)
+  }
 
   // Todo change into queue processor?
   async fetchAccountTransactions(
@@ -54,7 +57,7 @@ export class TransactionsService {
 
     const transactions = await this.fetchAccountTransactions(accountId, dateFilter)
     for (const transaction of transactions) {
-      this.cleanQueue.add({ account, transaction, bankConnection })
+      this.transactionQueue.add({ account, transaction, bankConnection })
     }
   }
 
@@ -72,7 +75,8 @@ export class TransactionsService {
     this.logger.debug(`user has ${userBankConnections.length} connections`)
 
     for (const connection of userBankConnections) {
-      if (connection.id === 13 && connection.requisition_data.status === 'LN') {
+      // TODO REMOVE THIS ID
+      if (connection.requisition_data.status === 'LN') {
         if (!connection.account_details_data) {
           await this.bankConnectionService.update(connection.id)
         }
@@ -82,7 +86,7 @@ export class TransactionsService {
     }
   }
 
-  async saveTransaction(entity: TransactionEntity): Promise<void> {
-    await this.transactionRepo.save(entity)
+  async saveTransaction(entity: TransactionEntity) {
+    return this.transactionRepo.save(entity)
   }
 }

@@ -14,37 +14,35 @@ import {
 import { User } from './User'
 import { UserBankConnection } from './UserBankConnection'
 
-export enum TransactionType {
-  PAYMENT = 'payment',
-  TRANSFER = 'transfer',
-  REFUND = 'refund',
-  ATM = 'atm',
-  OTHER = 'other',
-  UNTYPED = 'untyped',
+export enum SourceType {
+  TRANSACTION = 'TRANSACTION',
 }
 
 @Entity()
-export class Transaction {
+export class EmissionEvent {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column()
+  @Column({ type: 'real' })
   co2eq_mean: number
 
-  @Column()
-  co2eq_min: number
+  @Column({ nullable: true, type: 'real' })
+  co2eq_min?: number
 
-  @Column()
-  co2eq_max: number
+  @Column({ nullable: true, type: 'real' })
+  co2eq_max?: number
 
-  @Column()
-  source_type: 'transaction'
+  @Column({ enum: SourceType, type: 'enum' })
+  source_type: SourceType
 
   @Column()
   source_id: string
 
+  @Column({ type: 'json' })
+  data: { [key: string]: any }
+
   @Column({ type: 'timestamp with time zone' })
-  event_timestamp: Date
+  timestamp: Date
 
   // -----
   // Created + updated
@@ -53,13 +51,6 @@ export class Transaction {
 
   @UpdateDateColumn()
   updated_at: Date
-
-  // -----
-  // Relations
-  @ManyToOne(() => UserBankConnection, (bankConnection) => bankConnection.id, {
-    nullable: false,
-  })
-  bankConnection: UserBankConnection
 
   // -----
   // Relations

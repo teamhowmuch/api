@@ -3,7 +3,7 @@
     "booked": [
       {
         "bookingDate": "2021-03-26",
-        "creditorName": "ALBERT HEIJN 2203 AMSTERDAM",
+        "creditorName": "Shell 5423",
         "debtorAccount": {
           "currency": "EUR",
           "iban": "NL15RABO0142175013"
@@ -11,7 +11,37 @@
         "entryReference": "9029",
         "remittanceInformationUnstructured": "Betaalautomaat 13:47 pasnr. 020",
         "transactionAmount": {
-          "amount": "-6.67",
+          "amount": "-64.67",
+          "currency": "EUR"
+        },
+        "valueDate": "2021-03-26"
+      },
+      {
+        "bookingDate": "2022-03-01",
+        "creditorName": "Shell 5423",
+        "debtorAccount": {
+          "currency": "EUR",
+          "iban": "NL15RABO0142175013"
+        },
+        "entryReference": "9029",
+        "remittanceInformationUnstructured": "Betaalautomaat 13:47 pasnr. 020",
+        "transactionAmount": {
+          "amount": "-100.12",
+          "currency": "EUR"
+        },
+        "valueDate": "2021-03-26"
+      },
+      {
+        "bookingDate": "2022-02-01",
+        "creditorName": "Shell 5423",
+        "debtorAccount": {
+          "currency": "EUR",
+          "iban": "NL15RABO0142175013"
+        },
+        "entryReference": "9029",
+        "remittanceInformationUnstructured": "Betaalautomaat 13:47 pasnr. 020",
+        "transactionAmount": {
+          "amount": "-90.67",
           "currency": "EUR"
         },
         "valueDate": "2021-03-26"

@@ -7,13 +7,11 @@ import { UsersModule } from './users/users.module'
 import { HealthController } from './health.controller'
 import { AuthModule } from './auth/auth.module'
 import { BankConnectionsModule } from './bank-connections/bank-connections.module'
-import { EmissionsModule } from './emissions/emissions.module'
 import * as Entities from './entities'
 import { BullModule } from '@nestjs/bull'
 import { TransactionModule } from './transactions/transaction.module'
-import { PurchasesModule } from './purchases/purchases.module';
-import { ProductsModule } from './products/products.module';
-import { EmissionEventsModule } from './emission-events/emission-events.module';
+import { ProductsModule } from './products/products.module'
+import { EmissionEventsModule } from './emission-events/emission-events.module'
 
 @Module({
   imports: [
@@ -40,8 +38,6 @@ import { EmissionEventsModule } from './emission-events/emission-events.module';
     AuthModule,
     BankConnectionsModule,
     TransactionModule,
-    EmissionsModule,
-    PurchasesModule,
     ProductsModule,
     EmissionEventsModule,
   ],

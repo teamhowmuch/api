@@ -11,6 +11,21 @@ export enum TransactionCategory {
   UTILIES_ENERGY = 'utilities',
 }
 
+export interface KnownMerchant {
+  name: string
+  transactionMatch?: string
+  iconUrl?: string
+}
+export const knownMerchants: Readonly<KnownMerchant[]> = [
+  {
+    name: 'Shell',
+    transactionMatch: 'shell',
+    iconUrl:
+      'https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Shell_logo.svg/1200px-Shell_logo.svg.png',
+  },
+] as const
+export const knownMerchantsFlat = knownMerchants.map((el) => el.name)
+
 export const debtorCategoryMap: Record<TransactionCategory, readonly string[]> = {
   [TransactionCategory.CARFUEL]: ['shell', 'tamoil', 'total', 'avia', 'esso'],
   [TransactionCategory.FLIGHTS]: ['transavia', 'klm', 'easyjet', 'ryanair', 'vueling'],

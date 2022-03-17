@@ -3,8 +3,9 @@ import { HttpModule } from '@nestjs/axios'
 import { CarfuelController } from './carfuel/carfuel.controller'
 import { CarfuelService } from './carfuel/carfuel.service'
 @Module({
-  imports: [HttpModule],
+  imports    : [HttpModule],
   controllers: [CarfuelController],
-  providers: [CarfuelService],
+  providers  : [CarfuelService],
+  exports    : [CarfuelService],
 })
 export class ProductsModule {}
