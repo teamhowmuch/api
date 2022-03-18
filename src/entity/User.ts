@@ -4,7 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Sensor } from "./Sensor"
 
 @Entity()
 export class User {
@@ -16,6 +18,9 @@ export class User {
 
   @Column({ default: true })
   active: boolean;
+
+  @OneToMany(type => Sensor, sensor => sensor.user)
+  sensors: Sensor[]
 
   @CreateDateColumn()
   created_at: Date;

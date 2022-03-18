@@ -12,6 +12,12 @@ export class SensorsController {
         return this.sensorsService.getSensorTypes();
     }
 
+    @Get('sensors/all')
+    getAllSensors() {
+        console.log("in getting all sensors controller")
+        return this.sensorsService.findAll();
+    }
+
     // @UseGuards(JwtAuthGuard)
     @Get('users/sensors')
     userSensorList(){ 
