@@ -14,6 +14,15 @@ export class UsersService {
     return this.userRepository.find();
   }
 
+  async findSensors() {
+    const users = await this.userRepository.find({
+      relations: [
+        'sensors', //waarom deze notatie ipv {} zoals in docs?!
+      ],
+    });
+    return users;
+  }
+
   async findOne(params: FindConditions<User>): Promise<User> {
     const res = await this.userRepository.findOne(params);
     return res;

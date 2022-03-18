@@ -19,6 +19,9 @@ export class SensorsService {
     }
 
     async getSensorTypes() {
+        const tst = await this.usersService.findSensors();
+        console.log(tst.sensors);
+
         const userId = 1;
         const exUser = await this.usersService.findOne({ id: userId });
         
