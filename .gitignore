@@ -40,3 +40,4 @@ lerna-debug.log*
 dummy-auth-token.json
 package-lock.json
 yarn.lock
+yarn.lock
