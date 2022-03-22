@@ -18,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(UserOtp)
     private userOtpRepository: Repository<UserOtp>,
-    private mailService: MailService
+    private mailService: MailService,
   ) {}
 
   private async createNewOtp(user: User): Promise<{ otp: string }> {
@@ -54,10 +54,7 @@ export class AuthService {
     }
   }
 
-  async validateLoginRequest(
-    email: string,
-    userEnteredOtp: string,
-  ): Promise<User> {
+  async validateLoginRequest(email: string, userEnteredOtp: string): Promise<User> {
     const user = await this.usersService.findOne({ email })
     if (!user) {
       return null
@@ -80,10 +77,12 @@ export class AuthService {
     }
   }
 
-  async login(user: any) {
+  async login(user: { email: string; id: number }) {
     const payload = { email: user.email, sub: user.id }
+    const dbUser = await this.usersService.findOne({ id: user.id })
     return {
       access_token: this.jwtService.sign(payload),
+      user: dbUser,
     }
   }
 }

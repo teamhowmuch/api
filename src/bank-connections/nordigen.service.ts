@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 import axios, { AxiosError } from 'axios'
-import { formatISO } from 'date-fns'
-import { Bank } from './models/bank'
+import { addMinutes, formatISO, isFuture } from 'date-fns'
+import { NordigenBank } from './models/bank'
 import { AccountDetails } from './models/AccountDetails'
 import { GetTransactionsResponse } from './models/getTransactionsResponse'
 import { SupportedBank } from './constants'
@@ -60,6 +60,7 @@ export class NordigenService {
   private secretKey: string = process.env.NORDIGEN_KEY
   private secretId: string = process.env.NORDIGEN_ID
   private _token?: string
+  private tokenExpires?: Date
 
   constructor() {}
 
@@ -75,7 +76,7 @@ export class NordigenService {
   }
 
   async generateToken() {
-    if (this.token) {
+    if (this.token && isFuture(this.tokenExpires)) {
       return
     }
 
@@ -86,11 +87,17 @@ export class NordigenService {
 
     const response = await this.postRequest<AuthTokenData>(`token/new`, payload)
     this.token = response.data.access
+    this.tokenExpires = addMinutes(new Date(), response.data.access_expires - 10)
     return response
   }
 
   // -----
   // Generic requests
+  public async authenticatedPostRequest<T>(endpoint: string, data: Object) {
+    await this.generateToken()
+    return this.postRequest<T>(endpoint, data)
+  }
+
   public async postRequest<T>(endpoint: string, data: Object) {
     const url = new URL(`${this.baseUrl}/${endpoint}/`)
 
@@ -103,6 +110,11 @@ export class NordigenService {
       this.handleAxiosError(error)
       throw error
     }
+  }
+
+  public async authenticatedGetRequest<T>(endpoint: string, params?: Record<string, string>) {
+    await this.generateToken()
+    return this.getRequest<T>(endpoint, params)
   }
 
   public async getRequest<T>(endpoint: string, params?: Record<string, string>) {
@@ -136,9 +148,8 @@ export class NordigenService {
   // Banks
   async listBanks(country = 'nl') {
     await this.generateToken()
-
     const endpoint = 'institutions'
-    const res = await this.getRequest<Bank[]>(endpoint, { country })
+    const res = await this.getRequest<NordigenBank[]>(endpoint, { country })
     return res.data
   }
 
@@ -157,8 +168,6 @@ export class NordigenService {
     userLanguage?: string
     reference?: string
   }) {
-    await this.generateToken()
-
     const payload = {
       redirect: redirectUrl,
       reference: reference,
@@ -167,7 +176,7 @@ export class NordigenService {
       ...(agreement && { agreement: agreement }),
     }
 
-    const res = await this.postRequest<Requisition>('requisitions', payload)
+    const res = await this.authenticatedPostRequest<Requisition>('requisitions', payload)
     return res.data
   }
 

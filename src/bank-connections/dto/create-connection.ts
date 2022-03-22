@@ -4,8 +4,4 @@ export class CreateConnectionDto {
   @IsNotEmpty()
   @IsString()
   bankId: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  transaction_days_total: number;
 }

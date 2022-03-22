@@ -5,9 +5,10 @@ import { RequisitionStatus, UserBankConnection } from 'src/entities/UserBankConn
 import { UsersService } from 'src/users/users.service'
 import { Repository } from 'typeorm'
 import { DEFAULT_REQUISITION_VALIDITY, NordigenService } from './nordigen.service'
-import { Bank } from './models/bank'
+import { Bank } from '../entities/Bank'
 import { AccountDetails } from './models/AccountDetails'
 import { addDays } from 'date-fns'
+import { BanksService } from './banks.service'
 
 const NORDIGEN_REDIR_URL = 'exp://192.168.178.20:19000'
 
@@ -30,40 +31,23 @@ export class BankConnectionsService {
   constructor(
     @InjectRepository(UserBankConnection)
     private bankConnectionRepo: Repository<UserBankConnection>,
+    private banksService: BanksService,
     private usersService: UsersService,
     private nordigenService: NordigenService,
   ) {}
 
-  // ----
-  // Banks
-  async getBanks(): Promise<Bank[]> {
-    await this.nordigenService.generateToken()
-    const res = await this.nordigenService.listBanks()
-    return res
-  }
-
-  async getBank(bankId: string) {
-    const banks = await this.getBanks()
-    const bank = banks.find((el) => el.id === bankId)
-    if (!bank) {
-      throw new Error(`Bank not found ${bankId}`)
-    }
-    return bank
-  }
-
-  // ----
-  // User bank connections
-  async listBankConnections(userId: number): Promise<UserBankConnection[]> {
+  async list(userId: number): Promise<UserBankConnection[]> {
     const user = this.usersService.findOne({ id: userId })
+    console.log(userId)
     const bankConnections = await this.bankConnectionRepo.find({
       where: { userId },
-      loadRelationIds: true,
+      relations: ['bank'],
     })
     return bankConnections
   }
 
-  async getBankConnection(id: number): Promise<UserBankConnection> {
-    const res = await this.bankConnectionRepo.findOne({ where: { id } })
+  async getOne(id: number): Promise<UserBankConnection> {
+    const res = await this.bankConnectionRepo.findOne({ where: { id }, relations: ['bank'] })
 
     if (!res) {
       throw new NotFoundException(`No account with id ${id}`)
@@ -72,12 +56,9 @@ export class BankConnectionsService {
     return res
   }
 
-  async create(
-    institutionId: string,
-    transactionDaysTotal: number,
-    userId: number,
-  ): Promise<UserBankConnection> {
+  async create(institutionId: string, userId: number): Promise<UserBankConnection> {
     const user = await this.usersService.findOne({ id: userId })
+    const bank = await this.banksService.findOne({ where: { id: institutionId } })
     const bankConnection = new UserBankConnection()
     bankConnection.user = user
 
@@ -86,7 +67,7 @@ export class BankConnectionsService {
 
     const agreement = await this.nordigenService.createAgreement({
       institutionId,
-      maxHistoricalDays: Math.min(transactionDaysTotal, 365),
+      maxHistoricalDays: Math.min(bank.transaction_total_days, 365),
     })
 
     const requisition = await this.nordigenService.createRequisition({
@@ -97,6 +78,7 @@ export class BankConnectionsService {
     })
 
     bankConnection.requisition_data = requisition
+    bankConnection.bankId = institutionId
 
     await this.bankConnectionRepo.save(bankConnection)
 
@@ -106,7 +88,7 @@ export class BankConnectionsService {
   async update(bankConnectionId: number): Promise<UserBankConnection> {
     this.logger.debug(`Updating bankConnection ${bankConnectionId}`)
 
-    const bankConnection = await this.getBankConnection(bankConnectionId)
+    const bankConnection = await this.getOne(bankConnectionId)
     this.logger.debug(JSON.stringify(bankConnection, null, 2))
 
     try {
@@ -141,7 +123,7 @@ export class BankConnectionsService {
   // ----
   // Accounts
   async getActiveAccounts(userId: number) {
-    const bankConnections = await this.listBankConnections(userId)
+    const bankConnections = await this.list(userId)
     return bankConnections.reduce<string[]>(
       (acc, connection) => acc.concat(connection.requisition_data.accounts),
       [],

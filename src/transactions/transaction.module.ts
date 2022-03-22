@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TransactionsService } from './transactions.service'
-import { BullModule } from '@nestjs/bull'
-import { TransactionProcessor } from './transaction.processor'
-import { flatList } from '../queues'
+import { TransactionProcessor } from './transactionProcessor.service'
 import { CleanService } from './clean.service'
 import { ImportController } from './transactions.controller'
 import { BankConnectionsModule } from 'src/bank-connections/bank-connections.module'
@@ -18,19 +16,13 @@ import { EmissionEventsModule } from 'src/emission-events/emission-events.module
 
 @Module({
   imports: [
-    BullModule.registerQueue(...flatList.map((name) => ({ name }))),
     BankConnectionsModule,
     UsersModule,
     ProductsModule,
     EmissionEventsModule,
     TypeOrmModule.forFeature([Transaction]),
   ],
-  providers: [
-    // ConfirmationService,
-    TransactionsService,
-    TransactionProcessor,
-    CleanService,
-  ],
+  providers: [TransactionsService, TransactionProcessor, CleanService],
   controllers: [ImportController],
   exports: [],
 })

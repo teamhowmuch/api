@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -21,9 +22,20 @@ export class BankConnectionsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('')
-  getUserBankConnections(@Request() req: AuthenticatedRequest) {
+  list(@Request() req: AuthenticatedRequest) {
     const { user } = req
-    return this.bankConnections.listBankConnections(user.id)
+    return this.bankConnections.list(user.id)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getOne(@Param('id', ParseIntPipe) id: number, @Request() req: AuthenticatedRequest) {
+    const { user } = req
+    const connection = await this.bankConnections.getOne(id)
+    if (connection.userId !== user.id) {
+      throw new NotFoundException('Not found')
+    }
+    return connection
   }
 
   @UseGuards(JwtAuthGuard)
@@ -33,19 +45,13 @@ export class BankConnectionsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('list-banks')
-  listBanks() {
-    return this.bankConnections.getBanks()
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Post('')
   async createUserBankConnections(
     @Req() req: AuthenticatedRequest,
     @Body() dto: CreateConnectionDto,
   ) {
     const { user } = req
-    const res = await this.bankConnections.create(dto.bankId, dto.transaction_days_total, user.id)
+    const res = await this.bankConnections.create(dto.bankId, user.id)
     return res
   }
 }

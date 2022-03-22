@@ -8,15 +8,14 @@ import { Transaction as TransactionEntity } from '../entities/Transaction'
 import { FindManyOptions, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserBankConnection } from 'src/entities/UserBankConnection'
-import { transaction, TransactionData } from 'src/queues'
+import { TransactionProcessor } from './transactionProcessor.service'
 
 @Injectable()
 export class TransactionsService {
   private readonly logger = new Logger(TransactionsService.name)
 
   constructor(
-    @InjectQueue(transaction)
-    private transactionQueue: Queue<TransactionData>,
+    private transactionProcessorService: TransactionProcessor,
     private bankConnectionService: BankConnectionsService,
     private nordigenService: NordigenService,
     @InjectRepository(TransactionEntity)
@@ -57,7 +56,7 @@ export class TransactionsService {
 
     const transactions = await this.fetchAccountTransactions(accountId, dateFilter)
     for (const transaction of transactions) {
-      this.transactionQueue.add({ account, transaction, bankConnection })
+      await this.transactionProcessorService.process({ account, transaction, bankConnection })
     }
   }
 
@@ -71,7 +70,7 @@ export class TransactionsService {
 
   async importUserTransaction(userId: number, dateFilter?: DateFilter) {
     this.logger.debug(`importing transactions for user ${userId}`)
-    const userBankConnections = await this.bankConnectionService.listBankConnections(userId)
+    const userBankConnections = await this.bankConnectionService.list(userId)
     this.logger.debug(`user has ${userBankConnections.length} connections`)
 
     for (const connection of userBankConnections) {

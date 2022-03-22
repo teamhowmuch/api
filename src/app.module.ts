@@ -8,7 +8,6 @@ import { HealthController } from './health.controller'
 import { AuthModule } from './auth/auth.module'
 import { BankConnectionsModule } from './bank-connections/bank-connections.module'
 import * as Entities from './entities'
-import { BullModule } from '@nestjs/bull'
 import { TransactionModule } from './transactions/transaction.module'
 import { ProductsModule } from './products/products.module'
 import { EmissionEventsModule } from './emission-events/emission-events.module'
@@ -26,13 +25,6 @@ import { EmissionEventsModule } from './emission-events/emission-events.module'
       entities: Entities.Collection,
       synchronize: process.env.NODE_ENV !== 'production' && process.env.DB_SYNC === 'true',
       // logging:true
-    }),
-    BullModule.forRoot({
-      redis: {
-        host: process.env.REDIS_HOST,
-        port: parseInt(process.env.REDIS_PORT),
-        password: process.env.REDIS_PASSWORD,
-      },
     }),
     UsersModule,
     AuthModule,
