@@ -11,6 +11,7 @@ import { Sensor } from "./Sensor"
 
 @Entity()
 export class User {
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -21,7 +22,7 @@ export class User {
   active: boolean;
 
   @OneToMany(type => Sensor, sensor => sensor.user)
-  @JoinColumn()
+  //@JoinColumn()
   sensors: Sensor[]
 
   @CreateDateColumn()

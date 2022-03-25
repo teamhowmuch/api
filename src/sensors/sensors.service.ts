@@ -19,8 +19,9 @@ export class SensorsService {
     }
 
     async getSensorTypes() {
-        const tst = await this.usersService.findSensors();
-        console.log(tst.sensors);
+        const tst = await this.usersService.findSensorsForUser();
+        console.log(tst);
+        console.log(tst.sensors[0]);
 
         const userId = 1;
         const exUser = await this.usersService.findOne({ id: userId });
@@ -28,8 +29,11 @@ export class SensorsService {
         //const user = new User();
         //user.email = "Leo";
         //await this.sensorsRepository.save(user);
+        
+        /*
+        
         const user = await this.usersService.findAll();
-
+        
         const sensor1 = new Sensor();
         sensor1.sensorname = "sensor1";
         sensor1.sensortype = "P1";

@@ -14,13 +14,14 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  async findSensors() {
-    const users = await this.userRepository.find({
+  async findSensorsForUser(): Promise<User> {
+    const user = await this.userRepository.findOne({
       relations: [
-        'sensors', //waarom deze notatie ipv {} zoals in docs?!
+        'sensors', //waarom deze notatie ipv {} zoals in NestJS / TypeORM docs?!
       ],
+      where: {'id':2}
     });
-    return users;
+    return user;
   }
 
   async findOne(params: FindConditions<User>): Promise<User> {
