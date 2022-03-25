@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from "./User"
+import { SensorData} from "./SensorData"
 
 
 @Entity()
@@ -25,6 +27,10 @@ export class Sensor {
 
   @ManyToOne(type => User, user => user.sensors)
   user: User
+
+  @OneToMany(type => SensorData, data => data.sensor)
+  //@JoinColumn()
+  data: SensorData[]
 
   @CreateDateColumn()
   created_at: Date;

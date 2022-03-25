@@ -5,12 +5,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, Repository } from 'typeorm';
 import { User } from '../entity/User';
 import { Sensor } from '../entity/Sensor';
+import { SensorData } from '../entity/SensorData';
 
 @Injectable()
 export class SensorsService {
     constructor(
         @InjectRepository(Sensor)
         private sensorsRepository: Repository<Sensor>,
+        @InjectRepository(SensorData)
+        private sensorDataRepository: Repository<SensorData>,
         private usersService: UsersService
     ) {}
 
@@ -60,5 +63,21 @@ export class SensorsService {
             console.log("returning!");
             return {"userSensors": [{123:{"type":"smartMeterP1"}},{245:{"type":"bankPSD2"}}]};
         }   
+    }
+
+    async postNewSensorData(){
+        const sensorId = 14;
+        const sensor = await this.sensorsRepository.findOne({ id: sensorId });
+
+        const data = new SensorData();
+        data.sensor = sensor;
+        data.amount = 1045;
+        data.metric = "m3";
+        data.source = "Gas";
+        data.interval = false;
+        data.from = new Date();
+        data.to = new Date();
+        await this.sensorDataRepository.save(data);
+        return "data posted succesfully";
     }
 }

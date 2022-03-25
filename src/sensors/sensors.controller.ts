@@ -29,10 +29,13 @@ export class SensorsController {
 
     // @UseGuards(JwtAuthGuard)
     @Post('users/sensors/:id')
-    mockFunction(@Param('id',ParseIntPipe) id: number) {
-        console.log('user sensor is being posted!');
-        console.log(id);
+    postSensorData(){
+        return this.sensorsService.postNewSensorData();
     }
+    /*mockFunction(@Param('id',ParseIntPipe) id: number) {
+        console.log('user sensor is being posted with new data!');
+        console.log(id);
+    }*/
 
 
 }
