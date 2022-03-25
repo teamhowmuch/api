@@ -12,21 +12,14 @@ import * as Entities from './entity';
 import { BullModule } from '@nestjs/bull';
 import { TransactionModule } from './transaction/transaction.module';
 import { SensorsModule } from './sensors/sensors.module';
+import { PostgresConfigService } from './config/typeorm-config-service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DB,
-      entities: Entities.Collection,
-      synchronize:
-        process.env.NODE_ENV !== 'production' && process.env.DB_SYNC === 'true',
-      // logging:true
+    TypeOrmModule.forRootAsync({
+      useClass: PostgresConfigService,
+      inject: [PostgresConfigService],
     }),
     BullModule.forRoot({
       redis: {
@@ -43,6 +36,6 @@ import { SensorsModule } from './sensors/sensors.module';
     SensorsModule,
   ],
   controllers: [AppController, HealthController],
-  providers: [AppService],
+  providers: [AppService, PostgresConfigService],
 })
 export class AppModule {}
