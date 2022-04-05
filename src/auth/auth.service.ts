@@ -37,9 +37,13 @@ export class AuthService {
   }
 
   private async sendOtp(email: string, otp: string): Promise<void> {
-    notify(`Your OTP is ${otp}`)
-    // this.mailService.sendOtp(email, otp)
-    console.log('Your OTP is', otp)
+    if (process.env.SEND_AUTH_EMAILS === 'false') {
+      notify(`Your OTP is ${otp}`)
+      console.log('Your OTP is', otp)
+      return
+    }
+
+    this.mailService.sendOtp(email, otp)
   }
 
   async requestOtp(email: string): Promise<{ otp: string }> {
