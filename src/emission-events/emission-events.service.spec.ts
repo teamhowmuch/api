@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { TypeOrmModule } from '@nestjs/typeorm'
 // import { EmissionEvent, SourceType } from 'src/entities/EmissionEvent'
 import { EmissionEventsService } from './emission-events.service'
 

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
 import { TransactionsService } from './transactions.service'
 import { TransactionProcessor } from './transactionProcessor.service'
-import { CleanService } from './clean.service'
 import { ImportController } from './transactions.controller'
 import { BankConnectionsModule } from 'src/bank-connections/bank-connections.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
@@ -24,7 +23,7 @@ import { CarsModule } from 'src/cars/cars.module'
     CarsModule,
     TypeOrmModule.forFeature([Transaction]),
   ],
-  providers: [TransactionsService, TransactionProcessor, CleanService],
+  providers: [TransactionsService, TransactionProcessor],
   controllers: [ImportController],
   exports: [],
 })

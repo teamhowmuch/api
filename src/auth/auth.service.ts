@@ -1,12 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { User } from 'src/entities/User'
 import { UsersService } from 'src/users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserOtp } from 'src/entities/UserOtp'
-import { generatePin, hashOtp } from './otp'
-import { subMinutes } from 'date-fns'
+import { generatePin } from './otp'
 import { compare } from 'bcrypt'
 import { notify } from 'node-notifier'
 import { MailService } from './mail.service'
@@ -62,7 +61,6 @@ export class AuthService {
       return null
     }
 
-    const otpValidAfter = subMinutes(new Date(), 3000)
     const storedOtp = await this.userOtpRepository.findOne({ where: { user_id: user.id } })
 
     if (storedOtp) {

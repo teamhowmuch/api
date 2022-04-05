@@ -1,6 +1,6 @@
-import { Body, Controller, Post, Request, UnauthorizedException, UseGuards } from '@nestjs/common'
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { IsEmail, IsNotEmpty } from 'class-validator'
+import { IsEmail } from 'class-validator'
 import { AuthService } from './auth.service'
 import { AuthenticatedRequest } from './jwt-auth.guard'
 

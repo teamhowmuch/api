@@ -47,7 +47,7 @@ export class UserBankConnection {
   @UpdateDateColumn()
   updated_at: Date
 
-  @ManyToOne((type) => Bank, (bank) => bank)
+  @ManyToOne(() => Bank, (bank) => bank)
   @JoinColumn({ name: 'bank_id' })
   bank: Bank
 

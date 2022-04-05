@@ -28,7 +28,7 @@ export class Transaction {
 
   // -----
   // Relations
-  @ManyToOne((type) => UserBankConnection, (bankConnection) => bankConnection, {
+  @ManyToOne(() => UserBankConnection, (bankConnection) => bankConnection, {
     nullable: false,
   })
   @JoinColumn({ name: 'bank_connection_id' })
@@ -39,7 +39,7 @@ export class Transaction {
 
   // -----
   // Relations
-  @ManyToOne((type) => User, (user) => user)
+  @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'user_id' })
   user: User
 

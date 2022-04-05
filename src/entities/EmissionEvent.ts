@@ -1,18 +1,13 @@
-import { Transaction as TransactionData } from 'src/bank-connections/models/transaction'
-import { TransactionCategory } from 'src/transactions/categories'
 import {
   Entity,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  PrimaryColumn,
-  RelationId,
   JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm'
 import { User } from './User'
-import { UserBankConnection } from './UserBankConnection'
 
 export enum SourceType {
   TRANSACTION = 'TRANSACTION',
@@ -54,7 +49,7 @@ export class EmissionEvent {
 
   // -----
   // Relations
-  @ManyToOne((type) => User, (user) => user)
+  @ManyToOne(() => User, (user) => user)
   @JoinColumn({ name: 'user_id' })
   user: User
 

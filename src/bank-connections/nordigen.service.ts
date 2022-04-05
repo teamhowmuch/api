@@ -14,8 +14,6 @@ interface AuthTokenData {
   refresh_expires: number
 }
 
-let authToken: AuthTokenData
-
 export interface Requisition {
   id: string
   redirect: string
@@ -45,11 +43,17 @@ export interface AgreementsResponseDto {
 }
 
 export const DEFAULT_REQUISITION_PERIOD = 90
-export const DEFAULT_REQUISITION_VALIDITY = 90
+export const DEFAULT_REQUISITION_VALIDITY = 14
+
+interface AnyObject {
+  [key: string]: any
+}
 
 @Injectable()
 export class NordigenService {
   private readonly logger = new Logger(NordigenService.name)
+
+  private authToken?: AuthTokenData
 
   private baseUrl = `https://ob.nordigen.com/api/v2`
   private headers: { [key: string]: string } = {
@@ -61,8 +65,6 @@ export class NordigenService {
   private secretId: string = process.env.NORDIGEN_ID
   private _token?: string
   private tokenExpires?: Date
-
-  constructor() {}
 
   // ----
   // Token
@@ -93,12 +95,12 @@ export class NordigenService {
 
   // -----
   // Generic requests
-  public async authenticatedPostRequest<T>(endpoint: string, data: Object) {
+  public async authenticatedPostRequest<T>(endpoint: string, data: AnyObject) {
     await this.generateToken()
     return this.postRequest<T>(endpoint, data)
   }
 
-  public async postRequest<T>(endpoint: string, data: Object) {
+  public async postRequest<T>(endpoint: string, data: AnyObject) {
     const url = new URL(`${this.baseUrl}/${endpoint}/`)
 
     try {
@@ -237,10 +239,7 @@ export class NordigenService {
     return res.data.transactions
   }
 
-  async mockGetAccountTransactions(
-    accountId: string,
-    dateFilter?: DateFilter,
-  ): Promise<GetTransactionsResponse['transactions']> {
+  async mockGetAccountTransactions(): Promise<GetTransactionsResponse['transactions']> {
     const res = mockTransactions as unknown
     return (res as GetTransactionsResponse).transactions
   }

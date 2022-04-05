@@ -5,7 +5,6 @@ import { RequisitionStatus, UserBankConnection } from 'src/entities/UserBankConn
 import { UsersService } from 'src/users/users.service'
 import { Repository } from 'typeorm'
 import { DEFAULT_REQUISITION_VALIDITY, NordigenService } from './nordigen.service'
-import { Bank } from '../entities/Bank'
 import { AccountDetails } from './models/AccountDetails'
 import { addDays } from 'date-fns'
 import { BanksService } from './banks.service'
