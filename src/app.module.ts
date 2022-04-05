@@ -11,7 +11,7 @@ import * as Entities from './entities'
 import { TransactionModule } from './transactions/transaction.module'
 import { ProductsModule } from './products/products.module'
 import { EmissionEventsModule } from './emission-events/emission-events.module'
-import { CarsModule } from './cars/cars.module';
+import { CarsModule } from './cars/cars.module'
 
 @Module({
   imports: [

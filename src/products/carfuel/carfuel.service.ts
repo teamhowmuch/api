@@ -4,11 +4,11 @@ import { closestTo, differenceInHours, isAfter, parse } from 'date-fns'
 import { firstValueFrom } from 'rxjs'
 
 export enum FuelType {
-  PETROL   = 'PETROL',
-  DIESEL   = 'DIESEL',
-  LPG      = 'LPG',
+  PETROL = 'PETROL',
+  DIESEL = 'DIESEL',
+  LPG = 'LPG',
   ELECTRIC = 'ELECTRIC',
-  OTHER    = 'OTHER',
+  OTHER = 'OTHER',
 }
 
 type FuelTypeKeys = keyof typeof FuelType
@@ -19,20 +19,20 @@ interface FuelPriceDatum extends FuelKeyFields {
 }
 
 interface CbsData {
-  Perioden       : string
+  Perioden: string
   BenzineEuro95_1: number
-  Diesel_2       : number
-  Lpg_3          : number
+  Diesel_2: number
+  Lpg_3: number
 }
 
 // Source
 // https://www.co2emissiefactoren.nl/lijst-emissiefactoren/
 const CO2_EQ_PER_LITER: { [key in FuelType]: number } = {
-  [FuelType.PETROL]  : 2.784,
-  [FuelType.DIESEL]  : 3.262,
-  [FuelType.LPG]     : 1.798,
+  [FuelType.PETROL]: 2.784,
+  [FuelType.DIESEL]: 3.262,
+  [FuelType.LPG]: 1.798,
   [FuelType.ELECTRIC]: 0,
-  [FuelType.OTHER]   : 0,
+  [FuelType.OTHER]: 0,
 }
 
 const DATA_LOCATION = 'https://opendata.cbs.nl/ODataApi/odata/80416ned/TypedDataSet'
@@ -61,12 +61,12 @@ export class CarfuelService {
 
       this.fuelPricesData = res.data.value
         .map((e) => ({
-          date               : parse(e.Perioden, 'yyyyMMdd', new Date()),
-          [FuelType.LPG]     : e.Lpg_3,
-          [FuelType.DIESEL]  : e.Diesel_2,
-          [FuelType.PETROL]  : e.BenzineEuro95_1,
+          date: parse(e.Perioden, 'yyyyMMdd', new Date()),
+          [FuelType.LPG]: e.Lpg_3,
+          [FuelType.DIESEL]: e.Diesel_2,
+          [FuelType.PETROL]: e.BenzineEuro95_1,
           [FuelType.ELECTRIC]: 0,
-          [FuelType.OTHER]   : 0
+          [FuelType.OTHER]: 0,
         }))
         .filter((e) => isAfter(e.date, new Date('2020-01-01')))
       this.lastImport = new Date()

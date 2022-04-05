@@ -39,7 +39,9 @@ describe('CarfuelService', () => {
     const price = await service.getFuelPricePerLiter(date, type)
     const liters = await service.getFuelAmount(date, totalAmount, type)
     const co2 = service.calculateFuelEmissions('petrol', liters)
-    console.log(`you bought ${totalAmount} of ${type} on ${date}. We guessed price was ${price}. So that would be ${liters}L and ${co2}CO2eq`)
+    console.log(
+      `you bought ${totalAmount} of ${type} on ${date}. We guessed price was ${price}. So that would be ${liters}L and ${co2}CO2eq`,
+    )
     expect(typeof co2).toBe('number')
   })
 })

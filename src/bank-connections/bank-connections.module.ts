@@ -9,7 +9,7 @@ import { BankConnectionsService } from './bank-connections.service'
 import { NordigenService } from './nordigen.service'
 import { BanksService } from './banks.service'
 import { ScheduleModule } from '@nestjs/schedule'
-import { BanksController } from './banks.controller';
+import { BanksController } from './banks.controller'
 
 @Module({
   imports: [

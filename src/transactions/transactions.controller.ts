@@ -37,7 +37,7 @@ export class ImportController {
     const {
       user: { id: userId },
     } = req
-  
+
     return this.transactionsService.importUserTransaction(userId, body)
   }
 }

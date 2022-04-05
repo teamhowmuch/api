@@ -1,8 +1,8 @@
-import { Transaction } from './transaction';
+import { Transaction } from './transaction'
 
 export interface GetTransactionsResponse {
   transactions: {
-    booked: Transaction[];
-    pending: Partial<Transaction>[];
-  };
+    booked: Transaction[]
+    pending: Partial<Transaction>[]
+  }
 }

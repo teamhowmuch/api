@@ -1,7 +1,6 @@
-import { ConflictException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
+import { ConflictException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FindConditions, FindOneOptions, Repository } from 'typeorm'
-import { number } from 'yup'
+import { FindOneOptions, Repository } from 'typeorm'
 import { User } from '../entities/User'
 
 @Injectable()
@@ -31,14 +30,5 @@ export class UsersService {
     user.email = email
     const res = await this.userRepository.save(user)
     return res
-  }
-
-  async update(userId: number, fields: Partial<User>): Promise<void> {
-    const user = await this.findOne({where:{ id: userId }})
-    if (!user) {
-      throw new NotFoundException(`User with id ${userId} not found`)
-    }
-
-    this.userRepository.save(user)
   }
 }

@@ -15,7 +15,6 @@
 //   ConfirmationStatus,
 //   TransactionConfirmation,
 // } from 'src/entities/TransactionConfirmation'
-// import { string } from 'yup'
 // import { TransactionCategory } from './categories'
 
 // @Injectable()

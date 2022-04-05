@@ -25,7 +25,7 @@ export class EmissionEventsService {
     timestamp: Date,
     data: { [key: string]: any },
   ) {
-    console.log('craeting new emission event with user id',userId)
+    console.log('craeting new emission event with user id', userId)
     const entity = new EmissionEvent()
     entity.user_id = userId
     entity.co2eq_mean = co2eq

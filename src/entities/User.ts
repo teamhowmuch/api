@@ -14,10 +14,10 @@ export class User {
   @Column()
   email: string
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   first_name: string
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   last_name: string
 
   @Column({ default: true })

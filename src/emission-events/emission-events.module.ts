@@ -5,9 +5,9 @@ import { EmissionEventsController } from './emission-events.controller'
 import { EmissionEventsService } from './emission-events.service'
 
 @Module({
-  imports    : [TypeOrmModule.forFeature([EmissionEvent])],
+  imports: [TypeOrmModule.forFeature([EmissionEvent])],
   controllers: [EmissionEventsController],
-  providers  : [EmissionEventsService],
-  exports    : [EmissionEventsService]
+  providers: [EmissionEventsService],
+  exports: [EmissionEventsService],
 })
 export class EmissionEventsModule {}

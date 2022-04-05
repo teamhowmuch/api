@@ -14,7 +14,7 @@ import { User } from './User'
 import { FuelType } from 'src/products/carfuel/carfuel.service'
 
 @Entity()
-@Unique(['license_plate','user_id'])
+@Unique(['license_plate', 'user_id'])
 export class Car {
   @PrimaryGeneratedColumn()
   id: number
