@@ -22,7 +22,7 @@ export class AuthService {
   ) {}
 
   private async createNewOtp(user: User): Promise<{ otp: string }> {
-    let userOtp = await this.userOtpRepository.findOne({ user: user })
+    let userOtp = await this.userOtpRepository.findOne({ where: { user_id: user.id } })
 
     if (!userOtp) {
       userOtp = new UserOtp()
@@ -30,7 +30,7 @@ export class AuthService {
 
     const { pin, hashed } = await generatePin()
     userOtp.otp_hashed = hashed
-    userOtp.user = user
+    userOtp.user_id = user.id
     userOtp.used = false
     await this.userOtpRepository.save(userOtp)
 
@@ -44,24 +44,26 @@ export class AuthService {
   }
 
   async requestOtp(email: string): Promise<{ otp: string }> {
-    const user = await this.usersService.findOne({ email })
+    const user = await this.usersService.findOne({ where: { email } })
     if (user) {
       const { otp } = await this.createNewOtp(user)
       await this.sendOtp(email, otp)
       return
     } else {
-      throw new NotFoundException(`user with email ${email} not found`)
+      const newUser = await this.usersService.create({ email })
+      const { otp } = await this.createNewOtp(newUser)
+      await this.sendOtp(email, otp)
     }
   }
 
   async validateLoginRequest(email: string, userEnteredOtp: string): Promise<User> {
-    const user = await this.usersService.findOne({ email })
+    const user = await this.usersService.findOne({ where: { email } })
     if (!user) {
       return null
     }
 
     const otpValidAfter = subMinutes(new Date(), 3000)
-    const storedOtp = await this.userOtpRepository.findOne({ user })
+    const storedOtp = await this.userOtpRepository.findOne({ where: { user_id: user.id } })
 
     if (storedOtp) {
       const compared = await compare(userEnteredOtp, storedOtp.otp_hashed)
@@ -79,7 +81,7 @@ export class AuthService {
 
   async login(user: { email: string; id: number }) {
     const payload = { email: user.email, sub: user.id }
-    const dbUser = await this.usersService.findOne({ id: user.id })
+    const dbUser = await this.usersService.findOne({where:{ id: user.id }})
     return {
       access_token: this.jwtService.sign(payload),
       user: dbUser,

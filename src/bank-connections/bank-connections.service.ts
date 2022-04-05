@@ -37,10 +37,14 @@ export class BankConnectionsService {
   ) {}
 
   async list(userId: number): Promise<UserBankConnection[]> {
-    const user = this.usersService.findOne({ id: userId })
-    console.log(userId)
+    const user = this.usersService.findOne({ where: { id: userId } })
+
+    if (!user) {
+      throw new NotFoundException('No user with that id found')
+    }
+
     const bankConnections = await this.bankConnectionRepo.find({
-      where: { userId },
+      where: { user_id: userId },
       relations: ['bank'],
     })
     return bankConnections
@@ -57,7 +61,7 @@ export class BankConnectionsService {
   }
 
   async create(institutionId: string, userId: number): Promise<UserBankConnection> {
-    const user = await this.usersService.findOne({ id: userId })
+    const user = await this.usersService.findOne({ where: { id: userId } })
     const bank = await this.banksService.findOne({ where: { id: institutionId } })
     const bankConnection = new UserBankConnection()
     bankConnection.user = user
@@ -78,7 +82,7 @@ export class BankConnectionsService {
     })
 
     bankConnection.requisition_data = requisition
-    bankConnection.bankId = institutionId
+    bankConnection.bank_id = institutionId
 
     await this.bankConnectionRepo.save(bankConnection)
 

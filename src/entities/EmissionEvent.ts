@@ -55,9 +55,9 @@ export class EmissionEvent {
   // -----
   // Relations
   @ManyToOne((type) => User, (user) => user)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user: User
 
   @Column()
-  userId: number
+  user_id: number
 }

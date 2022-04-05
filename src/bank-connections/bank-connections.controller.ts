@@ -32,7 +32,7 @@ export class BankConnectionsController {
   async getOne(@Param('id', ParseIntPipe) id: number, @Request() req: AuthenticatedRequest) {
     const { user } = req
     const connection = await this.bankConnections.getOne(id)
-    if (connection.userId !== user.id) {
+    if (connection.user_id !== user.id) {
       throw new NotFoundException('Not found')
     }
     return connection

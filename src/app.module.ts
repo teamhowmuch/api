@@ -11,6 +11,7 @@ import * as Entities from './entities'
 import { TransactionModule } from './transactions/transaction.module'
 import { ProductsModule } from './products/products.module'
 import { EmissionEventsModule } from './emission-events/emission-events.module'
+import { CarsModule } from './cars/cars.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { EmissionEventsModule } from './emission-events/emission-events.module'
     TransactionModule,
     ProductsModule,
     EmissionEventsModule,
+    CarsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

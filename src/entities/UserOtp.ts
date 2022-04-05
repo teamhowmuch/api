@@ -6,27 +6,30 @@ import {
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
-} from 'typeorm';
-import { User } from './User';
+} from 'typeorm'
+import { User } from './User'
 
 @Entity()
 export class UserOtp {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column()
-  otp_hashed: string;
+  otp_hashed: string
 
   @Column()
-  used: boolean;
+  used: boolean
 
   @CreateDateColumn()
-  created_at: Date;
+  created_at: Date
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updated_at: Date
 
-  @OneToOne(() => User)
-  @JoinColumn()
-  user: User;
+  @OneToOne(() => User, { cascade: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User
+
+  @Column()
+  user_id: number
 }

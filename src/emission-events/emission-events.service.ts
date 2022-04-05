@@ -10,7 +10,7 @@ export class EmissionEventsService {
   ) {}
 
   async find(userId: number) {
-    return this.emissionEventRepo.find({ where: { userId } })
+    return this.emissionEventRepo.find({ where: { user_id: userId } })
   }
 
   async findOne(options: FindOneOptions<EmissionEvent>): Promise<EmissionEvent> {
@@ -23,10 +23,11 @@ export class EmissionEventsService {
     sourceType: SourceType,
     sourceId: number | string,
     timestamp: Date,
-    data: {[key:string]:any}
+    data: { [key: string]: any },
   ) {
+    console.log('craeting new emission event with user id',userId)
     const entity = new EmissionEvent()
-    entity.userId = userId
+    entity.user_id = userId
     entity.co2eq_mean = co2eq
     entity.source_type = sourceType
     entity.source_id = sourceId + ''

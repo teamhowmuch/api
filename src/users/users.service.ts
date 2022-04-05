@@ -1,6 +1,6 @@
 import { ConflictException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FindConditions, Repository } from 'typeorm'
+import { FindConditions, FindOneOptions, Repository } from 'typeorm'
 import { number } from 'yup'
 import { User } from '../entities/User'
 
@@ -15,8 +15,8 @@ export class UsersService {
     return this.userRepository.find()
   }
 
-  async findOne(params: FindConditions<User>): Promise<User> {
-    const res = await this.userRepository.findOne(params)
+  async findOne(options: FindOneOptions<User>): Promise<User> {
+    const res = await this.userRepository.findOne(options)
     return res
   }
 
@@ -34,13 +34,9 @@ export class UsersService {
   }
 
   async update(userId: number, fields: Partial<User>): Promise<void> {
-    const user = await this.findOne({ id: userId })
+    const user = await this.findOne({where:{ id: userId }})
     if (!user) {
       throw new NotFoundException(`User with id ${userId} not found`)
-    }
-
-    if (fields.car_fuel_type) {
-      user.car_fuel_type = fields.car_fuel_type
     }
 
     this.userRepository.save(user)

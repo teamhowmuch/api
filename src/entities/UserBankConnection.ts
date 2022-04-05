@@ -48,16 +48,16 @@ export class UserBankConnection {
   updated_at: Date
 
   @ManyToOne((type) => Bank, (bank) => bank)
-  @JoinColumn({ name: 'bankId' })
+  @JoinColumn({ name: 'bank_id' })
   bank: Bank
 
   @Column()
-  bankId: string
+  bank_id: string
 
   @ManyToOne(() => User, (user) => user)
-  @JoinColumn({ name: 'userId' })
+  @JoinColumn({ name: 'user_id' })
   user: User
 
   @Column()
-  userId: number
+  user_id: number
 }
