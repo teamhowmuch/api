@@ -59,6 +59,16 @@ export class BanksService {
         await this.bankRepository.save(entity)
         this.logger.log(`Imported ${entity.name}`)
       }
+
+      const entity = new Bank()
+      entity.id = 'nl_bunq_oauth2'
+      entity.transaction_total_days = 365
+      entity.logo =
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Bunq_%28bank%29_company_logo_2017.svg/2048px-Bunq_%28bank%29_company_logo_2017.svg.png'
+      entity.bic = 'BUNQNL2AXXX'
+      entity.name = 'bunq'
+      entity.provider = 'tink'
+      await this.bankRepository.save(entity)
     } catch (error) {
       this.logger.error('Error importing banks')
       this.logger.error(error)

@@ -10,6 +10,7 @@ import { NordigenService } from './nordigen.service'
 import { BanksService } from './banks.service'
 import { ScheduleModule } from '@nestjs/schedule'
 import { BanksController } from './banks.controller'
+import { TinkService } from './tink.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { BanksController } from './banks.controller'
     UsersModule,
   ],
   controllers: [BankConnectionsController, BanksController],
-  providers: [BankConnectionsService, NordigenService, BanksService],
+  providers: [BankConnectionsService, NordigenService, BanksService, TinkService],
   exports: [BankConnectionsService, NordigenService],
 })
 export class BankConnectionsModule {}

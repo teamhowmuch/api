@@ -18,7 +18,7 @@ export class Bank {
   name: string
 
   @Column()
-  provider: 'nordigen'
+  provider: 'nordigen' | 'tink'
 
   @Column()
   bic: string

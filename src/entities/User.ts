@@ -15,10 +15,7 @@ export class User {
   email: string
 
   @Column({ nullable: true })
-  first_name: string
-
-  @Column({ nullable: true })
-  last_name: string
+  name: string
 
   @Column({ default: true })
   active: boolean
