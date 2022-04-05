@@ -1,18 +1,7 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common'
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common'
 import { Type } from 'class-transformer'
 import { IsDate, IsOptional } from 'class-validator'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
-import { DateFilter } from 'src/bank-connections/nordigen.service'
 import { TransactionsService } from './transactions.service'
 
 class TriggerImportDto {

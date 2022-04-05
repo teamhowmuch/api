@@ -1,16 +1,4 @@
-import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
-import { Requisition } from 'src/bank-connections/nordigen.service'
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
-  PrimaryColumn,
-} from 'typeorm'
-import { User } from './User'
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, PrimaryColumn } from 'typeorm'
 
 export enum RequisitionStatus {
   PREINITIAL = 'preinitial',

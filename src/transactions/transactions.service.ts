@@ -1,6 +1,4 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
-import { Queue } from 'bull'
-import { InjectQueue } from '@nestjs/bull'
 import { BankConnectionsService } from 'src/bank-connections/bank-connections.service'
 import { Transaction } from 'src/bank-connections/models/transaction'
 import { DateFilter, NordigenService } from 'src/bank-connections/nordigen.service'

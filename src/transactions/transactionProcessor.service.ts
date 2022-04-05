@@ -5,7 +5,7 @@ import hasher from 'node-object-hash'
 import { debtorCategoryMap, TransactionCategory } from './categories'
 import { SourceType } from 'src/entities/EmissionEvent'
 import { UsersService } from 'src/users/users.service'
-import { CarfuelService, FuelType } from 'src/products/carfuel/carfuel.service'
+import { CarfuelService } from 'src/products/carfuel/carfuel.service'
 import { EmissionEventsService } from 'src/emission-events/emission-events.service'
 import { Transaction } from 'src/bank-connections/models/transaction'
 import { UserBankConnection } from 'src/entities/UserBankConnection'
@@ -43,7 +43,6 @@ export class TransactionProcessor {
   async process({
     bankConnection,
     transaction,
-    account,
   }: {
     bankConnection: UserBankConnection
     transaction: Transaction
