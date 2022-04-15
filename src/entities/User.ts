@@ -1,9 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 
-export interface OnboardingData {
-  completed: boolean
-  completed_at: Date
-  timeTakenS: number
+export interface AnyObject {
+  [key: string]: any
 }
 
 @Entity()
@@ -21,7 +19,10 @@ export class User {
   active: boolean
 
   @Column({ type: 'json', nullable: true })
-  onboarding_data: OnboardingData
+  onboarding_data: AnyObject
+
+  @Column({ type: 'json', nullable: true })
+  journey_data: AnyObject
 
   @CreateDateColumn()
   created_at: Date

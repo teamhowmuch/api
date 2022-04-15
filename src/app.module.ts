@@ -12,6 +12,7 @@ import { TransactionModule } from './transactions/transaction.module'
 import { ProductsModule } from './products/products.module'
 import { EmissionEventsModule } from './emission-events/emission-events.module'
 import { CarsModule } from './cars/cars.module'
+import { SentryModule } from '@ntegral/nestjs-sentry'
 
 @Module({
   imports: [
@@ -26,6 +27,11 @@ import { CarsModule } from './cars/cars.module'
       entities: Entities.Collection,
       synchronize: process.env.NODE_ENV !== 'production' && process.env.DB_SYNC === 'true',
       // logging:true
+    }),
+    SentryModule.forRoot({
+      dsn: 'https://f4c1bb286a2c44c3a38fb07945c5c052@o1193141.ingest.sentry.io/6334997',
+      debug: process.env.NODE_ENV !== 'development',
+      environment: process.env.NODE_ENV,
     }),
     UsersModule,
     AuthModule,

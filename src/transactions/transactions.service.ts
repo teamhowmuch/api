@@ -29,8 +29,8 @@ export class TransactionsService {
     accountId: string,
     dateFilter?: DateFilter,
   ): Promise<Transaction[]> {
-    const transactions = await this.nordigenService.getAccountTransactions(accountId, dateFilter)
-    // const transactions = await this.nordigenService.mockGetAccountTransactions()
+    // const transactions = await this.nordigenService.getAccountTransactions(accountId, dateFilter)
+    const transactions = await this.nordigenService.mockGetAccountTransactions()
     return transactions.booked
   }
 

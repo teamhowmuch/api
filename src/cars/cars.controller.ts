@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common'
@@ -21,6 +22,13 @@ class CreateCarDto {
 @Controller('cars')
 export class CarsController {
   constructor(private carsService: CarsService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('lookup')
+  get(@Query('license_plate') license_plate: string) {
+    console.log(license_plate)
+    return this.carsService.lookup(license_plate)
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post()

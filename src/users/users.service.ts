@@ -32,7 +32,10 @@ export class UsersService {
     return res
   }
 
-  async update(userId: number, { name }: { name?: string }) {
+  async update(
+    userId: number,
+    { name, onboarding_data }: Partial<Pick<User, 'onboarding_data' | 'name'>>,
+  ) {
     const user = await this.userRepository.findOne({ where: { id: userId } })
 
     if (!user) {
@@ -41,7 +44,12 @@ export class UsersService {
 
     if (name) {
       user.name = name
-      await this.userRepository.save(user)
     }
+
+    if (onboarding_data) {
+      user.onboarding_data = onboarding_data
+    }
+
+    await this.userRepository.save(user)
   }
 }

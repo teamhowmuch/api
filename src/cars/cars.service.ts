@@ -31,6 +31,24 @@ export class CarsService {
     private usersService: UsersService,
   ) {}
 
+  async lookup(licensePlate: string) {
+    try {
+      const data = await this.overheidService.lookupLicensePlate(licensePlate)
+      const car = new Car()
+      car.license_plate = licensePlate
+      car.brand = data.merk
+      car.type = data.handelsbenaming
+      car.fuel_types = data.brandstof.map((e) => e.brandstof_omschrijving).join('+')
+      car.fuel_type_simplified = normalizeCarFuel(car.fuel_types)
+      car.build_year = format(new Date(data.datum_eerste_tenaamstelling_in_nederland_dt), 'yyyy')
+      return car
+    } catch (error) {
+      if ('response' in error && error.response.status === 404) {
+        throw new NotFoundException(`No car exists with license plate ${licensePlate}`)
+      }
+    }
+  }
+
   async create(userId: number, licensePlate: string) {
     const user = await this.usersService.findOne({ where: { id: userId } })
     if (!user) {
@@ -56,7 +74,7 @@ export class CarsService {
     } catch (error) {
       console.log(error)
       if ('response' in error && error.response.status === 404) {
-        return new NotFoundException(`No car exists with license plate ${licensePlate}`)
+        throw new NotFoundException(`No car exists with license plate ${licensePlate}`)
       } else {
         throw error
       }

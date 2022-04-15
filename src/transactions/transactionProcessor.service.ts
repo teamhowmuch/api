@@ -16,6 +16,7 @@ const hash = hasher({ sort: true, coerce: true })
 
 function creditorNameToCategory(creditorName: string): TransactionCategory {
   let result = TransactionCategory.OTHER
+
   for (const category in debtorCategoryMap) {
     if (
       debtorCategoryMap[category as TransactionCategory].some((searchElement) =>
@@ -79,7 +80,13 @@ export class TransactionProcessor {
       transactionEntity = await this.transactionsService.saveTransaction(transactionEntity)
       console.log('saved transaction with userid', userId)
 
-      const transactionCategory = creditorNameToCategory(transaction.creditorName)
+      let transactionCategory
+      if (!transaction.creditorName) {
+        console.log('unknown transaction creditor', JSON.stringify(transaction))
+        transactionCategory = TransactionCategory.OTHER
+      } else {
+        transactionCategory = creditorNameToCategory(transaction.creditorName)
+      }
 
       // It's carfuelTime, process
       if (transactionCategory === TransactionCategory.CARFUEL) {
