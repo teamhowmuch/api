@@ -13,6 +13,7 @@ import { ProductsModule } from './products/products.module'
 import { EmissionEventsModule } from './emission-events/emission-events.module'
 import { CarsModule } from './cars/cars.module'
 import { SentryModule } from '@ntegral/nestjs-sentry'
+import { MerchantsModule } from './merchants/merchants.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { SentryModule } from '@ntegral/nestjs-sentry'
     ProductsModule,
     EmissionEventsModule,
     CarsModule,
+    MerchantsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

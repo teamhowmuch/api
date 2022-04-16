@@ -13,43 +13,51 @@ export enum TransactionCategory {
 
 export interface KnownMerchant {
   name: string
-  transactionMatch?: string
+  searchPattern: string
+  category: TransactionCategory
   iconUrl?: string
 }
 export const knownMerchants: Readonly<KnownMerchant[]> = [
   {
     name: 'Shell',
-    transactionMatch: 'shell',
-    iconUrl:
-      'https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Shell_logo.svg/1200px-Shell_logo.svg.png',
+    searchPattern: 'shell',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://1000logos.net/wp-content/uploads/2017/06/Shell-Logo.png',
+  },
+  {
+    name: 'Texaco',
+    searchPattern: 'texaco',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://1000logos.net/wp-content/uploads/2020/09/Texaco-Emblem.jpg',
+  },
+  {
+    name: 'Esso',
+    searchPattern: 'esso',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://1000logos.net/wp-content/uploads/2021/03/Esso-logo-1536x1024.png',
+  },
+  {
+    name: 'BP',
+    searchPattern: 'bp ',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://1000logos.net/wp-content/uploads/2016/10/BP-Logo-1024x640.png',
+  },
+  {
+    name: 'Tamoil',
+    searchPattern: 'tamoil',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://tamoil.nl/wp-content/uploads/2017/10/Tamoil-logo-hoge-resolutie.jpg',
+  },
+  {
+    name: 'TinQ',
+    searchPattern: 'tinq',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://travelcard.nl/wp-content/uploads/2017/11/17.-tinq.png',
+  },
+  {
+    name: 'Total',
+    searchPattern: 'total',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://www.tariefcoach.nl/upload/pdf/2018/07/Total-logo-1024x768.png',
   },
 ] as const
-export const knownMerchantsFlat = knownMerchants.map((el) => el.name)
-
-export const debtorCategoryMap: Record<TransactionCategory, readonly string[]> = {
-  [TransactionCategory.CARFUEL]: ['shell', 'tamoil', 'total', 'avia', 'esso'],
-  [TransactionCategory.FLIGHTS]: ['transavia', 'klm', 'easyjet', 'ryanair', 'vueling'],
-  [TransactionCategory.GROCERIES]: [
-    'marqt',
-    'albert heijn',
-    'jumbo',
-    'dirk',
-    'ekodis',
-    'ekoplaza',
-    'odin',
-    'vomar',
-  ],
-  [TransactionCategory.INSURANCE]: ['allianz', 'ohra', 'inshared', 'centraal beheer'],
-  [TransactionCategory.OTHER]: [],
-  [TransactionCategory.PRODUCTS]: ['coolblue', 'bol.com', 'praxis', 'gamma'],
-  [TransactionCategory.RENT]: [],
-  [TransactionCategory.TELECOMMUNICATION]: ['kpn', 't-mobile', 'ziggo'],
-  [TransactionCategory.UNCATEGORISED]: [],
-  [TransactionCategory.UTILIES_ENERGY]: [
-    'greenchoice',
-    'eneco',
-    'essent',
-    'vattenfall',
-    'vandebron',
-  ],
-} as const

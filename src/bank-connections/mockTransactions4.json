@@ -45,6 +45,21 @@
           "currency": "EUR"
         },
         "valueDate": "2021-03-26"
+      },
+      {
+        "bookingDate": "2022-04-13",
+        "creditorName": "Texaco Edam",
+        "debtorAccount": {
+          "currency": "EUR",
+          "iban": "NL15RABO0142175013"
+        },
+        "entryReference": "9029",
+        "remittanceInformationUnstructured": "Betaalautomaat 13:47 pasnr. 020",
+        "transactionAmount": {
+          "amount": "-123.67",
+          "currency": "EUR"
+        },
+        "valueDate": "2022-04-13"
       }
     ]
   }

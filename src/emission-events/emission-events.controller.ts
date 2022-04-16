@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common'
+import { Controller, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { EmissionEventsService } from './emission-events.service'
 
@@ -11,5 +11,12 @@ export class EmissionEventsController {
   async list(@Req() req: AuthenticatedRequest) {
     const userId = req.user.id
     return this.emissionEventsService.find(userId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getOne(@Param('id', ParseIntPipe) eventId: number, @Req() req: AuthenticatedRequest) {
+    const userId = req.user.id
+    return this.emissionEventsService.findOne({ where: { id: eventId, user_id: userId } })
   }
 }

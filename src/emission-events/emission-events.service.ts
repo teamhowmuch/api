@@ -10,7 +10,7 @@ export class EmissionEventsService {
   ) {}
 
   async find(userId: number) {
-    return this.emissionEventRepo.find({ where: { user_id: userId } })
+    return this.emissionEventRepo.find({ where: { user_id: userId }, order: { timestamp: 'DESC' } })
   }
 
   async findOne(options: FindOneOptions<EmissionEvent>): Promise<EmissionEvent> {

@@ -2,7 +2,7 @@ import { Transaction as TransactionEntity } from 'src/entities/Transaction'
 import { TransactionsService } from './transactions.service'
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common'
 import hasher from 'node-object-hash'
-import { debtorCategoryMap, TransactionCategory } from './categories'
+import { knownMerchants, KnownMerchant, TransactionCategory } from './categories'
 import { SourceType } from 'src/entities/EmissionEvent'
 import { UsersService } from 'src/users/users.service'
 import { CarfuelService } from 'src/products/carfuel/carfuel.service'
@@ -14,19 +14,25 @@ import { CarsService } from 'src/cars/cars.service'
 
 const hash = hasher({ sort: true, coerce: true })
 
-function creditorNameToCategory(creditorName: string): TransactionCategory {
-  let result = TransactionCategory.OTHER
+function extractMerchant(transaction: Transaction): KnownMerchant | null {
+  console.log('analysing transaction', transaction)
+  if (!transaction.creditorName) {
+    console.warn('unknown transaction creditor / unreadable format')
+    console.log(JSON.stringify(transaction))
+    return null
+  }
+  const { creditorName } = transaction
+  const creditorNameLower = creditorName.toLowerCase()
+  console.log('analysing')
 
-  for (const category in debtorCategoryMap) {
-    if (
-      debtorCategoryMap[category as TransactionCategory].some((searchElement) =>
-        creditorName.toLowerCase().includes(searchElement),
-      )
-    ) {
-      result = category as TransactionCategory
+  for (const merchant of knownMerchants) {
+    if (creditorNameLower.includes(merchant.searchPattern)) {
+      console.log('Analysed merchantName', creditorNameLower, 'resolved to', merchant)
+      return merchant
     }
   }
-  return result
+  console.log('Analysed merchantName', creditorNameLower, 'resolved to nothing')
+  return null
 }
 
 @Injectable()
@@ -80,61 +86,56 @@ export class TransactionProcessor {
       transactionEntity = await this.transactionsService.saveTransaction(transactionEntity)
       console.log('saved transaction with userid', userId)
 
-      let transactionCategory
-      if (!transaction.creditorName) {
-        console.log('unknown transaction creditor', JSON.stringify(transaction))
-        transactionCategory = TransactionCategory.OTHER
-      } else {
-        transactionCategory = creditorNameToCategory(transaction.creditorName)
-      }
+      const merchant = extractMerchant(transaction)
 
       // It's carfuelTime, process
-      if (transactionCategory === TransactionCategory.CARFUEL) {
-        const user = await this.usersService.findOne({ where: { id: userId } })
-        const cars = await this.carsService.list(userId)
-        const userCarFuelType = cars[0]?.fuel_type_simplified
+      if (merchant) {
+        if (merchant.category === TransactionCategory.CARFUEL) {
+          const user = await this.usersService.findOne({ where: { id: userId } })
+          const cars = await this.carsService.list(userId)
+          const userCarFuelType = cars[0]?.fuel_type_simplified
 
-        if (userCarFuelType) {
-          const transactionDate = new Date(transaction.bookingDate)
-          const amount = Math.abs(transaction.transactionAmount.amount)
+          if (userCarFuelType) {
+            const transactionDate = new Date(transaction.bookingDate)
+            const amount = Math.abs(transaction.transactionAmount.amount)
 
-          const liters = await this.carfuelService.getFuelAmount(
-            transactionDate,
-            amount,
-            userCarFuelType,
-          )
-          const price = await this.carfuelService.getFuelPricePerLiter(
-            transactionDate,
-            userCarFuelType,
-          )
-          const co2eq_mean = await this.carfuelService.calculateFuelEmissions(
-            userCarFuelType,
-            liters,
-          )
+            const liters = await this.carfuelService.getFuelAmount(
+              transactionDate,
+              amount,
+              userCarFuelType,
+            )
+            const price = await this.carfuelService.getFuelPricePerLiter(
+              transactionDate,
+              userCarFuelType,
+            )
+            const co2eq_mean = await this.carfuelService.calculateFuelEmissions(
+              userCarFuelType,
+              liters,
+            )
 
-          const data = {
-            transaction_type: TransactionCategory.CARFUEL,
-            transaction_amount: amount,
-            carfuel_type: userCarFuelType,
-            carfuel_amount: liters,
-            carfuel_price: price,
-            vendor: 'Shell',
-            vendor_icon: 'https://itanks.eu/app/uploads/2018/07/Shell-logo.png',
+            const data = {
+              transaction_type: TransactionCategory.CARFUEL,
+              transaction_amount: amount,
+              carfuel_type: userCarFuelType,
+              carfuel_amount: liters,
+              carfuel_price: price,
+              merchant,
+            }
+
+            await this.emissionEventService.create(
+              user.id,
+              co2eq_mean,
+              SourceType.TRANSACTION,
+              id,
+              transactionDate,
+              data,
+            )
+
+            transactionEntity.processed = false
+            await this.transactionsService.saveTransaction(transactionEntity)
+            return true
+            this.logger.debug('G')
           }
-
-          await this.emissionEventService.create(
-            user.id,
-            co2eq_mean,
-            SourceType.TRANSACTION,
-            id,
-            transactionDate,
-            data,
-          )
-
-          transactionEntity.processed = false
-          await this.transactionsService.saveTransaction(transactionEntity)
-          return true
-          this.logger.debug('G')
         }
       }
     } catch (error) {
