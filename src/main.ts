@@ -1,6 +1,5 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { SentryService } from '@ntegral/nestjs-sentry'
 import { AppModule } from './app.module'
 
 const PORT = process.env.PORT || 3010
@@ -12,7 +11,6 @@ async function bootstrap() {
 
   console.log(`Starting app on port ${PORT}`)
 
-  app.useLogger(SentryService.SentryServiceInstance())
   await app.listen(PORT)
 }
 bootstrap()

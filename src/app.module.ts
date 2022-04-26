@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
@@ -12,8 +12,9 @@ import { TransactionModule } from './transactions/transaction.module'
 import { ProductsModule } from './products/products.module'
 import { EmissionEventsModule } from './emission-events/emission-events.module'
 import { CarsModule } from './cars/cars.module'
-import { SentryModule } from '@ntegral/nestjs-sentry'
 import { MerchantsModule } from './merchants/merchants.module'
+import { SentryModule } from './sentry/sentry.module'
+import * as Sentry from '@sentry/node'
 
 @Module({
   imports: [
@@ -33,7 +34,6 @@ import { MerchantsModule } from './merchants/merchants.module'
       dsn: 'https://f4c1bb286a2c44c3a38fb07945c5c052@o1193141.ingest.sentry.io/6334997',
       debug: process.env.NODE_ENV !== 'development',
       environment: process.env.NODE_ENV,
-      logLevels: ['debug', 'error', 'warn'],
     }),
     UsersModule,
     AuthModule,
@@ -43,8 +43,16 @@ import { MerchantsModule } from './merchants/merchants.module'
     EmissionEventsModule,
     CarsModule,
     MerchantsModule,
+    SentryModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(Sentry.Handlers.requestHandler()).forRoutes({
+      path: '*',
+      method: RequestMethod.ALL,
+    })
+  }
+}

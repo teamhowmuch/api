@@ -1,4 +1,10 @@
-import { Controller, Get, Logger, MethodNotAllowedException } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Logger,
+  MethodNotAllowedException,
+  NotFoundException,
+} from '@nestjs/common'
 import { AppService } from './app.service'
 
 @Controller()
@@ -12,5 +18,15 @@ export class AppController {
   @Get()
   get(): MethodNotAllowedException {
     return new MethodNotAllowedException()
+  }
+
+  @Get('error')
+  generateError() {
+    throw new Error('Some error')
+  }
+
+  @Get('log')
+  generateLog() {
+    throw new NotFoundException()
   }
 }
