@@ -6,6 +6,7 @@ import { AccountDetails } from './models/AccountDetails'
 import { GetTransactionsResponse } from './models/getTransactionsResponse'
 import { SupportedBank } from './constants'
 import mockTransactions from './mockTransactions4.json'
+import { Cron, CronExpression } from '@nestjs/schedule'
 
 interface AuthTokenData {
   access: string
@@ -75,6 +76,11 @@ export class NordigenService {
 
   private get token() {
     return this._token
+  }
+
+  @Cron(CronExpression.EVERY_12_HOURS)
+  async refreshToken() {
+    this.generateToken()
   }
 
   async generateToken() {
