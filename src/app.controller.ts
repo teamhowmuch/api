@@ -1,9 +1,13 @@
-import { Controller, Get, MethodNotAllowedException } from '@nestjs/common'
+import { Controller, Get, Logger, MethodNotAllowedException } from '@nestjs/common'
 import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  private logger = new Logger(AppController.name)
+
+  constructor(private readonly appService: AppService) {
+    this.logger.debug('Starting app')
+  }
 
   @Get()
   get(): MethodNotAllowedException {
