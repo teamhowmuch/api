@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -18,6 +19,8 @@ import { CreateConnectionDto } from './dto/create-connection'
 
 @Controller('bank-connections')
 export class BankConnectionsController {
+  private logger = new Logger(BankConnectionsController.name)
+
   constructor(private bankConnections: BankConnectionsService) {}
 
   @UseGuards(JwtAuthGuard)
@@ -51,7 +54,7 @@ export class BankConnectionsController {
     @Body() dto: CreateConnectionDto,
   ) {
     const { user } = req
-    const res = await this.bankConnections.create(dto.bankId, user.id)
+    const res = await this.bankConnections.create(dto.bank_id, user.id, dto.redirect_url)
     return res
   }
 }

@@ -3,5 +3,9 @@ import { IsNotEmpty, IsString } from 'class-validator'
 export class CreateConnectionDto {
   @IsNotEmpty()
   @IsString()
-  bankId: string
+  bank_id: string
+
+  @IsNotEmpty()
+  @IsString()
+  redirect_url: string
 }

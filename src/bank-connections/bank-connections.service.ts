@@ -9,7 +9,7 @@ import { AccountDetails } from './models/AccountDetails'
 import { addDays } from 'date-fns'
 import { BanksService } from './banks.service'
 
-const NORDIGEN_REDIR_URL = 'exp://192.168.178.20:19000'
+// const ALLOWED_REDIRECT_URLS = ['exp://192.168.178.20:19000']
 
 const STATUS_MAP: Record<string, RequisitionStatus> = {
   CR: RequisitionStatus.INITIAL,
@@ -59,13 +59,21 @@ export class BankConnectionsService {
     return res
   }
 
-  async create(institutionId: string, userId: number): Promise<UserBankConnection> {
+  async create(
+    institutionId: string,
+    userId: number,
+    redirectUrl: string,
+  ): Promise<UserBankConnection> {
     const user = await this.usersService.findOne({ where: { id: userId } })
     const bank = await this.banksService.findOne({ where: { id: institutionId } })
     const bankConnection = new UserBankConnection()
     bankConnection.user = user
 
-    const redirectUrl = NORDIGEN_REDIR_URL
+    // Todo enable:
+    // if (!ALLOWED_REDIRECT_URLS.includes(redirectUrl)) {
+    //   throw new BadRequestException(`That redirect url is not allowed`)
+    // }
+
     const reference = randomUUID()
 
     const agreement = await this.nordigenService.createAgreement({
