@@ -32,7 +32,7 @@ import * as Sentry from '@sentry/node'
       synchronize: false,
       migrationsTableName: 'migrations',
       migrationsRun: true,
-      // logging:true
+      logging: true,
     }),
     SentryModule.forRoot({
       dsn: 'https://f4c1bb286a2c44c3a38fb07945c5c052@o1193141.ingest.sentry.io/6334997',
