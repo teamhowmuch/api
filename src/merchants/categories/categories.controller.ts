@@ -5,7 +5,7 @@ import { CategoriesService } from './categories.service'
 
 class CreateDto {
   @IsString()
-  label: string
+  name: string
 }
 
 @Controller('merchants/categories')
@@ -15,7 +15,7 @@ export class CategoriesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async create(@Body() body: CreateDto) {
-    const { label } = body
-    return this.categoriesService.create(label)
+    const { name } = body
+    return this.categoriesService.create(name)
   }
 }

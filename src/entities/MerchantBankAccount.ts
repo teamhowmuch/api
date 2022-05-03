@@ -11,9 +11,9 @@ import {
 import { Merchant } from './Merchant'
 
 @Entity()
-export class MerchantPattern {
+export class MerchantBankAccount {
   @PrimaryColumn()
-  name: string
+  iban: string
 
   @CreateDateColumn()
   created_at: Date

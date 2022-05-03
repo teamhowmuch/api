@@ -14,6 +14,8 @@ import { EmissionEventsModule } from './emission-events/emission-events.module'
 import { CarsModule } from './cars/cars.module'
 import { MerchantsModule } from './merchants/merchants.module'
 import { SentryModule } from './sentry/sentry.module'
+import { FlightsModule } from './flights/flights.module'
+import { AirportsModule } from './airports/airports.module'
 import * as Sentry from '@sentry/node'
 
 @Module({
@@ -27,7 +29,8 @@ import * as Sentry from '@sentry/node'
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DB,
       entities: Entities.Collection,
-      synchronize: process.env.NODE_ENV !== 'production' && process.env.DB_SYNC === 'true',
+      synchronize: false,
+      migrationsTableName: 'migrations',
       // logging:true
     }),
     SentryModule.forRoot({
@@ -44,6 +47,8 @@ import * as Sentry from '@sentry/node'
     CarsModule,
     MerchantsModule,
     SentryModule,
+    FlightsModule,
+    AirportsModule,
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],

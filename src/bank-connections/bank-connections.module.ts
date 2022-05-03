@@ -10,7 +10,7 @@ import { NordigenService } from './nordigen.service'
 import { BanksService } from './banks.service'
 import { ScheduleModule } from '@nestjs/schedule'
 import { BanksController } from './banks.controller'
-import { TinkService } from './tink.service';
+import { TinkService } from './tink.service'
 
 @Module({
   imports: [

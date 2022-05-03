@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { randomUUID } from 'crypto'
 import { RequisitionStatus, UserBankConnection } from 'src/entities/UserBankConnection'
 import { UsersService } from 'src/users/users.service'
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { DEFAULT_REQUISITION_VALIDITY, NordigenService } from './nordigen.service'
 import { AccountDetails } from './models/AccountDetails'
 import { addDays } from 'date-fns'
@@ -47,6 +47,10 @@ export class BankConnectionsService {
       relations: ['bank'],
     })
     return bankConnections
+  }
+
+  async find(options: FindManyOptions<UserBankConnection>) {
+    return this.bankConnectionRepo.find(options)
   }
 
   async getOne(id: number): Promise<UserBankConnection> {

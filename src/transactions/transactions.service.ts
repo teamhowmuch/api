@@ -3,7 +3,7 @@ import { BankConnectionsService } from 'src/bank-connections/bank-connections.se
 import { Transaction } from 'src/bank-connections/models/transaction'
 import { DateFilter, NordigenService } from 'src/bank-connections/nordigen.service'
 import { Transaction as TransactionEntity } from '../entities/Transaction'
-import { FindManyOptions, Repository } from 'typeorm'
+import { FindOneOptions, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserBankConnection } from 'src/entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
@@ -20,7 +20,7 @@ export class TransactionsService {
     private transactionRepo: Repository<TransactionEntity>,
   ) {}
 
-  async findOne(options: FindManyOptions<TransactionEntity>) {
+  async findOne(options: FindOneOptions<TransactionEntity>) {
     return this.transactionRepo.findOne(options)
   }
 

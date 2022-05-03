@@ -43,6 +43,7 @@ export class CarsService {
       car.build_year = format(new Date(data.datum_eerste_tenaamstelling_in_nederland_dt), 'yyyy')
       return car
     } catch (error) {
+      console.log(error)
       if ('response' in error && error.response.status === 404) {
         throw new NotFoundException(`No car exists with license plate ${licensePlate}`)
       }
