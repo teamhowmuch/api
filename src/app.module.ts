@@ -32,7 +32,7 @@ import * as Sentry from '@sentry/node'
       synchronize: false,
       migrationsTableName: 'migrations',
       migrationsRun: true,
-      migrations: process.env.NODE_ENV === 'development' ? ['src/migrations'] : ['dist/migrations'],
+      migrations: ['dist/migration/**/*.js'],
       logging: true,
     }),
     SentryModule.forRoot({
