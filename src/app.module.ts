@@ -31,6 +31,7 @@ import * as Sentry from '@sentry/node'
       entities: Entities.Collection,
       synchronize: false,
       migrationsTableName: 'migrations',
+      migrationsRun: true,
       // logging:true
     }),
     SentryModule.forRoot({
