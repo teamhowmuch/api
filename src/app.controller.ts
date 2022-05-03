@@ -10,8 +10,8 @@ export class AppController {
   }
 
   @Get()
-  get(): MethodNotAllowedException {
-    return new MethodNotAllowedException()
+  get() {
+    return 'hi'
   }
 
   @Get('error')
