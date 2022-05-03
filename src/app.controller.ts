@@ -4,9 +4,10 @@ import { Controller, Get, Logger } from '@nestjs/common'
 export class AppController {
   private logger = new Logger(AppController.name)
 
-  @Get('')
+  @Get()
   get() {
-    return { how: 'much' }
+    console.log('watdan')
+    return { how: 'doen' }
   }
 
   @Get('error')
