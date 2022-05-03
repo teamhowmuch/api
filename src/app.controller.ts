@@ -1,13 +1,16 @@
 import { Controller, Get, Logger } from '@nestjs/common'
+import { Connection } from 'typeorm'
 
 @Controller()
 export class AppController {
   private logger = new Logger(AppController.name)
 
+  constructor(private connection: Connection) {}
+
   @Get()
-  get() {
-    console.log('watdan')
-    return { how: 'doen' }
+  async get() {
+    const dbRes = await this.connection.query('SELECT 1')
+    return { api: 'ok', db: dbRes ? 'ok' : 'not ok' }
   }
 
   @Get('error')
