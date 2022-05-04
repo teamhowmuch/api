@@ -1,17 +1,20 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { FindOneOptions, Repository } from 'typeorm'
+import { RoleEnum } from 'src/entities/UserRole'
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
 import { User } from '../entities/User'
+import { RolesService } from './roles.service'
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private rolesService: RolesService,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find()
+  find(options: FindManyOptions): Promise<User[]> {
+    return this.userRepository.find(options)
   }
 
   async findOne(options: FindOneOptions<User>): Promise<User> {
@@ -19,9 +22,8 @@ export class UsersService {
     return res
   }
 
-  async create({ email }: { email: string }): Promise<User> {
+  async create({ email }: Pick<User, 'email'>): Promise<User> {
     const exists = await this.userRepository.findOne({ email })
-
     if (exists) {
       throw new ConflictException('User with that email exists')
     }
@@ -29,6 +31,10 @@ export class UsersService {
     const user = new User()
     user.email = email
     const res = await this.userRepository.save(user)
+    console.log('created', res)
+    const re2s = await this.rolesService.assign(res.id, RoleEnum.USER)
+
+    console.log('heir ook done?', re2s)
     return res
   }
 

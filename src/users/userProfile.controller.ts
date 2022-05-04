@@ -22,7 +22,7 @@ export class UserProfileController {
   @Get('')
   get(@Request() req: AuthenticatedRequest) {
     const { user } = req
-    return this.userService.findOne({ where: { id: user.id } })
+    return this.userService.findOne({ where: { id: user.id }, loadRelationIds: true })
   }
 
   @UseGuards(JwtAuthGuard)

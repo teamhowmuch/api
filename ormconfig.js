@@ -1,5 +1,3 @@
-const typeormFolder = process.env.NODE_ENV === 'development' ? 'src' : 'dist'
-
 module.exports = {
   type: 'postgres',
   host: process.env.DB_HOST,
@@ -9,9 +7,9 @@ module.exports = {
   database: process.env.DB_DB,
   logging: false,
   synchronize: true,
-  entities: [`${typeormFolder}/entity/**/*.ts`],
-  migrations: [`${typeormFolder}/migration/**/*.ts`],
-  subscribers: [`${typeormFolder}/subscriber/**/*.ts`],
+  entities: [`src/entity/**/*.ts`],
+  migrations: [`src/migration/**/*.ts`],
+  subscribers: [`src/subscriber/**/*.ts`],
   cli: {
     entitiesDir: 'src/entity',
     migrationsDir: 'src/migration',

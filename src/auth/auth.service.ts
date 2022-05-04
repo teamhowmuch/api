@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserOtp } from 'src/entities/UserOtp'
-import { generatePin } from './otp'
+import { generatePin } from './util'
 import { compare } from 'bcrypt'
 import { notify } from 'node-notifier'
 import { MailService } from './mail.service'
@@ -81,9 +81,9 @@ export class AuthService {
     }
   }
 
-  async login(user: { email: string; id: number }) {
-    const payload = { email: user.email, sub: user.id }
-    const dbUser = await this.usersService.findOne({ where: { id: user.id } })
+  async login({ email, id }: { email: string; id: number }) {
+    const dbUser = await this.usersService.findOne({ where: { id }, loadRelationIds: true })
+    const payload = { email: email, sub: id, roles: dbUser.roles }
     return {
       access_token: this.jwtService.sign(payload),
       user: dbUser,

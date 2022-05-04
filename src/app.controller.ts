@@ -5,7 +5,9 @@ import { Connection } from 'typeorm'
 export class AppController {
   private logger = new Logger(AppController.name)
 
-  constructor(private connection: Connection) {}
+  constructor(private connection: Connection) {
+    console.log(process.env.JWT_SECRET)
+  }
 
   @Get()
   async get() {

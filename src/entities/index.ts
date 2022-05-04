@@ -8,6 +8,7 @@ import { Merchant } from './Merchant'
 import { MerchantBankAccount } from './MerchantBankAccount'
 import { MerchantCategory } from './MerchantCategory'
 import { MerchantTransactionSearchPattern } from './MerchantTransactionSearchPattern'
+import { UserRole } from './UserRole'
 import { Transaction } from './Transaction'
 import { User } from './User'
 import { UserBankConnection } from './UserBankConnection'
@@ -25,6 +26,7 @@ export const Collection = [
   MerchantBankAccount,
   MerchantCategory,
   MerchantTransactionSearchPattern,
+  UserRole,
   Transaction,
   User,
   UserBankConnection,

@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm'
+import { UserRole } from './UserRole'
 
 export interface AnyObject {
   [key: string]: any
@@ -23,6 +31,9 @@ export class User {
 
   @Column({ type: 'json', nullable: true })
   journey_data: AnyObject
+
+  @OneToMany(() => UserRole, (role) => role.user)
+  roles: UserRole[]
 
   @CreateDateColumn()
   created_at: Date
