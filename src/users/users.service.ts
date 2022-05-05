@@ -31,10 +31,9 @@ export class UsersService {
     const user = new User()
     user.email = email
     const res = await this.userRepository.save(user)
-    console.log('created', res)
-    const re2s = await this.rolesService.assign(res.id, RoleEnum.USER)
 
-    console.log('heir ook done?', re2s)
+    await this.rolesService.assign(res.id, RoleEnum.USER)
+
     return res
   }
 

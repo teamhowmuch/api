@@ -6,6 +6,9 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm'
+import { Car } from './Car'
+import { EmissionEvent } from './EmissionEvent'
+import { UserBankConnection } from './UserBankConnection'
 import { UserRole } from './UserRole'
 
 export interface AnyObject {
@@ -34,6 +37,15 @@ export class User {
 
   @OneToMany(() => UserRole, (role) => role.user)
   roles: UserRole[]
+
+  @OneToMany(() => UserBankConnection, (bankConnection) => bankConnection.user)
+  bankConnections: UserBankConnection[]
+
+  @OneToMany(() => Car, (car) => car.user)
+  cars: Car[]
+
+  @OneToMany(() => EmissionEvent, (emissionEvent) => emissionEvent.user)
+  emissionEvents: EmissionEvent[]
 
   @CreateDateColumn()
   created_at: Date

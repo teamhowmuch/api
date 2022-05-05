@@ -54,7 +54,7 @@ export class UserBankConnection {
   @Column()
   bank_id: string
 
-  @ManyToOne(() => User, (user) => user)
+  @ManyToOne(() => User, (user) => user.bankConnections)
   @JoinColumn({ name: 'user_id' })
   user: User
 
