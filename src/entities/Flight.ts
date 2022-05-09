@@ -9,6 +9,8 @@ import {
   JoinColumn,
 } from 'typeorm'
 import { Airport } from './Airport'
+import { Merchant } from './Merchant'
+import { User } from './User'
 
 @Entity()
 export class Flight {
@@ -21,14 +23,31 @@ export class Flight {
   @Column({ type: 'int' })
   ticket_count: number
 
-  @ManyToOne(() => Airport, { cascade: true })
+  @ManyToOne(() => Merchant, { cascade: false })
+  @JoinColumn({ name: 'merchant_id' })
+  merchant: Merchant
+
+  @Column({ type: 'integer' })
+  merchant_id: number
+
+  @ManyToOne(() => User, { cascade: true })
+  @JoinColumn({ name: 'user_id' })
+  user: User
+
+  @Column({ type: 'integer', nullable: false })
+  user_id: number
+
+  @Column({ type: 'float', nullable: true })
+  amount_paid_eur?: number
+
+  @ManyToOne(() => Airport)
   @JoinColumn({ name: 'from_airport_id' })
   from_airport: Airport
 
   @Column({ type: 'varchar', length: 3 })
   from_airport_id: string
 
-  @ManyToOne(() => Airport, { cascade: true })
+  @ManyToOne(() => Airport)
   @JoinColumn({ name: 'to_airport_id' })
   to_airport: Airport
 

@@ -8,5 +8,6 @@ import { AirportsService } from './airports.service'
   controllers: [AirportsController],
   imports: [TypeOrmModule.forFeature([Airport])],
   providers: [AirportsService],
+  exports: [AirportsService],
 })
 export class AirportsModule {}

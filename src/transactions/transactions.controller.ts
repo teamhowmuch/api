@@ -26,7 +26,11 @@ class TriggerImportDto {
   readonly dateTo?: Date
 }
 
-export function verifyAccess(user: UserPayload, requestUserId: number, requiredRoles?: RoleEnum[]) {
+export function verifyAccess(
+  user: UserPayload,
+  requestUserId: number,
+  requiredRoles: RoleEnum[] = [RoleEnum.ADMIN],
+) {
   if (requiredRoles.every((role) => user.roles.includes(role))) {
     return true
   } else if (user.id === requestUserId) {
