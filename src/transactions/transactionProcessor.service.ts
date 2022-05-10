@@ -69,8 +69,19 @@ export class TransactionProcessor {
         return
       }
 
+      // Todo this seems like a redundant check with transaction already processed
+      // but useful for dev
+      const existingEmissionEvent = await this.emissionEventService.findOne({
+        where: { source_type: SourceType.TRANSACTION, source_id: id, user_id: userId },
+      })
+      if (existingEmissionEvent) {
+        console.log('emission event for this source already exists')
+        // Emission Event for this transaction already exists
+        return
+      }
+
       let anonymizedTransaction
-      console.log('is user beta tester?', user.is_beta_tester)
+
       if (user.is_beta_tester) {
         anonymizedTransaction = new TransactionAnonymized()
         anonymizedTransaction.raw_data = {
