@@ -72,9 +72,20 @@ export class TransactionProcessor {
       let anonymizedTransaction
       console.log('is user beta tester?', user.is_beta_tester)
       if (user.is_beta_tester) {
-        console.log(user.is_beta_tester)
         anonymizedTransaction = new TransactionAnonymized()
-        anonymizedTransaction.raw_data = transaction
+        anonymizedTransaction.raw_data = {
+          transactionAmount: transaction.transactionAmount,
+          remittanceInformationUnstructured: transaction.remittanceInformationUnstructured,
+          remittanceInformationStructured: transaction.remittanceInformationStructured,
+          remittanceInformationStructuredArray: transaction.remittanceInformationStructuredArray,
+          remittanceInformationUnstructuredArray:
+            transaction.remittanceInformationUnstructuredArray,
+          creditorName:
+            transaction.transactionAmount.amount < 0 ? transaction.creditorName : 'HIDDEN_SELF',
+          creditorAccount:
+            transaction.transactionAmount.amount < 0 ? transaction.creditorAccount : 'HIDDEN_SELF',
+        }
+        transaction.creditorAccount
         await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
       }
 
