@@ -7,6 +7,7 @@ import { FindOneOptions, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserBankConnection } from 'src/entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
+import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
 
 @Injectable()
 export class TransactionsService {
@@ -18,6 +19,8 @@ export class TransactionsService {
     private nordigenService: NordigenService,
     @InjectRepository(TransactionEntity)
     private transactionRepo: Repository<TransactionEntity>,
+    @InjectRepository(TransactionAnonymized)
+    private anonymTransactionRepo: Repository<TransactionAnonymized>,
   ) {}
 
   async findOne(options: FindOneOptions<TransactionEntity>) {
@@ -82,5 +85,10 @@ export class TransactionsService {
 
   async saveTransaction(entity: TransactionEntity) {
     return this.transactionRepo.save(entity)
+  }
+
+  async saveAnonymizedTransaction(aTransaction: TransactionAnonymized) {
+    console.log('saving', aTransaction)
+    return this.anonymTransactionRepo.save(aTransaction)
   }
 }

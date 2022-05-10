@@ -11,19 +11,19 @@ import { Transaction } from 'src/bank-connections/models/transaction'
 import { UserBankConnection } from 'src/entities/UserBankConnection'
 import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
 import { CarsService } from 'src/cars/cars.service'
+import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
 
 const hash = hasher({ sort: true, coerce: true })
 
 function extractMerchant(transaction: Transaction): KnownMerchant | null {
-  console.log('analysing transaction', transaction)
   if (!transaction.creditorName) {
-    console.warn('unknown transaction creditor / unreadable format')
-    console.log(JSON.stringify(transaction))
+    console.warn(
+      'unknown transaction creditor / unreadable format at transaction, JSON.stringify(transaction)',
+    )
     return null
   }
   const { creditorName } = transaction
   const creditorNameLower = creditorName.toLowerCase()
-  console.log('analysing')
 
   for (const merchant of knownMerchants) {
     if (creditorNameLower.includes(merchant.searchPattern)) {
@@ -38,6 +38,7 @@ function extractMerchant(transaction: Transaction): KnownMerchant | null {
 @Injectable()
 export class TransactionProcessor {
   private readonly logger = new Logger(TransactionProcessor.name)
+
   constructor(
     private usersService: UsersService,
     private carfuelService: CarfuelService,
@@ -58,23 +59,23 @@ export class TransactionProcessor {
     try {
       const id = transaction.transactionId || transaction.endToEndId || hash.hash(transaction)
       const userId = bankConnection.user_id
+      const user = await this.usersService.findOne({ where: { id: userId } })
+
       let transactionEntity = await this.transactionsService.findOne({
         where: { id, user_id: userId },
       })
 
       if (transactionEntity && transactionEntity.processed) {
-        console.log('transaction for this user already processed')
         return
       }
 
-      // Todo this seems like a redundant check with transaction already processed
-      const existingEmissionEvent = await this.emissionEventService.findOne({
-        where: { source_type: SourceType.TRANSACTION, source_id: id, user_id: userId },
-      })
-      if (existingEmissionEvent) {
-        console.log('emission event for this source already exists')
-        // Emission Event for this transaction already exists
-        return
+      let anonymizedTransaction
+      console.log('is user beta tester?', user.is_beta_tester)
+      if (user.is_beta_tester) {
+        console.log(user.is_beta_tester)
+        anonymizedTransaction = new TransactionAnonymized()
+        anonymizedTransaction.raw_data = transaction
+        await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
       }
 
       // Save transaction proof of processing
@@ -84,12 +85,16 @@ export class TransactionProcessor {
       transactionEntity.processed = false
       transactionEntity.bank_connection_id = bankConnection.id
       transactionEntity = await this.transactionsService.saveTransaction(transactionEntity)
-      console.log('saved transaction with userid', userId)
 
       const merchant = extractMerchant(transaction)
 
       // It's carfuelTime, process
       if (merchant) {
+        if (user.is_beta_tester) {
+          anonymizedTransaction.resolved_to = { ...anonymizedTransaction.resolved_to, merchant }
+          await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
+        }
+
         if (merchant.category === TransactionCategory.CARFUEL) {
           const user = await this.usersService.findOne({ where: { id: userId } })
           const cars = await this.carsService.list(userId)
@@ -122,7 +127,7 @@ export class TransactionProcessor {
               merchant,
             }
 
-            await this.emissionEventService.create(
+            const emissionEvent = await this.emissionEventService.create(
               user.id,
               co2eq_mean,
               SourceType.TRANSACTION,
@@ -133,8 +138,16 @@ export class TransactionProcessor {
 
             transactionEntity.processed = false
             await this.transactionsService.saveTransaction(transactionEntity)
+
+            if (user.is_beta_tester) {
+              anonymizedTransaction.resolved_to = {
+                ...anonymizedTransaction.resolved_to,
+                emissionEvent,
+              }
+              await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
+            }
+
             return true
-            this.logger.debug('G')
           }
         }
       }

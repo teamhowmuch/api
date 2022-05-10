@@ -13,6 +13,7 @@ import { UsersModule } from 'src/users/users.module'
 import { ProductsModule } from 'src/products/products.module'
 import { EmissionEventsModule } from 'src/emission-events/emission-events.module'
 import { CarsModule } from 'src/cars/cars.module'
+import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { CarsModule } from 'src/cars/cars.module'
     ProductsModule,
     EmissionEventsModule,
     CarsModule,
-    TypeOrmModule.forFeature([Transaction]),
+    TypeOrmModule.forFeature([Transaction, TransactionAnonymized]),
   ],
   providers: [TransactionsService, TransactionProcessor],
   controllers: [ImportController],
