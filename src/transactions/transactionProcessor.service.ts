@@ -18,7 +18,8 @@ const hash = hasher({ sort: true, coerce: true })
 function extractMerchant(transaction: Transaction): KnownMerchant | null {
   if (!transaction.creditorName) {
     console.warn(
-      'unknown transaction creditor / unreadable format at transaction, JSON.stringify(transaction)',
+      'unknown transaction creditor / unreadable format at transaction',
+      JSON.stringify(transaction),
     )
     return null
   }
@@ -80,10 +81,19 @@ export class TransactionProcessor {
         return
       }
 
+      // Save transaction proof of processing
+      transactionEntity = new TransactionEntity()
+      transactionEntity.id = id
+      transactionEntity.user_id = userId
+      transactionEntity.processed = false
+      transactionEntity.bank_connection_id = bankConnection.id
+      transactionEntity = await this.transactionsService.saveTransaction(transactionEntity)
+
       let anonymizedTransaction
 
       if (user.is_beta_tester) {
         anonymizedTransaction = new TransactionAnonymized()
+        anonymizedTransaction.transaction_id = id
         anonymizedTransaction.raw_data = {
           transactionAmount: transaction.transactionAmount,
           remittanceInformationUnstructured: transaction.remittanceInformationUnstructured,
@@ -99,14 +109,6 @@ export class TransactionProcessor {
         transaction.creditorAccount
         await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
       }
-
-      // Save transaction proof of processing
-      transactionEntity = new TransactionEntity()
-      transactionEntity.id = id
-      transactionEntity.user_id = userId
-      transactionEntity.processed = false
-      transactionEntity.bank_connection_id = bankConnection.id
-      transactionEntity = await this.transactionsService.saveTransaction(transactionEntity)
 
       const merchant = extractMerchant(transaction)
 
