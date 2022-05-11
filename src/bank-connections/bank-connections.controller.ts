@@ -13,11 +13,12 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { verifyAccess } from 'src/transactions/transactions.controller'
 
 import { BankConnectionsService } from './bank-connections.service'
 import { CreateConnectionDto } from './dto/create-connection'
 
-@Controller('bank-connections')
+@Controller('users/:userId/bank-connections')
 export class BankConnectionsController {
   private logger = new Logger(BankConnectionsController.name)
 
@@ -25,36 +26,47 @@ export class BankConnectionsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('')
-  list(@Request() req: AuthenticatedRequest) {
+  list(@Request() req: AuthenticatedRequest, @Param('userId', ParseIntPipe) userId: number) {
+    verifyAccess(req.user, userId)
     const { user } = req
     return this.bankConnections.list(user.id)
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async getOne(@Param('id', ParseIntPipe) id: number, @Request() req: AuthenticatedRequest) {
-    const { user } = req
-    const connection = await this.bankConnections.getOne(id)
-    if (connection.user_id !== user.id) {
+  @Get(':bankConnectionId')
+  async getOne(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('bankConnectionId', ParseIntPipe) bankConnectionId: number,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    verifyAccess(req.user, userId)
+    const connection = await this.bankConnections.getOne(bankConnectionId)
+    if (connection.user_id !== userId) {
       throw new NotFoundException('Not found')
     }
     return connection
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  getUserBankConnectionsWithRefresh(@Param('id', ParseIntPipe) id: number) {
-    return this.bankConnections.update(id)
+  @Patch(':bankConnectionId')
+  getUserBankConnectionsWithRefresh(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('bankConnectionId', ParseIntPipe) bankConnectionId: number,
+    @Request() req: AuthenticatedRequest,
+  ) {
+    verifyAccess(req.user, userId)
+    return this.bankConnections.update(bankConnectionId)
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('')
   async createUserBankConnections(
+    @Param('userId', ParseIntPipe) userId: number,
     @Req() req: AuthenticatedRequest,
     @Body() dto: CreateConnectionDto,
   ) {
-    const { user } = req
-    const res = await this.bankConnections.create(dto.bank_id, user.id, dto.redirect_url)
+    verifyAccess(req.user, userId)
+    const res = await this.bankConnections.create(dto.bank_id, userId, dto.redirect_url)
     return res
   }
 }
