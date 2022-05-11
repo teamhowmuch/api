@@ -28,8 +28,7 @@ export class BankConnectionsController {
   @Get('')
   list(@Request() req: AuthenticatedRequest, @Param('userId', ParseIntPipe) userId: number) {
     verifyAccess(req.user, userId)
-    const { user } = req
-    return this.bankConnections.list(user.id)
+    return this.bankConnections.list(userId)
   }
 
   @UseGuards(JwtAuthGuard)
