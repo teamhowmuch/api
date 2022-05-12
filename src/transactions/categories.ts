@@ -60,4 +60,16 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     category: TransactionCategory.CARFUEL,
     iconUrl: 'https://www.tariefcoach.nl/upload/pdf/2018/07/Total-logo-1024x768.png',
   },
+  {
+    name: 'Avia',
+    searchPattern: 'avia ',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/AVIA_International_logo.svg',
+  },
+  {
+    name: 'Garage Lux (shell)',
+    searchPattern: 'garage lux',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://1000logos.net/wp-content/uploads/2017/06/Shell-Logo.png',
+  },
 ] as const

@@ -119,15 +119,15 @@ export class TransactionProcessor {
           await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
         }
 
-        if (merchant.category === TransactionCategory.CARFUEL) {
+        const transactionDate = new Date(transaction.bookingDate)
+        const amount = Math.abs(transaction.transactionAmount.amount)
+
+        if (merchant.category === TransactionCategory.CARFUEL && amount > 15 && amount < 175) {
           const user = await this.usersService.findOne({ where: { id: userId } })
           const cars = await this.carsService.list(userId)
           const userCarFuelType = cars[0]?.fuel_type_simplified
 
           if (userCarFuelType) {
-            const transactionDate = new Date(transaction.bookingDate)
-            const amount = Math.abs(transaction.transactionAmount.amount)
-
             const liters = await this.carfuelService.getFuelAmount(
               transactionDate,
               amount,
