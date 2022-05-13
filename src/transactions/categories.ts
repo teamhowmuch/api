@@ -72,4 +72,16 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     category: TransactionCategory.CARFUEL,
     iconUrl: 'https://1000logos.net/wp-content/uploads/2017/06/Shell-Logo.png',
   },
+  {
+    name: 'Berkman Breda',
+    searchPattern: 'berkman breda',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://www.berkman.nl/wp-content/themes/berkman/images/berkman_logo.png',
+  },
+  {
+    name: 'Berkman Breda',
+    searchPattern: 'berkman breda',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://www.berkman.nl/wp-content/themes/berkman/images/berkman_logo.png',
+  },
 ] as const
