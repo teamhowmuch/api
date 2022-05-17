@@ -46,8 +46,9 @@ export class AuthService {
     this.mailService.sendOtp(email, otp)
   }
 
-  async requestOtp(email: string): Promise<{ otp: string }> {
-    const user = await this.usersService.findOne({ where: { email } })
+  async requestOtp(emailRaw: string): Promise<{ otp: string }> {
+    const email = emailRaw.toLowerCase()
+    const user = await this.usersService.findOne({ where: { email: email.toLowerCase() } })
     if (user) {
       const { otp } = await this.createNewOtp(user)
       await this.sendOtp(email, otp)
@@ -59,7 +60,8 @@ export class AuthService {
     }
   }
 
-  async validateLoginRequest(email: string, userEnteredOtp: string): Promise<User> {
+  async validateLoginRequest(emailRaw: string, userEnteredOtp: string): Promise<User> {
+    const email = emailRaw.toLowerCase()
     const user = await this.usersService.findOne({ where: { email } })
     if (!user) {
       return null
@@ -81,7 +83,8 @@ export class AuthService {
     }
   }
 
-  async login({ email, id }: { email: string; id: number }) {
+  async login({ email: emailRaw, id }: { email: string; id: number }) {
+    const email = emailRaw.toLowerCase()
     const dbUser = await this.usersService.findOne({ where: { id }, loadRelationIds: true })
     const payload = { email: email, sub: id, roles: dbUser.roles }
     return {

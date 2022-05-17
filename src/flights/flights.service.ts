@@ -4,6 +4,7 @@ import { AirportsService } from 'src/airports/airports.service'
 import { Flight } from 'src/entities/Flight'
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
 import { CreateFlightDto } from './models'
+import { calcDistanceCrow } from './utils'
 
 @Injectable()
 export class FlightsService {
@@ -46,8 +47,14 @@ export class FlightsService {
     newFlight.ticket_count = ticket_count
     newFlight.merchant_id = merchant_id
     newFlight.amount_paid_eur = amount_paid_eur
-    // todo:
-    newFlight.distance = 1000
+
+    newFlight.distance = Math.round(
+      calcDistanceCrow(
+        { lat: fromAirport.lat, long: fromAirport.long },
+        { lat: toAirport.lat, long: toAirport.long },
+      ),
+    )
+
     const res = this.flightsRepo.save(newFlight)
     return res
   }
