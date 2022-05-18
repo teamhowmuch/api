@@ -1,36 +1,16 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm'
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, ManyToOne, OneToMany } from 'typeorm'
+import { BaseEntity } from './BaseEntity'
 
 import { MerchantCategory } from './MerchantCategory'
+import { MerchantTransactionSearchPattern } from './MerchantTransactionSearchPattern'
 
 @Entity()
-export class Merchant {
-  @PrimaryGeneratedColumn()
-  id: number
+export class Merchant extends BaseEntity {
+  @PrimaryGeneratedColumn() id: number
 
-  @Column()
-  name: string
-
-  @Column({ nullable: true })
-  website?: string
-
-  @Column({ nullable: true })
-  logo?: string
-
-  // -----
-  // CA/UA
-  @CreateDateColumn()
-  created_at: Date
-
-  @UpdateDateColumn()
-  updated_at: Date
+  @Column() name: string
+  @Column({ nullable: true }) website?: string
+  @Column({ nullable: true }) logo?: string
 
   // -----
   // Relations
@@ -40,4 +20,7 @@ export class Merchant {
 
   @Column({ nullable: true })
   category_id?: number
+
+  @OneToMany(() => MerchantTransactionSearchPattern, (pattern) => pattern.merchant)
+  patterns: MerchantTransactionSearchPattern[]
 }

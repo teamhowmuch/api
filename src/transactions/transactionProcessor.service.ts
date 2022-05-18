@@ -1,40 +1,21 @@
-import { Transaction as TransactionEntity } from 'src/entities/Transaction'
-import { TransactionsService } from './transactions.service'
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common'
+
+import { Transaction as TransactionEntity } from '../entities/Transaction'
+import { TransactionsService } from './transactions.service'
 import hasher from 'node-object-hash'
-import { knownMerchants, KnownMerchant, TransactionCategory } from './categories'
-import { SourceType } from 'src/entities/EmissionEvent'
-import { UsersService } from 'src/users/users.service'
-import { CarfuelService } from 'src/products/carfuel/carfuel.service'
-import { EmissionEventsService } from 'src/emission-events/emission-events.service'
-import { Transaction } from 'src/bank-connections/models/transaction'
-import { UserBankConnection } from 'src/entities/UserBankConnection'
-import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
-import { CarsService } from 'src/cars/cars.service'
-import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
+import { TransactionCategory } from './categories'
+import { SourceType } from '../entities/EmissionEvent'
+import { UsersService } from '../users/users.service'
+import { CarfuelService } from '../products/carfuel/carfuel.service'
+import { EmissionEventsService } from '../emission-events/emission-events.service'
+import { Transaction } from '../bank-connections/models/transaction'
+import { UserBankConnection } from '../entities/UserBankConnection'
+import { AccountDetails } from '../bank-connections/models/AccountDetails'
+import { CarsService } from '../cars/cars.service'
+import { TransactionAnonymized } from '../entities/TransactionAnonymized'
+import { extractMerchant } from './extractMerchant'
 
 const hash = hasher({ sort: true, coerce: true })
-
-function extractMerchant(transaction: Transaction): KnownMerchant | null {
-  if (!transaction.creditorName) {
-    console.warn(
-      'unknown transaction creditor / unreadable format at transaction',
-      JSON.stringify(transaction),
-    )
-    return null
-  }
-  const { creditorName } = transaction
-  const creditorNameLower = creditorName.toLowerCase()
-
-  for (const merchant of knownMerchants) {
-    if (creditorNameLower.includes(merchant.searchPattern)) {
-      console.log('Analysed merchantName', creditorNameLower, 'resolved to', merchant)
-      return merchant
-    }
-  }
-  console.log('Analysed merchantName', creditorNameLower, 'resolved to nothing')
-  return null
-}
 
 @Injectable()
 export class TransactionProcessor {

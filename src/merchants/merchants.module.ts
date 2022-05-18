@@ -6,10 +6,16 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Merchant } from 'src/entities/Merchant'
 import { AccountsModule } from './accounts/accounts.module'
 import { PatternsModule } from './patterns/patterns.module'
+import { MerchantTransactionSearchPattern } from 'src/entities/MerchantTransactionSearchPattern'
 
 @Module({
   controllers: [MerchantsController],
   providers: [MerchantsService],
-  imports: [TypeOrmModule.forFeature([Merchant]), CategoriesModule, AccountsModule, PatternsModule],
+  imports: [
+    TypeOrmModule.forFeature([Merchant, MerchantTransactionSearchPattern]),
+    CategoriesModule,
+    AccountsModule,
+    PatternsModule,
+  ],
 })
 export class MerchantsModule {}

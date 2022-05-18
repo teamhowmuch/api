@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Bank } from 'src/entities/Bank'
+import { Bank } from '../entities/Bank'
 import { FindOneOptions, Repository } from 'typeorm'
 import { NordigenService } from './nordigen.service'
 import { Cron, CronExpression } from '@nestjs/schedule'

@@ -7,6 +7,7 @@ import { PatternsService } from './patterns.service'
 @Module({
   controllers: [PatternsController],
   providers: [PatternsService],
+  exports: [PatternsService],
   imports: [TypeOrmModule.forFeature([MerchantTransactionSearchPattern])],
 })
 export class PatternsModule {}

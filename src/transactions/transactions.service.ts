@@ -1,13 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common'
-import { BankConnectionsService } from 'src/bank-connections/bank-connections.service'
-import { Transaction } from 'src/bank-connections/models/transaction'
-import { DateFilter, NordigenService } from 'src/bank-connections/nordigen.service'
+import { BankConnectionsService } from '../bank-connections/bank-connections.service'
+import { Transaction } from '../bank-connections/models/transaction'
+import { DateFilter, NordigenService } from '../bank-connections/nordigen.service'
 import { Transaction as TransactionEntity } from '../entities/Transaction'
 import { FindOneOptions, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserBankConnection } from 'src/entities/UserBankConnection'
+import { UserBankConnection } from '../entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
-import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
+import { TransactionAnonymized } from '../entities/TransactionAnonymized'
 
 @Injectable()
 export class TransactionsService {

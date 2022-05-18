@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { EmissionEvent, SourceType } from 'src/entities/EmissionEvent'
+import { EmissionEvent, SourceType } from '../entities/EmissionEvent'
 import { FindOneOptions, Repository } from 'typeorm'
 
 @Injectable()

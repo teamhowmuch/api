@@ -33,7 +33,7 @@ import { RolesGuard } from './auth/roles.guard'
       entities: Entities.Collection,
       synchronize: false,
       migrationsTableName: 'migrations',
-      migrationsRun: true,
+      migrationsRun: false,
       migrations: ['dist/migration/**/*.js'],
       // logging: true,
     }),

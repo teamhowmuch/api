@@ -19,6 +19,12 @@ export interface KnownMerchant {
 }
 export const knownMerchants: Readonly<KnownMerchant[]> = [
   {
+    name: 'Albert Heijn',
+    searchPattern: 'albert heijn',
+    category: TransactionCategory.GROCERIES,
+    iconUrl: 'https://pbs.twimg.com/profile_images/1092811623167942656/J6_HT2vZ_400x400.jpg',
+  },
+  {
     name: 'Shell',
     searchPattern: 'shell',
     category: TransactionCategory.CARFUEL,

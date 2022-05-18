@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RoleEnum } from 'src/entities/UserRole'
+import { RoleEnum } from '../entities/UserRole'
 import { FindManyOptions, FindOneOptions, Repository } from 'typeorm'
 import { User } from '../entities/User'
 import { RolesService } from './roles.service'

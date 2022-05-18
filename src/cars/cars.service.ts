@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { format } from 'date-fns'
-import { Car } from 'src/entities/Car'
-import { UsersService } from 'src/users/users.service'
+import { Car } from '../entities/Car'
+import { UsersService } from '../users/users.service'
 import { Repository } from 'typeorm'
 import { OverheidService } from './overheid/overheid.service'
 
-import { FuelType } from 'src/products/carfuel/carfuel.service'
+import { FuelType } from '../products/carfuel/carfuel.service'
 
 function normalizeCarFuel(carFuelRaw: string): FuelType {
   const c = carFuelRaw.toLowerCase()
