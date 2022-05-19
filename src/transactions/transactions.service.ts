@@ -117,8 +117,6 @@ export class TransactionsService {
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   async checkNewJob() {
-    this.logger.debug('checking for new jobs')
-
     const activeJob = await this.importsRepo.findOne({ status: BankImportStatus.ACTIVE })
     if (activeJob) {
       return

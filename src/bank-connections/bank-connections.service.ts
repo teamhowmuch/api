@@ -24,7 +24,7 @@ const STATUS_MAP: Record<string, RequisitionStatus> = {
   SU: RequisitionStatus.EXPIRED,
 } as const
 
-interface BankConnectionWithLastImport extends UserBankConnection {
+export interface BankConnectionWithLastImport extends UserBankConnection {
   last_successful_import?: BankImport
   last_import?: BankImport
 }
