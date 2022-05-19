@@ -53,7 +53,7 @@ export class UsersCarsController {
   @Get()
   list(@Param('userId', ParseIntPipe) userId: number, @Request() req: AuthenticatedRequest) {
     verifyAccess(req.user, userId)
-    return this.carsService.list(req.user.id)
+    return this.carsService.list(userId)
   }
 
   @UseGuards(JwtAuthGuard)
