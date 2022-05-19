@@ -40,7 +40,9 @@ export class CarsService {
       car.type = data.handelsbenaming
       car.fuel_types = data.brandstof.map((e) => e.brandstof_omschrijving).join('+')
       car.fuel_type_simplified = normalizeCarFuel(car.fuel_types)
+      car.raw_data = data
       car.build_year = format(new Date(data.datum_eerste_tenaamstelling_in_nederland_dt), 'yyyy')
+      car.last_change_of_ownership = new Date(data.datum_tenaamstelling_dt)
       return car
     } catch (error) {
       console.log(error)
@@ -65,10 +67,12 @@ export class CarsService {
       car.license_plate = licensePlate
       car.user_id = userId
       car.brand = data.merk
+      car.raw_data = data
       car.type = data.handelsbenaming
       car.fuel_types = data.brandstof.map((e) => e.brandstof_omschrijving).join('+')
       car.fuel_type_simplified = normalizeCarFuel(car.fuel_types)
-      car.build_year = format(new Date(data.datum_eerste_tenaamstelling_in_nederland_dt), 'yyyy')
+      car.build_year = format(new Date(data.datum_eerste_toelating_dt), 'yyyy')
+      car.last_change_of_ownership = new Date(data.datum_tenaamstelling_dt)
 
       const res = this.carRepo.save(car)
       return res
