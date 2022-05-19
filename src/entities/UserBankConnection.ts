@@ -8,8 +8,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm'
 import { Bank } from './Bank'
+import { BankImport } from './BankImport'
 import { User } from './User'
 
 export enum RequisitionStatus {
@@ -51,13 +53,12 @@ export class UserBankConnection {
   @JoinColumn({ name: 'bank_id' })
   bank: Bank
 
-  @Column()
-  bank_id: string
+  @Column() bank_id: string
 
   @ManyToOne(() => User, (user) => user.bankConnections)
   @JoinColumn({ name: 'user_id' })
   user: User
+  @Column() user_id: number
 
-  @Column()
-  user_id: number
+  @OneToMany(() => BankImport, (i) => i.user_bank_connection) imports: BankImport[]
 }

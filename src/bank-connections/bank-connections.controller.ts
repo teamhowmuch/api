@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
-import { verifyAccess } from 'src/transactions/transactions.controller'
+import { verifyAccess } from 'src/auth/verifyAccess'
 
 import { BankConnectionsService } from './bank-connections.service'
 import { CreateConnectionDto } from './dto/create-connection'

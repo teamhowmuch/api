@@ -11,10 +11,11 @@ import { BanksService } from './banks.service'
 import { ScheduleModule } from '@nestjs/schedule'
 import { BanksController } from './banks.controller'
 import { TinkService } from './tink.service'
+import { BankImport } from 'src/entities/BankImport'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserBankConnection, Transaction, Bank]),
+    TypeOrmModule.forFeature([UserBankConnection, Transaction, Bank, BankImport]),
     ScheduleModule.forRoot(),
     UsersModule,
   ],

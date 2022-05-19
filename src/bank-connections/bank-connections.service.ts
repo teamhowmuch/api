@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { randomUUID } from 'crypto'
 import { RequisitionStatus, UserBankConnection } from '../entities/UserBankConnection'
 import { UsersService } from '../users/users.service'
-import { FindManyOptions, Repository } from 'typeorm'
+import { Connection, FindManyOptions, Repository } from 'typeorm'
 import { DEFAULT_REQUISITION_VALIDITY, NordigenService } from './nordigen.service'
 import { AccountDetails } from './models/AccountDetails'
 import { addDays } from 'date-fns'
 import { BanksService } from './banks.service'
+import { BankImport, BankImportStatus } from 'src/entities/BankImport'
 
 // const ALLOWED_REDIRECT_URLS = ['exp://192.168.178.20:19000']
 
@@ -23,29 +24,54 @@ const STATUS_MAP: Record<string, RequisitionStatus> = {
   SU: RequisitionStatus.EXPIRED,
 } as const
 
+interface BankConnectionWithLastImport extends UserBankConnection {
+  last_successful_import?: BankImport
+  last_import?: BankImport
+}
+
 @Injectable()
 export class BankConnectionsService {
   private readonly logger = new Logger(BankConnectionsService.name)
 
   constructor(
+    private connection: Connection,
     @InjectRepository(UserBankConnection)
     private bankConnectionRepo: Repository<UserBankConnection>,
+    @InjectRepository(BankImport)
+    private importsRepo: Repository<BankImport>,
     private banksService: BanksService,
     private usersService: UsersService,
     private nordigenService: NordigenService,
   ) {}
 
-  async list(userId: number): Promise<UserBankConnection[]> {
+  async list(userId: number) {
     const user = this.usersService.findOne({ where: { id: userId } })
 
     if (!user) {
       throw new NotFoundException('No user with that id found')
     }
 
-    const bankConnections = await this.bankConnectionRepo.find({
-      where: { user_id: userId },
-      relations: ['bank'],
-    })
+    const bankConnections: BankConnectionWithLastImport[] = await this.bankConnectionRepo
+      .createQueryBuilder('user_bank_connection')
+      .leftJoinAndSelect('user_bank_connection.bank', 'bank')
+      .where('user_id = :userId', { userId })
+      .getMany()
+
+    for (const bankConnection of bankConnections) {
+      bankConnection.last_successful_import = await this.importsRepo
+        .createQueryBuilder('bank_import')
+        .where('user_bank_connection_id = :id', { id: bankConnection.id })
+        .andWhere('status = :status', { status: BankImportStatus.COMPLETED })
+        .orderBy('created_at', 'DESC')
+        .getOne()
+
+      bankConnection.last_import = await this.importsRepo
+        .createQueryBuilder('bank_import')
+        .where('user_bank_connection_id = :id', { id: bankConnection.id })
+        .orderBy('created_at', 'DESC')
+        .getOne()
+    }
+
     return bankConnections
   }
 
@@ -53,12 +79,28 @@ export class BankConnectionsService {
     return this.bankConnectionRepo.find(options)
   }
 
-  async getOne(id: number): Promise<UserBankConnection> {
-    const res = await this.bankConnectionRepo.findOne({ where: { id }, relations: ['bank'] })
+  async getOne(id: number): Promise<BankConnectionWithLastImport> {
+    const res: BankConnectionWithLastImport = await this.bankConnectionRepo.findOne({
+      where: { id },
+      relations: ['bank'],
+    })
 
     if (!res) {
       throw new NotFoundException(`No account with id ${id}`)
     }
+
+    res.last_import = await this.importsRepo
+      .createQueryBuilder('bank_import')
+      .where('user_bank_connection_id = :id', { id })
+      .orderBy('created_at', 'DESC')
+      .getOne()
+
+    res.last_successful_import = await this.importsRepo
+      .createQueryBuilder('bank_import')
+      .where('user_bank_connection_id = :id', { id })
+      .andWhere('status = :status', { status: BankImportStatus.COMPLETED })
+      .orderBy('created_at', 'DESC')
+      .getOne()
 
     return res
   }

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
-import { verifyAccess } from 'src/transactions/transactions.controller'
+import { verifyAccess } from 'src/auth/verifyAccess'
 import { FlightsService } from './flights.service'
 import { CreateFlightDto } from './models'
 

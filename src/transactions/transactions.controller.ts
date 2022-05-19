@@ -1,18 +1,10 @@
-import {
-  Body,
-  Controller,
-  ForbiddenException,
-  Param,
-  ParseIntPipe,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common'
+import { Body, Controller, Param, ParseIntPipe, Post, Req, UseGuards } from '@nestjs/common'
 import { Type } from 'class-transformer'
 import { IsDate, IsOptional } from 'class-validator'
-import { AuthenticatedRequest, JwtAuthGuard, UserPayload } from 'src/auth/jwt-auth.guard'
+import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { RoleEnum } from 'src/entities/UserRole'
 import { TransactionsService } from './transactions.service'
+import { verifyAccess } from 'src/auth/verifyAccess'
 
 class TriggerImportDto {
   @Type(() => Date)
@@ -26,33 +18,19 @@ class TriggerImportDto {
   readonly dateTo?: Date
 }
 
-export function verifyAccess(
-  user: UserPayload,
-  requestUserId: number,
-  requiredRoles: RoleEnum[] = [RoleEnum.ADMIN],
-) {
-  if (requiredRoles.every((role) => user.roles.includes(role))) {
-    return true
-  } else if (user.id === requestUserId) {
-    return true
-  } else {
-    throw new ForbiddenException()
-  }
-}
-
 @Controller('users/:userId/transactions')
 export class ImportController {
   constructor(private transactionsService: TransactionsService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  triggerImport(
+  createImport(
     @Req() { user }: AuthenticatedRequest,
     @Body() body: TriggerImportDto,
     @Param('userId', ParseIntPipe) userId: number,
   ) {
     verifyAccess(user, userId, [RoleEnum.ADMIN])
 
-    return this.transactionsService.importUserTransaction(userId, body)
+    return this.transactionsService.createImport(userId, body)
   }
 }

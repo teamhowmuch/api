@@ -1,6 +1,7 @@
 // @index: import {${variable}} from ${relpath}
 import { Airport } from './Airport'
 import { Bank } from './Bank'
+import { BankImport } from './BankImport'
 import { Car } from './Car'
 import { EmissionEvent } from './EmissionEvent'
 import { Flight } from './Flight'
@@ -20,6 +21,7 @@ import { TransactionAnonymized } from './TransactionAnonymized'
 export const Collection = [
   Airport,
   Bank,
+  BankImport,
   Car,
   EmissionEvent,
   Flight,

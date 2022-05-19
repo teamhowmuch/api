@@ -2,7 +2,7 @@ import { Body, Controller, Param, ParseIntPipe, Post, Req, UseGuards } from '@ne
 import { IsString } from 'class-validator'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { RoleEnum } from 'src/entities/UserRole'
-import { verifyAccess } from 'src/transactions/transactions.controller'
+import { verifyAccess } from 'src/auth/verifyAccess'
 import { PatternsService } from './patterns.service'
 
 class CreatePatternDto {

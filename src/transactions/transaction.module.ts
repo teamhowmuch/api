@@ -5,15 +5,12 @@ import { ImportController } from './transactions.controller'
 import { BankConnectionsModule } from 'src/bank-connections/bank-connections.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Transaction } from 'src/entities/Transaction'
-
-// import { ConfirmationService } from './confirmation.service'
-// import { ConfirmationsController } from './confirmations.controller'
-
 import { UsersModule } from 'src/users/users.module'
 import { ProductsModule } from 'src/products/products.module'
 import { EmissionEventsModule } from 'src/emission-events/emission-events.module'
 import { CarsModule } from 'src/cars/cars.module'
 import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
+import { BankImport } from 'src/entities/BankImport'
 
 @Module({
   imports: [
@@ -22,7 +19,7 @@ import { TransactionAnonymized } from 'src/entities/TransactionAnonymized'
     ProductsModule,
     EmissionEventsModule,
     CarsModule,
-    TypeOrmModule.forFeature([Transaction, TransactionAnonymized]),
+    TypeOrmModule.forFeature([Transaction, TransactionAnonymized, BankImport]),
   ],
   providers: [TransactionsService, TransactionProcessor],
   controllers: [ImportController],
