@@ -46,7 +46,7 @@ export class UsersCarsController {
     @Request() req: AuthenticatedRequest,
   ) {
     verifyAccess(req.user, userId)
-    return this.carsService.create(req.user.id, body.license_plate)
+    return this.carsService.create(userId, body.license_plate)
   }
 
   @UseGuards(JwtAuthGuard)
@@ -64,6 +64,6 @@ export class UsersCarsController {
     @Param('carId', ParseIntPipe) id: number,
   ) {
     verifyAccess(req.user, userId)
-    return this.carsService.delete(req.user.id, id)
+    return this.carsService.delete(userId, id)
   }
 }
