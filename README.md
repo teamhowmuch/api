@@ -14,7 +14,7 @@ Put the `.env` file in place. Ask Daan for the `.env` file
 Start the service
 
 ```sh
-$ yarn start:dev
+$ yarn start
 ```
 
 Validate that the server is running
