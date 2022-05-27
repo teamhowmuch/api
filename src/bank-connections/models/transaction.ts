@@ -1,6 +1,7 @@
 export interface Transaction {
   endToEndId?: string // optional Id
   additionalInformation?: string //	Max500Text	Optional	Might be used by the financial institution to transport additional transaction related information
+  additionalInformationStructured?: string //	Max500Text	Optional	Might be used by the financial institution to transport additional transaction related information
   balanceAfterTransaction?: string //    	Balance	Optional	This is the balance after this transaction. Recommended balance type is interimBooked.
   bankTransactionCode?: string //    	Bank Transaction Code	Optional 	Bank transaction code as used by the financial institution and using the sub elements of this structured code defined by ISO20022. For standing order reports the following codes are applicable: "PMNT-ICDT-STDO" for credit transfers, "PMNT-IRCT-STDO" for instant credit transfers, "PMNT-ICDT-XBST" for cross-border credit transfers, "PMNT-IRCT-XBST" for cross-border real time credit transfers, "PMNT-MCOP-OTHR" for specific standing orders which have a dynamical amount to move left funds e.g. on month end to a saving account
   bookingDate?: string //    	ISODate	Optional	The Date when an entry is posted to an account on the financial institutions books.

@@ -1,23 +1,8 @@
-import { Transaction } from 'src/bank-connections/models/transaction'
 import { knownMerchants, KnownMerchant } from './categories'
+import { CleanedTransaction } from './clean'
 
-export function extractMerchant(transaction: Transaction): KnownMerchant | null {
-  const {
-    creditorName,
-    remittanceInformationUnstructured,
-    remittanceInformationStructured,
-    remittanceInformationStructuredArray,
-    remittanceInformationUnstructuredArray,
-  } = transaction
-
-  const mashedLookupString = [
-    creditorName,
-    remittanceInformationUnstructured,
-    remittanceInformationStructured,
-    remittanceInformationStructuredArray,
-    remittanceInformationUnstructuredArray,
-  ]
-    .flat()
+export function extractMerchant(cleanedTransactions: CleanedTransaction): KnownMerchant | null {
+  const mashedLookupString = [cleanedTransactions.creditorName, cleanedTransactions.remittance]
     .join(' ')
     .toLowerCase()
 

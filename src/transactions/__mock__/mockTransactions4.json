@@ -1,0 +1,228 @@
+[
+  {
+    "transactionAmount": { "amount": "-7.15", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Reisverzekering 301538356 Periode 07.05.2022 - 07.06.2022 Centraal Beheer",
+    "creditorName": "Centraal Beheer",
+    "creditorAccount": { "iban": "NL54INGB0005564520" }
+  },
+  {
+    "transactionAmount": { "amount": "-45.41", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 13:45 pasnr. 020",
+    "creditorName": "SHELL 8196 TAPONAS FRA"
+  },
+  {
+    "transactionAmount": { "amount": "-34.24", "currency": "EUR" },
+    "remittanceInformationUnstructured": "DN110636341",
+    "creditorName": "Allianz Direct Nederland",
+    "creditorAccount": { "iban": "DE30500210000018093401" }
+  },
+  {
+    "transactionAmount": { "amount": "-51.26", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 16:30 pasnr. 020",
+    "creditorName": "TOTAL FRESNOY LE CH FRA"
+  },
+  {
+    "transactionAmount": { "amount": "1000.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Tussen prive",
+    "creditorName": "HIDDEN_SELF",
+    "creditorAccount": "HIDDEN_SELF"
+  },
+  {
+    "transactionAmount": { "amount": "-55.89", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 20:03 pasnr. 020",
+    "creditorName": "Q8 108203 GERPINNES OU GERPINNES BEL"
+  },
+  {
+    "transactionAmount": { "amount": "-21.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Factuur CNV02791683",
+    "creditorName": "CINEVILLE BY BUCKAROO",
+    "creditorAccount": { "iban": "NL81DEUT0265295289" }
+  },
+  {
+    "transactionAmount": { "amount": "-2.31", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Factuur 2022/04 nr. 1172341.00084",
+    "creditorName": "InShared Nederland B.V.",
+    "creditorAccount": { "iban": "NL26RABO0140251111" }
+  },
+  {
+    "transactionAmount": { "amount": "-59.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "V0122023522",
+    "creditorName": "Freedom Internet B.V.",
+    "creditorAccount": { "iban": "NL45RABO0341927058" }
+  },
+  {
+    "transactionAmount": { "amount": "-5.65", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Rabo TotaalPakket                  Periode 01-05-2022 t/m 31-05-2022",
+    "creditorName": "Kosten"
+  },
+  {
+    "transactionAmount": { "amount": "-57.24", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 16:30 pasnr. 020",
+    "creditorName": "GARE ROUT SENAS SENAS FRA"
+  },
+  {
+    "transactionAmount": { "amount": "-1567.34", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Verschuldigde bedragen PERIODE 04-2022",
+    "creditorName": "FLORIUS",
+    "creditorAccount": { "iban": "NL19ABNA0427093546" }
+  },
+  {
+    "transactionAmount": { "amount": "-781.71", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Maandincasso voor uw hypotheek PERIODE 04-2022",
+    "creditorName": "ONTV HYPOTHEEKGELDEN",
+    "creditorAccount": { "iban": "NL95ABNA0588270288" }
+  },
+  {
+    "transactionAmount": { "amount": "-15.91", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Klant: 0015905473, Factuur: 2017226023",
+    "creditorName": "Waternet/Gem. Amsterdam",
+    "creditorAccount": { "iban": "NL60RABO0110022777" }
+  },
+  {
+    "transactionAmount": { "amount": "-8.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "GroenLinks Lidmaatschap (01-apr-2022 tot 01-mei-2022)",
+    "creditorName": "GroenLinks Contributies",
+    "creditorAccount": { "iban": "NL05TRIO0777927144" }
+  },
+  {
+    "transactionAmount": { "amount": "-25.00", "currency": "EUR" },
+    "remittanceInformationStructured": "2182778637820002",
+    "creditorName": "BELASTINGDIENST",
+    "creditorAccount": { "iban": "NL86INGB0002445588" }
+  },
+  {
+    "transactionAmount": { "amount": "-6.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Bedankt voor uw Gift",
+    "creditorName": "St. Leger des Heils",
+    "creditorAccount": { "iban": "NL72RABO0707070171" }
+  },
+  {
+    "transactionAmount": { "amount": "-55.84", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 15:30 pasnr. 020",
+    "creditorName": "TAMOIL EDAM EDAM"
+  },
+  {
+    "transactionAmount": { "amount": "-310.87", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Kaartnummer: ****.****.****.3524   Zie rekeningoverzicht 23-04-2022",
+    "creditorName": "Rabobank Nederland"
+  },
+  {
+    "transactionAmount": { "amount": "3000.00", "currency": "EUR" },
+    "creditorName": "HIDDEN_SELF",
+    "creditorAccount": "HIDDEN_SELF"
+  },
+  {
+    "transactionAmount": { "amount": "442.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "HomeExpenses",
+    "creditorName": "HIDDEN_SELF",
+    "creditorAccount": "HIDDEN_SELF"
+  },
+  {
+    "transactionAmount": { "amount": "-244.57", "currency": "EUR" },
+    "remittanceInformationUnstructured": "9182778630220495 DUO langlopende studieschuld termijn 04/2022",
+    "creditorName": "DUO Hoofdrekening",
+    "creditorAccount": { "iban": "NL45INGB0705001903" }
+  },
+  {
+    "transactionAmount": { "amount": "-8.68", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 19:56 pasnr. 020    15-04-2022",
+    "creditorName": "SILO BY TALENT BASEL BASEL CHE"
+  },
+  {
+    "transactionAmount": { "amount": "-30.43", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Factuur 14-04-2022, klantnummer 20195520385, kpn.com/mobielefactuur.",
+    "creditorName": "KPN - Mobiel",
+    "creditorAccount": { "iban": "NL83INGB0000325513" }
+  },
+  {
+    "transactionAmount": { "amount": "-47.41", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 18:30 pasnr. 020    15-04-2022                         Koersopslag 1,2% EUR 0,56",
+    "creditorName": "Za Zaa Barfi Basel CHE"
+  },
+  {
+    "transactionAmount": { "amount": "-31.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 09:13 pasnr. 020",
+    "creditorName": "DB Automaten Basel CHE"
+  },
+  {
+    "transactionAmount": { "amount": "-12.30", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 11:23 pasnr. 020",
+    "creditorName": "Backwerk Singen Singen DEU"
+  },
+  {
+    "transactionAmount": { "amount": "-8.51", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 17:44 pasnr. 020",
+    "creditorName": "Coop Pronto Basel Basel CHE"
+  },
+  {
+    "transactionAmount": { "amount": "-29.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "ABON 18-04-2022 t/m 17-05-2022 / NRC Handelsblad digitaal Relnr: 2363890 / INCL BTW 9: EUR 2.40",
+    "creditorName": "NRC MEDIA",
+    "creditorAccount": { "iban": "NL62ABNA0461750872" }
+  },
+  {
+    "transactionAmount": { "amount": "-200.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Geldautomaat 09:01 pasnr. 020",
+    "creditorName": "Primera Beukenplein Amsterdam"
+  },
+  {
+    "transactionAmount": { "amount": "-19.99", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 16:21 pasnr. 020",
+    "creditorName": "H&M 145 AMSTERDAM Amsterdam"
+  },
+  {
+    "transactionAmount": { "amount": "-15.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 16:12 pasnr. 020",
+    "creditorName": "The Sting TILBURG"
+  },
+  {
+    "transactionAmount": { "amount": "-22.99", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 16:32 pasnr. 020",
+    "creditorName": "Scheltema AMSTERDAM"
+  },
+  {
+    "transactionAmount": { "amount": "-19.23", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 19:11 pasnr. 020",
+    "creditorName": "Albert Heijn 1436 AMSTERDAM"
+  },
+  {
+    "transactionAmount": { "amount": "-34.24", "currency": "EUR" },
+    "remittanceInformationUnstructured": "DN110636341",
+    "creditorName": "Allianz Direct Nederland",
+    "creditorAccount": { "iban": "DE30500210000018093401" }
+  },
+  {
+    "transactionAmount": { "amount": "-7.15", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Reisverzekering 301538356 Periode 07.04.2022 - 07.05.2022 Centraal Beheer",
+    "creditorName": "Centraal Beheer",
+    "creditorAccount": { "iban": "NL54INGB0005564520" }
+  },
+  {
+    "transactionAmount": { "amount": "-21.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Factuur CNV02737352",
+    "creditorName": "CINEVILLE BY BUCKAROO",
+    "creditorAccount": { "iban": "NL81DEUT0265295289" }
+  },
+  {
+    "transactionAmount": { "amount": "-15.91", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Klant: 0015905473, Factuur: 2016692486",
+    "creditorName": "Waternet/Gem. Amsterdam",
+    "creditorAccount": { "iban": "NL60RABO0110022777" }
+  },
+  {
+    "transactionAmount": { "amount": "3000.00", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Tussen prive",
+    "creditorName": "HIDDEN_SELF",
+    "creditorAccount": "HIDDEN_SELF"
+  },
+  {
+    "transactionAmount": { "amount": "-3.45", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Betaalautomaat 17:35 pasnr. 020",
+    "creditorName": "BP NIEUWE HEMWEG AMSTERDAM"
+  },
+  {
+    "transactionAmount": { "amount": "-5.65", "currency": "EUR" },
+    "remittanceInformationUnstructured": "Rabo TotaalPakket                  Periode 01-04-2022 t/m 30-04-2022",
+    "creditorName": "Kosten"
+  }
+]

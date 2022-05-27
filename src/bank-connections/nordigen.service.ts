@@ -5,7 +5,6 @@ import { NordigenBank } from './models/bank'
 import { AccountDetails } from './models/AccountDetails'
 import { GetTransactionsResponse } from './models/getTransactionsResponse'
 import { SupportedBank } from './constants'
-import mockTransactions from './mockTransactions4.json'
 import { Cron, CronExpression } from '@nestjs/schedule'
 
 interface AuthTokenData {
@@ -243,11 +242,6 @@ export class NordigenService {
       queryParams,
     )
     return res.data.transactions
-  }
-
-  async mockGetAccountTransactions(): Promise<GetTransactionsResponse['transactions']> {
-    const res = mockTransactions as unknown
-    return (res as GetTransactionsResponse).transactions
   }
 
   // -----

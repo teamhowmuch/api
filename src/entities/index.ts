@@ -14,7 +14,6 @@ import { Transaction } from './Transaction'
 import { User } from './User'
 import { UserBankConnection } from './UserBankConnection'
 import { UserOtp } from './UserOtp'
-import { TransactionAnonymized } from './TransactionAnonymized'
 
 // /index
 
@@ -31,7 +30,6 @@ export const Collection = [
   MerchantTransactionSearchPattern,
   UserRole,
   Transaction,
-  TransactionAnonymized,
   User,
   UserBankConnection,
   UserOtp,

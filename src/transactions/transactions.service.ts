@@ -3,28 +3,29 @@ import { BankConnectionsService } from '../bank-connections/bank-connections.ser
 import { Transaction } from '../bank-connections/models/transaction'
 import { DateFilter, NordigenService } from '../bank-connections/nordigen.service'
 import { Transaction as TransactionEntity } from '../entities/Transaction'
-import { FindOneOptions, LessThan, Repository } from 'typeorm'
+import { FindManyOptions, FindOneOptions, LessThan, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserBankConnection } from '../entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
-import { TransactionAnonymized } from '../entities/TransactionAnonymized'
 import { BankImport, BankImportStatus } from 'src/entities/BankImport'
 import { subSeconds, subYears } from 'date-fns'
 import { Cron, CronExpression } from '@nestjs/schedule'
+import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
+import { UsersService } from 'src/users/users.service'
+import { clean } from './clean'
 
 @Injectable()
 export class TransactionsService {
   private readonly logger = new Logger(TransactionsService.name)
 
   constructor(
+    private usersService: UsersService,
     private transactionProcessorService: TransactionProcessor,
     private bankConnectionService: BankConnectionsService,
     private nordigenService: NordigenService,
     @InjectRepository(BankImport) private importsRepo: Repository<BankImport>,
     @InjectRepository(TransactionEntity)
     private transactionRepo: Repository<TransactionEntity>,
-    @InjectRepository(TransactionAnonymized)
-    private anonymTransactionRepo: Repository<TransactionAnonymized>,
   ) {}
 
   async findOne(options: FindOneOptions<TransactionEntity>) {
@@ -56,8 +57,43 @@ export class TransactionsService {
 
     const transactions = await this.fetchAccountTransactions(accountId, dateFilter)
     for (const transaction of transactions) {
-      await this.transactionProcessorService.process({ account, transaction, bankConnection })
+      await this.saveTransaction(transaction, bankConnection, account)
     }
+  }
+
+  async saveTransaction(
+    transaction: Transaction,
+    bankConnection: UserBankConnection,
+    account: AccountDetails,
+  ) {
+    const user = await this.usersService.findOne({ where: { id: bankConnection.user_id } })
+    const cleaned = await clean(transaction)
+    const entity = new TransactionEntity()
+
+    entity.id = cleaned.id
+    entity.bank_connection_id = bankConnection.id
+    entity.user_id = user.id
+
+    entity.imported_at = new Date()
+
+    if (user.is_beta_tester) {
+      entity.booking_date = cleaned.bookingDate
+      entity.amount = cleaned.amount
+      entity.currency = cleaned.currency
+
+      entity.remittance = cleaned.remittance
+      entity.creditor = cleaned.creditorName
+      entity.debtor = cleaned.debtorName
+
+      entity.extracted_from_account_iban = account.iban
+      entity.extracted_from_account_display = account.displayName
+
+      entity.raw_data = transaction
+    }
+
+    const saveResult = await this.transactionRepo.save(entity)
+    await this.transactionProcessorService.process(saveResult, transaction, cleaned)
+    return saveResult
   }
 
   // Todo change into queue processor?
@@ -155,12 +191,11 @@ export class TransactionsService {
     }
   }
 
-  async saveTransaction(entity: TransactionEntity) {
-    return this.transactionRepo.save(entity)
+  async find(options: FindManyOptions<TransactionEntity>) {
+    return this.transactionRepo.findAndCount(options)
   }
 
-  async saveAnonymizedTransaction(aTransaction: TransactionAnonymized) {
-    console.log('saving', aTransaction)
-    return this.anonymTransactionRepo.save(aTransaction)
+  async updateTransaction(entity: TransactionEntity) {
+    return this.transactionRepo.save(entity)
   }
 }

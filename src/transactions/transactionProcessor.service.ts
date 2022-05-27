@@ -2,20 +2,15 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common'
 
 import { Transaction as TransactionEntity } from '../entities/Transaction'
 import { TransactionsService } from './transactions.service'
-import hasher from 'node-object-hash'
-import { TransactionCategory } from './categories'
+import { TransactionCategory, KnownMerchant } from './categories'
 import { SourceType } from '../entities/EmissionEvent'
 import { UsersService } from '../users/users.service'
 import { CarfuelService } from '../products/carfuel/carfuel.service'
 import { EmissionEventsService } from '../emission-events/emission-events.service'
 import { Transaction } from '../bank-connections/models/transaction'
-import { UserBankConnection } from '../entities/UserBankConnection'
-import { AccountDetails } from '../bank-connections/models/AccountDetails'
 import { CarsService } from '../cars/cars.service'
-import { TransactionAnonymized } from '../entities/TransactionAnonymized'
 import { extractMerchant } from './extractMerchant'
-
-const hash = hasher({ sort: true, coerce: true })
+import { CleanedTransaction } from './clean'
 
 @Injectable()
 export class TransactionProcessor {
@@ -30,136 +25,68 @@ export class TransactionProcessor {
     private emissionEventService: EmissionEventsService,
   ) {}
 
-  async process({
-    bankConnection,
-    transaction,
-  }: {
-    bankConnection: UserBankConnection
-    transaction: Transaction
-    account: AccountDetails
-  }) {
-    try {
-      const id = transaction.transactionId || transaction.endToEndId || hash.hash(transaction)
-      const userId = bankConnection.user_id
-      const user = await this.usersService.findOne({ where: { id: userId } })
+  async process(
+    entity: TransactionEntity,
+    rawTransaction: Transaction,
+    cleanedTransaction: CleanedTransaction,
+  ) {
+    if (entity.processed_at) {
+      return
+    }
 
-      let transactionEntity = await this.transactionsService.findOne({
-        where: { id, user_id: userId },
-      })
+    const merchant = extractMerchant(cleanedTransaction)
 
-      if (transactionEntity && transactionEntity.processed) {
-        return
+    if (merchant) {
+      if (merchant.category === TransactionCategory.CARFUEL) {
+        await this.processCarfuelTransaction(entity, rawTransaction, cleanedTransaction, merchant)
+      }
+    }
+  }
+
+  private async processCarfuelTransaction(
+    entity: TransactionEntity,
+    rawTransaction: Transaction,
+    cleanedTransaction: CleanedTransaction,
+    merchant: KnownMerchant,
+  ) {
+    const amount = Math.abs(cleanedTransaction.amount)
+    const cars = await this.carsService.list(entity.user_id)
+    const userCarFuelType = cars[0]?.fuel_type_simplified
+
+    if (userCarFuelType) {
+      const liters = await this.carfuelService.getFuelAmount(
+        cleanedTransaction.bookingDate,
+        amount,
+        userCarFuelType,
+      )
+      const price = await this.carfuelService.getFuelPricePerLiter(
+        cleanedTransaction.bookingDate,
+        userCarFuelType,
+      )
+
+      const co2eq_mean = await this.carfuelService.calculateFuelEmissions(userCarFuelType, liters)
+
+      const data = {
+        transaction_type: TransactionCategory.CARFUEL,
+        transaction_amount: amount,
+        carfuel_type: userCarFuelType,
+        carfuel_amount: liters,
+        carfuel_price: price,
+        merchant,
       }
 
-      // Todo this seems like a redundant check with transaction already processed
-      // but useful for dev
-      const existingEmissionEvent = await this.emissionEventService.findOne({
-        where: { source_type: SourceType.TRANSACTION, source_id: id, user_id: userId },
-      })
-      if (existingEmissionEvent) {
-        console.log('emission event for this source already exists')
-        // Emission Event for this transaction already exists
-        return
-      }
+      await this.emissionEventService.create(
+        entity.user_id,
+        co2eq_mean,
+        SourceType.TRANSACTION,
+        entity.id,
+        cleanedTransaction.bookingDate,
+        data,
+      )
 
-      // Save transaction proof of processing
-      transactionEntity = new TransactionEntity()
-      transactionEntity.id = id
-      transactionEntity.user_id = userId
-      transactionEntity.processed = false
-      transactionEntity.bank_connection_id = bankConnection.id
-      transactionEntity = await this.transactionsService.saveTransaction(transactionEntity)
-
-      let anonymizedTransaction
-
-      if (user.is_beta_tester) {
-        anonymizedTransaction = new TransactionAnonymized()
-        anonymizedTransaction.transaction_id = id
-        anonymizedTransaction.raw_data = {
-          transactionAmount: transaction.transactionAmount,
-          remittanceInformationUnstructured: transaction.remittanceInformationUnstructured,
-          remittanceInformationStructured: transaction.remittanceInformationStructured,
-          remittanceInformationStructuredArray: transaction.remittanceInformationStructuredArray,
-          remittanceInformationUnstructuredArray:
-            transaction.remittanceInformationUnstructuredArray,
-          creditorName:
-            transaction.transactionAmount.amount < 0 ? transaction.creditorName : 'HIDDEN_SELF',
-          creditorAccount:
-            transaction.transactionAmount.amount < 0 ? transaction.creditorAccount : 'HIDDEN_SELF',
-        }
-        transaction.creditorAccount
-        await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
-      }
-
-      const merchant = extractMerchant(transaction)
-
-      // It's carfuelTime, process
-      if (merchant) {
-        if (user.is_beta_tester) {
-          anonymizedTransaction.resolved_to = { ...anonymizedTransaction.resolved_to, merchant }
-          await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
-        }
-
-        const transactionDate = new Date(transaction.bookingDate)
-        const amount = Math.abs(transaction.transactionAmount.amount)
-
-        if (merchant.category === TransactionCategory.CARFUEL && amount > 15 && amount < 175) {
-          const user = await this.usersService.findOne({ where: { id: userId } })
-          const cars = await this.carsService.list(userId)
-          const userCarFuelType = cars[0]?.fuel_type_simplified
-
-          if (userCarFuelType) {
-            const liters = await this.carfuelService.getFuelAmount(
-              transactionDate,
-              amount,
-              userCarFuelType,
-            )
-            const price = await this.carfuelService.getFuelPricePerLiter(
-              transactionDate,
-              userCarFuelType,
-            )
-            const co2eq_mean = await this.carfuelService.calculateFuelEmissions(
-              userCarFuelType,
-              liters,
-            )
-
-            const data = {
-              transaction_type: TransactionCategory.CARFUEL,
-              transaction_amount: amount,
-              carfuel_type: userCarFuelType,
-              carfuel_amount: liters,
-              carfuel_price: price,
-              merchant,
-            }
-
-            const emissionEvent = await this.emissionEventService.create(
-              user.id,
-              co2eq_mean,
-              SourceType.TRANSACTION,
-              id,
-              transactionDate,
-              data,
-            )
-
-            transactionEntity.processed = false
-            await this.transactionsService.saveTransaction(transactionEntity)
-
-            if (user.is_beta_tester) {
-              anonymizedTransaction.resolved_to = {
-                ...anonymizedTransaction.resolved_to,
-                emissionEvent,
-              }
-              await this.transactionsService.saveAnonymizedTransaction(anonymizedTransaction)
-            }
-
-            return true
-          }
-        }
-      }
-    } catch (error) {
-      this.logger.error('Error processing transaction')
-      this.logger.error(error)
-      throw error
+      entity.processed_at = new Date()
+      await this.transactionsService.updateTransaction(entity)
+      return true
     }
   }
 }

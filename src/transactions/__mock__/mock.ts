@@ -1,6 +1,19 @@
-export const mocks: { name: string; transaction: any }[] = [
+export interface MockData {
+  matchInfo: {
+    amount: number
+    currency: string
+    bookingDate: Date
+  }
+  transaction: any
+}
+
+export const mocks: MockData[] = [
   {
-    name: 'Albert Heijn',
+    matchInfo: {
+      amount: -4.63,
+      currency: 'eur',
+      bookingDate: new Date('2022-01-09'),
+    },
     transaction: {
       bankTransactionCode: 'PMNT-CCRD-POSD',
       bookingDate: '2022-01-09',
@@ -25,7 +38,11 @@ export const mocks: { name: string; transaction: any }[] = [
   },
 
   {
-    name: 'Berkman Breda',
+    matchInfo: {
+      amount: -44.42,
+      currency: 'eur',
+      bookingDate: new Date('2021-08-13'),
+    },
     transaction: {
       bookingDate: '2021-08-13',
       proprietaryBankTransactionCode: '426',
@@ -51,7 +68,11 @@ export const mocks: { name: string; transaction: any }[] = [
   },
 
   {
-    name: 'Shell',
+    matchInfo: {
+      amount: -64.67,
+      currency: 'eur',
+      bookingDate: new Date('2022-01-09'),
+    },
     transaction: {
       bookingDate: '2021-03-26',
       creditorName: 'Shell 5423',
