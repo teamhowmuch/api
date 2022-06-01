@@ -70,7 +70,7 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     name: 'Avia',
     searchPattern: 'avia ',
     category: TransactionCategory.CARFUEL,
-    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/AVIA_International_logo.svg',
+    iconUrl: 'https://www.loyaltyfacts.nl/wp-content/uploads/2018/03/Avia-logo.jpg',
   },
   {
     name: 'Garage Lux (shell)',
