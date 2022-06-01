@@ -43,7 +43,7 @@ export interface AgreementsResponseDto {
 }
 
 export const DEFAULT_REQUISITION_PERIOD = 90
-export const DEFAULT_REQUISITION_VALIDITY = 14
+export const DEFAULT_REQUISITION_VALIDITY = 90
 
 interface AnyObject {
   [key: string]: any

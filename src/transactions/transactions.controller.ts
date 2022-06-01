@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { Type } from 'class-transformer'
-import { IsDate, IsEnum, IsNumber, IsOptional } from 'class-validator'
+import { IsDate, IsEnum, IsInt, IsOptional } from 'class-validator'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { RoleEnum } from 'src/entities/UserRole'
 import { TransactionsService } from './transactions.service'
@@ -27,21 +27,11 @@ enum OrderByField {
 }
 
 class ListTransactionsDto {
-  @IsNumber()
-  @IsOptional()
-  page: number
+  @Type(() => Number) @IsInt() @IsOptional() limit: number
+  @Type(() => Number) @IsInt() @IsOptional() offset: number
 
-  @IsNumber()
-  @IsOptional()
-  page_size: number
-
-  @IsEnum(OrderByField)
-  @IsOptional()
-  order_by: string
-
-  @IsEnum(OrderDirection)
-  @IsOptional()
-  order_direction: OrderDirection
+  @IsEnum(OrderByField) @IsOptional() order_by: string
+  @IsEnum(OrderDirection) @IsOptional() order_direction: OrderDirection
 }
 
 class TriggerImportDto {
@@ -81,18 +71,21 @@ export class ImportController {
     {
       order_by = OrderByField.booking_date,
       order_direction = OrderDirection.DESC,
-      page = 0,
-      page_size = 25,
+      offset = 0,
+      limit = 25,
     }: ListTransactionsDto,
   ) {
     verifyAccess(user, userId, [RoleEnum.ADMIN])
-    return this.transactionsService.find({
+    console.log(order_by, order_direction)
+    const [data, count] = await this.transactionsService.find({
       where: { user_id: userId },
       order: {
-        [order_by]: [order_direction],
+        [order_by]: order_direction === 'ASC' ? 'ASC' : 'DESC',
       },
-      take: page_size,
-      skip: page * page_size,
+      take: limit,
+      skip: offset,
     })
+
+    return { data, count }
   }
 }

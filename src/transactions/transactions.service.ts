@@ -87,8 +87,6 @@ export class TransactionsService {
 
       entity.extracted_from_account_iban = account.iban
       entity.extracted_from_account_display = account.displayName
-
-      entity.raw_data = transaction
     }
 
     const saveResult = await this.transactionRepo.save(entity)
