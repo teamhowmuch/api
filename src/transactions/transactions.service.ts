@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { RequisitionStatus, UserBankConnection } from '../entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
 import { BankImport, BankImportStatus } from 'src/entities/BankImport'
-import { differenceInHours, subSeconds, subYears } from 'date-fns'
+import { differenceInHours, subDays, subSeconds, subYears } from 'date-fns'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
 import { UsersService } from 'src/users/users.service'
@@ -172,7 +172,10 @@ export class TransactionsService {
         !plannedOrActive &&
         (!lastImport || differenceInHours(new Date(), lastImport.updated_at) > 1)
       ) {
-        await this.queueImport(connection.id)
+        await this.queueImport(connection.id, {
+          dateFrom: subDays(new Date(), 2),
+          dateTo: new Date(),
+        })
       }
     }
   }
