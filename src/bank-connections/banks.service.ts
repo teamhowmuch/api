@@ -13,9 +13,7 @@ export class BanksService {
   constructor(
     private nordigenService: NordigenService,
     @InjectRepository(Bank) private bankRepository: Repository<Bank>,
-  ) {
-    this.updateAvailableBanks()
-  }
+  ) {}
 
   async list() {
     return this.bankRepository.find()

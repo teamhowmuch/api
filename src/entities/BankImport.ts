@@ -8,7 +8,6 @@ export enum BankImportStatus {
   ACTIVE = 'ACTIVE',
   COMPLETED = 'COMPLETED',
   ERROR = 'ERROR',
-  CANCELED = 'CANCELED',
 }
 
 @Entity()

@@ -5,10 +5,10 @@ import { DateFilter, NordigenService } from '../bank-connections/nordigen.servic
 import { Transaction as TransactionEntity } from '../entities/Transaction'
 import { FindManyOptions, FindOneOptions, LessThan, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserBankConnection } from '../entities/UserBankConnection'
+import { RequisitionStatus, UserBankConnection } from '../entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
 import { BankImport, BankImportStatus } from 'src/entities/BankImport'
-import { subSeconds, subYears } from 'date-fns'
+import { differenceInHours, subSeconds, subYears } from 'date-fns'
 import { Cron, CronExpression } from '@nestjs/schedule'
 import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
 import { UsersService } from 'src/users/users.service'
@@ -94,12 +94,16 @@ export class TransactionsService {
     return saveResult
   }
 
-  // Todo change into queue processor?
   async importConnectionTransactions(
     bankConnectionId: UserBankConnection['id'],
     dateFilter?: DateFilter,
   ) {
-    const bankConnection = await this.bankConnectionService.getOne(bankConnectionId)
+    const bankConnection = await this.bankConnectionService.update(bankConnectionId)
+    if (bankConnection.requisition_status !== RequisitionStatus.VALID) {
+      throw new Error(
+        `Cannot import transactions from bankConnection. Requisition status is ${bankConnection.requisition_status}`,
+      )
+    }
     this.logger.debug(`importing transactions for bankConnection ${bankConnection.id}`)
     for (const { nordigenId } of bankConnection.account_details_data) {
       await this.importAccountTransactions(bankConnection, nordigenId, dateFilter)
@@ -125,12 +129,50 @@ export class TransactionsService {
           return
         }
 
-        const bankImport = new BankImport()
-        bankImport.date_to = dateFilter.dateTo || new Date()
-        bankImport.date_from = dateFilter.dateFrom || subYears(new Date(), 1)
-        bankImport.user_bank_connection_id = connection.id
-        await this.importsRepo.save(bankImport)
+        this.queueImport(connection.id, dateFilter)
         this.checkNewJob()
+      }
+    }
+  }
+
+  async queueImport(bankConnectionId: number, dateFilter?: DateFilter) {
+    console.log('scheduling import')
+    const bankImport = new BankImport()
+    bankImport.date_to = dateFilter?.dateTo || new Date()
+    bankImport.date_from = dateFilter?.dateFrom || subYears(new Date(), 1)
+    bankImport.user_bank_connection_id = bankConnectionId
+    await this.importsRepo.save(bankImport)
+  }
+
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async autoImportTransactions() {
+    const allValidBankConnections = await this.bankConnectionService.find({
+      where: { requisition_status: RequisitionStatus.VALID },
+    })
+
+    for (const connection of allValidBankConnections) {
+      const lastImport = await this.importsRepo
+        .createQueryBuilder()
+        .where('user_bank_connection_id = :id', { id: connection.id })
+        .andWhere(`status IN ('${BankImportStatus.COMPLETED}','${BankImportStatus.ERROR}')`)
+        .orderBy('started_at', 'DESC')
+
+        .getOne()
+
+      const plannedOrActive = await this.importsRepo
+        .createQueryBuilder()
+        .where('user_bank_connection_id = :id', { id: connection.id })
+        .andWhere(`status IN ('${BankImportStatus.QUEUED}','${BankImportStatus.ACTIVE}')`)
+
+        .getOne()
+
+      this.logger.log(`Queueing import for bankConnection: ${connection.id}`)
+
+      if (
+        !plannedOrActive &&
+        (!lastImport || differenceInHours(new Date(), lastImport.updated_at) > 1)
+      ) {
+        await this.queueImport(connection.id)
       }
     }
   }
@@ -139,7 +181,7 @@ export class TransactionsService {
   async checkStaleJobs() {
     const staleJob = await this.importsRepo.findOne({
       status: BankImportStatus.ACTIVE,
-      started_at: LessThan(subSeconds(new Date(), 90)),
+      started_at: LessThan(subSeconds(new Date(), 120)),
     })
 
     if (staleJob) {

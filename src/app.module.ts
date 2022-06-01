@@ -31,6 +31,7 @@ import { RolesGuard } from './auth/roles.guard'
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DB,
       entities: Entities.Collection,
+      useUTC: true,
       synchronize: false,
       migrationsTableName: 'migrations',
       migrationsRun: true,
