@@ -9,6 +9,7 @@ import { AccountDetails } from './models/AccountDetails'
 import { addDays } from 'date-fns'
 import { BanksService } from './banks.service'
 import { BankImport, BankImportStatus } from 'src/entities/BankImport'
+import { Cron, CronExpression } from '@nestjs/schedule'
 
 // const ALLOWED_REDIRECT_URLS = ['exp://192.168.178.20:19000']
 
@@ -135,6 +136,7 @@ export class BankConnectionsService {
     })
 
     bankConnection.requisition_data = requisition
+    bankConnection.requisition_expires_at = addDays(new Date(), DEFAULT_REQUISITION_VALIDITY)
     bankConnection.bank_id = institutionId
 
     await this.bankConnectionRepo.save(bankConnection)
@@ -152,12 +154,11 @@ export class BankConnectionsService {
       const requisition = await this.nordigenService.getRequisition(
         bankConnection.requisition_data.id,
       )
+      console.log('pinggg')
       bankConnection.requisition_data = requisition
       bankConnection.requisition_status = STATUS_MAP[requisition.status]
-      bankConnection.requisition_expires_at = addDays(new Date(), DEFAULT_REQUISITION_VALIDITY)
+      // todo check if this is in right place does it actually get renewed here or just checked?
     } catch (error) {
-      bankConnection.requisition_data = null
-      bankConnection.requisition_expires_at = null
       this.logger.error(`Error fetching requisition for bankConnection ${bankConnectionId}`)
       bankConnection.requisition_status = RequisitionStatus.BROKEN
     }
@@ -170,11 +171,20 @@ export class BankConnectionsService {
       }
       bankConnection.account_details_data = accountsDetails
       this.logger.debug(JSON.stringify(bankConnection, null, 2))
-    } else {
-      bankConnection.account_details_data = null
     }
     this.bankConnectionRepo.save(bankConnection)
     return bankConnection
+  }
+
+  @Cron(CronExpression.EVERY_2_HOURS)
+  async updateBankConnections() {
+    const allBankConnections = await this.find({
+      where: { requisition_status: RequisitionStatus.VALID },
+    })
+
+    for (const connection of allBankConnections) {
+      this.update(connection.id)
+    }
   }
 
   // ----
@@ -187,6 +197,3 @@ export class BankConnectionsService {
     )
   }
 }
-
-// storing: saving uniqueness
-// on ln created
