@@ -190,7 +190,7 @@ export class TransactionsService {
   async checkStaleJobs() {
     const staleJob = await this.importsRepo.findOne({
       status: BankImportStatus.ACTIVE,
-      started_at: LessThan(subSeconds(new Date(), 120)),
+      started_at: LessThan(subSeconds(new Date(), 180)),
     })
 
     if (staleJob) {
