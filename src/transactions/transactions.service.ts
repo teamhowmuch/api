@@ -202,8 +202,10 @@ export class TransactionsService {
 
   @Cron(CronExpression.EVERY_10_SECONDS)
   async checkNewJob() {
-    const activeJob = await this.importsRepo.findOne({ status: BankImportStatus.ACTIVE })
-    if (activeJob) {
+    const activeJobcount = await this.importsRepo.count({
+      status: BankImportStatus.ACTIVE,
+    })
+    if (activeJobcount >= 3) {
       return
     }
 
