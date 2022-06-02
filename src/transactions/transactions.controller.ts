@@ -76,7 +76,7 @@ export class ImportController {
     }: ListTransactionsDto,
   ) {
     verifyAccess(user, userId, [RoleEnum.ADMIN])
-    console.log(order_by, order_direction)
+
     const [data, count] = await this.transactionsService.find({
       where: { user_id: userId },
       order: {

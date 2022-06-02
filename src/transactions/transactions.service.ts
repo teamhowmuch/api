@@ -159,7 +159,7 @@ export class TransactionsService {
 
         .getOne()
 
-      const plannedOrActive = await this.importsRepo
+      const queuedOrActive = await this.importsRepo
         .createQueryBuilder()
         .where('user_bank_connection_id = :id', { id: connection.id })
         .andWhere(`status IN ('${BankImportStatus.QUEUED}','${BankImportStatus.ACTIVE}')`)
@@ -168,10 +168,16 @@ export class TransactionsService {
 
       this.logger.log(`Queueing import for bankConnection: ${connection.id}`)
 
-      if (
-        !plannedOrActive &&
-        (!lastImport || differenceInHours(new Date(), lastImport.updated_at) > 1)
-      ) {
+      if (queuedOrActive) {
+        return
+      } else if (!lastImport) {
+        await this.queueImport(connection.id, {
+          // first import, import 1 year of transactions
+          dateFrom: subDays(new Date(), 365),
+          dateTo: new Date(),
+        })
+      } else if (differenceInHours(new Date(), lastImport.updated_at) > 1) {
+        // only import last two days
         await this.queueImport(connection.id, {
           dateFrom: subDays(new Date(), 2),
           dateTo: new Date(),
