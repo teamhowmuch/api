@@ -34,6 +34,14 @@ export class TransactionProcessor {
       return
     }
 
+    const existingEmissionEvent = await this.emissionEventService.findOne({
+      where: { source_id: entity.id, source_type: SourceType.TRANSACTION },
+    })
+
+    if (existingEmissionEvent) {
+      return
+    }
+
     const merchant = extractMerchant(cleanedTransaction)
 
     if (merchant) {
