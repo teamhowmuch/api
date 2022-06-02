@@ -10,7 +10,6 @@ import { addDays, differenceInHours } from 'date-fns'
 import { BanksService } from './banks.service'
 import { BankImport, BankImportStatus } from 'src/entities/BankImport'
 import { Cron, CronExpression } from '@nestjs/schedule'
-import { User } from 'src/entities/User'
 
 // const ALLOWED_REDIRECT_URLS = ['exp://192.168.178.20:19000']
 
