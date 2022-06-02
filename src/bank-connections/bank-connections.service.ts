@@ -3,13 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { randomUUID } from 'crypto'
 import { RequisitionStatus, UserBankConnection } from '../entities/UserBankConnection'
 import { UsersService } from '../users/users.service'
-import { Connection, FindManyOptions, Repository } from 'typeorm'
+import { Connection, FindManyOptions, IsNull, Not, Repository } from 'typeorm'
 import { DEFAULT_REQUISITION_VALIDITY, NordigenService } from './nordigen.service'
 import { AccountDetails } from './models/AccountDetails'
-import { addDays } from 'date-fns'
+import { addDays, differenceInHours } from 'date-fns'
 import { BanksService } from './banks.service'
 import { BankImport, BankImportStatus } from 'src/entities/BankImport'
 import { Cron, CronExpression } from '@nestjs/schedule'
+import { User } from 'src/entities/User'
 
 // const ALLOWED_REDIRECT_URLS = ['exp://192.168.178.20:19000']
 
@@ -146,15 +147,11 @@ export class BankConnectionsService {
 
   async update(bankConnectionId: number): Promise<UserBankConnection> {
     this.logger.debug(`Updating bankConnection ${bankConnectionId}`)
-
     const bankConnection = await this.getOne(bankConnectionId)
-    this.logger.debug(JSON.stringify(bankConnection, null, 2))
-
     try {
       const requisition = await this.nordigenService.getRequisition(
         bankConnection.requisition_data.id,
       )
-      console.log('pinggg')
       bankConnection.requisition_data = requisition
       bankConnection.requisition_status = STATUS_MAP[requisition.status]
       // todo check if this is in right place does it actually get renewed here or just checked?
@@ -170,7 +167,6 @@ export class BankConnectionsService {
         accountsDetails.push({ ...res, nordigenId: account })
       }
       bankConnection.account_details_data = accountsDetails
-      this.logger.debug(JSON.stringify(bankConnection, null, 2))
     }
     this.bankConnectionRepo.save(bankConnection)
     return bankConnection
@@ -185,6 +181,31 @@ export class BankConnectionsService {
     for (const connection of allBankConnections) {
       this.update(connection.id)
     }
+  }
+
+  @Cron(CronExpression.EVERY_2_HOURS)
+  async pruneStaleBankConnections() {
+    const staleBankConnections = await this.find({
+      where: { requisition_status: Not(RequisitionStatus.VALID), deleted_at: IsNull() },
+    })
+
+    for (const connection of staleBankConnections) {
+      if (differenceInHours(new Date(), connection.updated_at) > 24) {
+        this.bankConnectionRepo.softDelete(connection)
+      }
+    }
+  }
+
+  async delete({ bankConnectionId, userId }: { bankConnectionId: number; userId: number }) {
+    const exists = await this.bankConnectionRepo.findOne({
+      where: { id: bankConnectionId, user_id: userId },
+    })
+
+    if (!exists) {
+      throw new NotFoundException()
+    }
+    this.logger.debug(`Soft deleting bankconnection ${bankConnectionId}`)
+    await this.bankConnectionRepo.softDelete(bankConnectionId)
   }
 
   // ----

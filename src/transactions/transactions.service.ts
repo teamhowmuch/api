@@ -166,11 +166,10 @@ export class TransactionsService {
 
         .getOne()
 
-      this.logger.log(`Queueing import for bankConnection: ${connection.id}`)
-
       if (queuedOrActive) {
         return
       } else if (!lastImport) {
+        this.logger.log(`Queueing full import for bankConnection: ${connection.id}`)
         await this.queueImport(connection.id, {
           // first import, import 1 year of transactions
           dateFrom: subDays(new Date(), 365),
@@ -178,6 +177,7 @@ export class TransactionsService {
         })
       } else if (differenceInHours(new Date(), lastImport.updated_at) > 1) {
         // only import last two days
+        this.logger.log(`Queueing last-2-days import for bankConnection: ${connection.id}`)
         await this.queueImport(connection.id, {
           dateFrom: subDays(new Date(), 2),
           dateTo: new Date(),

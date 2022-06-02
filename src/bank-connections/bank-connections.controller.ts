@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Logger,
   NotFoundException,
@@ -66,6 +67,18 @@ export class BankConnectionsController {
   ) {
     verifyAccess(req.user, userId)
     const res = await this.bankConnections.create(dto.bank_id, userId, dto.redirect_url)
+    return res
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':bankConnectionId')
+  async delete(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('bankConnectionId', ParseIntPipe) bankConnectionId: number,
+    @Req() req: AuthenticatedRequest,
+  ) {
+    verifyAccess(req.user, userId)
+    const res = await this.bankConnections.delete({ userId, bankConnectionId })
     return res
   }
 }

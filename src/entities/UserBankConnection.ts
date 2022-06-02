@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
   ManyToOne,
   JoinColumn,
   OneToMany,
@@ -43,11 +44,9 @@ export class UserBankConnection {
   @Column({ type: 'jsonb', nullable: true })
   account_details_data?: AccountDetails[]
 
-  @CreateDateColumn()
-  created_at: Date
-
-  @UpdateDateColumn()
-  updated_at: Date
+  @CreateDateColumn() created_at: Date
+  @UpdateDateColumn() updated_at: Date
+  @DeleteDateColumn() deleted_at: Date
 
   @ManyToOne(() => Bank, (bank) => bank)
   @JoinColumn({ name: 'bank_id' })
