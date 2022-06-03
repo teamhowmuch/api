@@ -90,4 +90,10 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     category: TransactionCategory.CARFUEL,
     iconUrl: 'https://www.berkman.nl/wp-content/themes/berkman/images/berkman_logo.png',
   },
+  {
+    name: 'Q8',
+    searchPattern: 'q8',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://www.case.vlaanderen/pictures/cms/q8/q8-logo.jpg',
+  },
 ] as const
