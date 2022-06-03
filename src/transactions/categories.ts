@@ -96,4 +96,10 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     category: TransactionCategory.CARFUEL,
     iconUrl: 'https://www.case.vlaanderen/pictures/cms/q8/q8-logo.jpg',
   },
+  {
+    name: 'Aral',
+    searchPattern: 'aral',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Aral_Logo.svg/120px-Aral_Logo.svg.png',
+  },
 ] as const
