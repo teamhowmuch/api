@@ -85,10 +85,10 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     iconUrl: 'https://www.berkman.nl/wp-content/themes/berkman/images/berkman_logo.png',
   },
   {
-    name: 'Berkman Breda',
-    searchPattern: 'berkman breda',
+    name: 'Esso Kalix Berna',
+    searchPattern: 'Vissers Oosterhout',
     category: TransactionCategory.CARFUEL,
-    iconUrl: 'https://www.berkman.nl/wp-content/themes/berkman/images/berkman_logo.png',
+    iconUrl: 'https://1000logos.net/wp-content/uploads/2021/03/Esso-logo-1536x1024.png',
   },
   {
     name: 'Q8',
