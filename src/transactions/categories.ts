@@ -108,4 +108,10 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     category: TransactionCategory.CARFUEL,
     iconUrl: 'https://www.servicestationmagazine.be/sites/default/files/styles/nieuws_teaserfoto/public/nieuws/gabriels1.jpg?itok=vMEXwCNM',
   },
+  {
+    name: 'Scheiwijk',
+    searchPattern: 'Scheiwijk',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://pbs.twimg.com/profile_images/2818949973/981c08dc0e89ebf35e651bca4763e190_400x400.png',
+  },
 ] as const
