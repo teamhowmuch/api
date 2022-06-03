@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Patch, Request, UseGuards } from '@nes
 
 import { UsersService } from './users.service'
 import { AuthenticatedRequest, JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { IsObject, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsObject, IsOptional, IsString } from 'class-validator'
 
 class PatchProfileDto {
   @IsOptional()
@@ -12,6 +12,10 @@ class PatchProfileDto {
   @IsOptional()
   @IsObject()
   onboarding_data?: { [key: string]: any }
+
+  @IsOptional()
+  @IsBoolean()
+  is_beta_tester?: boolean
 }
 
 @Controller('profile')
@@ -30,7 +34,7 @@ export class UserProfileController {
   @HttpCode(204)
   async patch(@Body() body: PatchProfileDto, @Request() req: AuthenticatedRequest) {
     const { user } = req
-    const { name, onboarding_data } = body
-    await this.userService.update(user.id, { name, onboarding_data })
+    const { name, onboarding_data, is_beta_tester } = body
+    await this.userService.update(user.id, { name, onboarding_data, is_beta_tester })
   }
 }

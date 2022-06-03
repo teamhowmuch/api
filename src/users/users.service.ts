@@ -39,7 +39,11 @@ export class UsersService {
 
   async update(
     userId: number,
-    { name, onboarding_data }: Partial<Pick<User, 'onboarding_data' | 'name'>>,
+    {
+      name,
+      onboarding_data,
+      is_beta_tester,
+    }: Partial<Pick<User, 'onboarding_data' | 'name' | 'is_beta_tester'>>,
   ) {
     const user = await this.userRepository.findOne({ where: { id: userId } })
 
@@ -53,6 +57,10 @@ export class UsersService {
 
     if (onboarding_data) {
       user.onboarding_data = onboarding_data
+    }
+
+    if (typeof is_beta_tester !== 'undefined') {
+      user.is_beta_tester = is_beta_tester
     }
 
     await this.userRepository.save(user)
