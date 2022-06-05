@@ -27,12 +27,12 @@ export class EmissionEventsController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':eventId')
-  async deleteOne(
+  async softDeleteOne(
     @Param('userId', ParseIntPipe) userId: number,
     @Param('id', ParseIntPipe) eventId: number,
     @Req() req: AuthenticatedRequest,
   ) {
     verifyAccess(req.user, userId)
-    return this.emissionEventsService.deleteOne(eventId)
+    return this.emissionEventsService.softDeleteOne(eventId)
   }
 }

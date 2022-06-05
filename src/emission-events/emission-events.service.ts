@@ -36,7 +36,7 @@ export class EmissionEventsService {
     return res
   }
 
-  async deleteOne(eventId: number): Promise<UpdateResult> {
+  async softDeleteOne(eventId: number): Promise<UpdateResult> {
     return await this.emissionEventRepo.softDelete(eventId)
   }
 }
