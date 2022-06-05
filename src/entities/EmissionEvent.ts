@@ -49,7 +49,7 @@ export class EmissionEvent {
   updated_at: Date
 
   @DeleteDateColumn()
-  deletedAt: Date
+  deleted_at?: Date
 
   // -----
   // Relations
