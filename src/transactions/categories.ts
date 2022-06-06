@@ -86,7 +86,7 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
   },
   {
     name: 'Esso Kalix Berna',
-    searchPattern: 'Vissers Oosterhout',
+    searchPattern: 'vissers oosterhout',
     category: TransactionCategory.CARFUEL,
     iconUrl: 'https://1000logos.net/wp-content/uploads/2021/03/Esso-logo-1536x1024.png',
   },
@@ -100,18 +100,21 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     name: 'Aral',
     searchPattern: 'aral',
     category: TransactionCategory.CARFUEL,
-    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Aral_Logo.svg/120px-Aral_Logo.svg.png',
+    iconUrl:
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Aral_Logo.svg/120px-Aral_Logo.svg.png',
   },
   {
     name: 'Gabriëls',
-    searchPattern: 'GABRIELS',
+    searchPattern: 'gabriels',
     category: TransactionCategory.CARFUEL,
-    iconUrl: 'https://www.servicestationmagazine.be/sites/default/files/styles/nieuws_teaserfoto/public/nieuws/gabriels1.jpg?itok=vMEXwCNM',
+    iconUrl:
+      'https://www.servicestationmagazine.be/sites/default/files/styles/nieuws_teaserfoto/public/nieuws/gabriels1.jpg?itok=vMEXwCNM',
   },
   {
     name: 'Scheiwijk',
-    searchPattern: 'Scheiwijk',
+    searchPattern: 'scheiwijk',
     category: TransactionCategory.CARFUEL,
-    iconUrl: 'https://pbs.twimg.com/profile_images/2818949973/981c08dc0e89ebf35e651bca4763e190_400x400.png',
+    iconUrl:
+      'https://pbs.twimg.com/profile_images/2818949973/981c08dc0e89ebf35e651bca4763e190_400x400.png',
   },
 ] as const
