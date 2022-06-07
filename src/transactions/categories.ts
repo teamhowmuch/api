@@ -17,7 +17,8 @@ export interface KnownMerchant {
   category: TransactionCategory
   iconUrl?: string
 }
-export const knownMerchants: Readonly<KnownMerchant[]> = [
+
+export const knownMerchants: KnownMerchant[] = [
   {
     name: 'Albert Heijn',
     searchPattern: 'albert heijn',
@@ -117,4 +118,10 @@ export const knownMerchants: Readonly<KnownMerchant[]> = [
     iconUrl:
       'https://pbs.twimg.com/profile_images/2818949973/981c08dc0e89ebf35e651bca4763e190_400x400.png',
   },
-] as const
+  {
+    name: 'Developer gas station',
+    searchPattern: 'alderaan coffe',
+    category: TransactionCategory.CARFUEL,
+    iconUrl: 'https://www.case.vlaanderen/pictures/cms/q8/q8-logo.jpg',
+  },
+]
