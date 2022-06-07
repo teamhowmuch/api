@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, ParseIntPipe, Put, Req, UseGuards } from '@nestjs/common'
+import { Controller, Delete, Get, Param, ParseIntPipe, Req, UseGuards } from '@nestjs/common'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { verifyAccess } from 'src/auth/verifyAccess'
 import { EmissionEventsService } from './emission-events.service'
@@ -18,7 +18,7 @@ export class EmissionEventsController {
   @Get(':eventId')
   async getOne(
     @Param('userId', ParseIntPipe) userId: number,
-    @Param('id', ParseIntPipe) eventId: number,
+    @Param('eventId', ParseIntPipe) eventId: number,
     @Req() req: AuthenticatedRequest,
   ) {
     verifyAccess(req.user, userId)
@@ -26,10 +26,10 @@ export class EmissionEventsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':eventId')
+  @Delete(':eventId')
   async softDeleteOne(
     @Param('userId', ParseIntPipe) userId: number,
-    @Param('id', ParseIntPipe) eventId: number,
+    @Param('eventId', ParseIntPipe) eventId: number,
     @Req() req: AuthenticatedRequest,
   ) {
     verifyAccess(req.user, userId)
