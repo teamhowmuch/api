@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common'
 import axios, { AxiosError } from 'axios'
-import { addMinutes, formatISO, isFuture } from 'date-fns'
+import { addSeconds, formatISO, isFuture } from 'date-fns'
 import { NordigenBank } from './models/bank'
 import { AccountDetails } from './models/AccountDetails'
 import { GetTransactionsResponse } from './models/getTransactionsResponse'
@@ -94,7 +94,7 @@ export class NordigenService {
 
     const response = await this.postRequest<AuthTokenData>(`token/new`, payload)
     this.token = response.data.access
-    this.tokenExpires = addMinutes(new Date(), response.data.access_expires - 10)
+    this.tokenExpires = addSeconds(new Date(), response.data.access_expires - 10)
     return response
   }
 
