@@ -42,8 +42,9 @@ export class UsersService {
     {
       name,
       onboarding_data,
+      journey_data,
       is_beta_tester,
-    }: Partial<Pick<User, 'onboarding_data' | 'name' | 'is_beta_tester'>>,
+    }: Partial<Pick<User, 'onboarding_data' | 'journey_data' | 'name' | 'is_beta_tester'>>,
   ) {
     const user = await this.userRepository.findOne({ where: { id: userId } })
 
@@ -56,7 +57,11 @@ export class UsersService {
     }
 
     if (onboarding_data) {
-      user.onboarding_data = onboarding_data
+      user.onboarding_data = { ...user.onboarding_data, ...onboarding_data }
+    }
+
+    if (journey_data) {
+      user.journey_data = { ...user.journey_data, ...journey_data }
     }
 
     if (typeof is_beta_tester !== 'undefined') {

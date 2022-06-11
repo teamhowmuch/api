@@ -167,7 +167,15 @@ export class BankConnectionsService {
       }
       bankConnection.account_details_data = accountsDetails
     }
-    this.bankConnectionRepo.save(bankConnection)
+    try {
+      this.bankConnectionRepo.save(bankConnection)
+    } catch (error) {
+      this.logger.error(`Error updating bank connection, ${bankConnection.id}`)
+      console.error(error)
+      this.logger.error(`bankConnection:`)
+      console.error(bankConnection)
+    }
+    this.logger.debug(`Done updating bankConnection ${bankConnection.id}`)
     return bankConnection
   }
 
@@ -178,7 +186,11 @@ export class BankConnectionsService {
     })
 
     for (const connection of allBankConnections) {
-      this.update(connection.id)
+      try {
+        await this.update(connection.id)
+      } catch (error) {
+        this.logger.error(`Error cron update bank connection, ${connection.id}`)
+      }
     }
   }
 

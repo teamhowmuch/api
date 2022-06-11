@@ -14,6 +14,10 @@ class PatchProfileDto {
   onboarding_data?: { [key: string]: any }
 
   @IsOptional()
+  @IsObject()
+  journey_data?: { [key: string]: any }
+
+  @IsOptional()
   @IsBoolean()
   is_beta_tester?: boolean
 }
@@ -34,7 +38,7 @@ export class UserProfileController {
   @HttpCode(204)
   async patch(@Body() body: PatchProfileDto, @Request() req: AuthenticatedRequest) {
     const { user } = req
-    const { name, onboarding_data, is_beta_tester } = body
-    await this.userService.update(user.id, { name, onboarding_data, is_beta_tester })
+    const { name, onboarding_data, journey_data, is_beta_tester } = body
+    await this.userService.update(user.id, { name, onboarding_data, journey_data, is_beta_tester })
   }
 }
