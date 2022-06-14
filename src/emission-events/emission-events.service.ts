@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmissionEvent, SourceType } from '../entities/EmissionEvent'
-import { FindOneOptions, Repository } from 'typeorm'
+import { FindOneOptions, Repository, UpdateResult } from 'typeorm'
 
 @Injectable()
 export class EmissionEventsService {
@@ -34,5 +34,9 @@ export class EmissionEventsService {
     entity.data = data
     const res = await this.emissionEventRepo.save(entity)
     return res
+  }
+
+  async softDeleteOne(eventId: number): Promise<UpdateResult> {
+    return await this.emissionEventRepo.softDelete(eventId)
   }
 }

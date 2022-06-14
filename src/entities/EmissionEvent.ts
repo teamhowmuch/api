@@ -6,6 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryGeneratedColumn,
+  DeleteDateColumn,
 } from 'typeorm'
 import { User } from './User'
 
@@ -46,6 +47,9 @@ export class EmissionEvent {
 
   @UpdateDateColumn()
   updated_at: Date
+
+  @DeleteDateColumn()
+  deleted_at?: Date
 
   // -----
   // Relations
