@@ -237,6 +237,8 @@ export class NordigenService {
       queryParams.date_to = formatISO(dateFilter.dateTo, { representation: 'date' })
     }
 
+    console.log('importing with datefilter', queryParams)
+
     const res = await this.getRequest<GetTransactionsResponse>(
       `accounts/premium/${accountId}/transactions`,
       queryParams,

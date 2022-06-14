@@ -138,7 +138,6 @@ export class TransactionsService {
   async queueImport(bankConnectionId: number, dateFilter?: DateFilter) {
     console.log('scheduling import')
     const bankImport = new BankImport()
-    bankImport.date_to = dateFilter?.dateTo || new Date()
     bankImport.date_from = dateFilter?.dateFrom || subYears(new Date(), 1)
     bankImport.user_bank_connection_id = bankConnectionId
     await this.importsRepo.save(bankImport)
@@ -173,14 +172,12 @@ export class TransactionsService {
         await this.queueImport(connection.id, {
           // first import, import 1 year of transactions
           dateFrom: subDays(new Date(), 365),
-          dateTo: new Date(),
         })
       } else if (differenceInHours(new Date(), lastImport.updated_at) > 1) {
         // only import last two days
         this.logger.log(`Queueing last-2-days import for bankConnection: ${connection.id}`)
         await this.queueImport(connection.id, {
-          dateFrom: subDays(new Date(), 2),
-          dateTo: new Date(),
+          dateFrom: subDays(new Date(), 6),
         })
       }
     }
