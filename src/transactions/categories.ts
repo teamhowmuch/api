@@ -119,6 +119,13 @@ export const knownMerchants: KnownMerchant[] = [
       'https://pbs.twimg.com/profile_images/2818949973/981c08dc0e89ebf35e651bca4763e190_400x400.png',
   },
   {
+    name: 'SuperTank',
+    searchPattern: 'supertank',
+    category: TransactionCategory.CARFUEL,
+    iconUrl:
+      'https://www.dierenambulancehoorn.nl/wp-content/uploads/2020/03/LOGO_SuperTank_4kant.png',
+  },
+  {
     name: 'Developer gas station',
     searchPattern: 'alderaan coffe',
     category: TransactionCategory.CARFUEL,
