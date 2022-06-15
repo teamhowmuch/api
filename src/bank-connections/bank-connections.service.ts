@@ -123,9 +123,13 @@ export class BankConnectionsService {
 
     const reference = randomUUID()
 
+    const accessValidForDays =
+      user.journey_data?.continuous_access === true ? DEFAULT_REQUISITION_VALIDITY : 1
+
     const agreement = await this.nordigenService.createAgreement({
       institutionId,
       maxHistoricalDays: Math.min(bank.transaction_total_days, 365),
+      accessValidForDays,
     })
 
     const requisition = await this.nordigenService.createRequisition({
