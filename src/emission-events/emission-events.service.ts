@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { EmissionEvent, SourceType } from '../entities/EmissionEvent'
 import { FindOneOptions, Repository, UpdateResult } from 'typeorm'
+import { SearchResults } from 'src/search/searchResults'
+import { SearchInput } from 'src/search/searchInput'
 
 @Injectable()
 export class EmissionEventsService {
@@ -11,6 +13,29 @@ export class EmissionEventsService {
 
   async find(userId: number) {
     return this.emissionEventRepo.find({ where: { user_id: userId }, order: { timestamp: 'DESC' } })
+  }
+
+  async list(searchInput: SearchInput, userId: number): Promise<SearchResults<EmissionEvent>> {
+    const { limit, offset, orderByDirection, orderByField } = searchInput
+    const builder = this.emissionEventRepo.createQueryBuilder('emission-events')
+    builder.where('user_id = :userId', { userId: `${userId}` })
+
+    if (orderByDirection && orderByField) {
+      builder.orderBy(`${orderByField}`, `${orderByDirection}`)
+    }
+    if (limit) {
+      builder.limit(limit)
+    }
+    if (offset) {
+      builder.offset(offset)
+    }
+
+    const count = await builder.getCount()
+    const data = await builder.getMany()
+    return {
+      count,
+      data,
+    } as SearchResults<EmissionEvent>
   }
 
   async findOne(options: FindOneOptions<EmissionEvent>): Promise<EmissionEvent> {

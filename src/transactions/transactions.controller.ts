@@ -10,29 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common'
 import { Type } from 'class-transformer'
-import { IsDate, IsEnum, IsInt, IsOptional } from 'class-validator'
+import { IsDate, IsOptional } from 'class-validator'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { RoleEnum } from 'src/entities/UserRole'
 import { TransactionsService } from './transactions.service'
+import { Transaction as TransactionEntity } from '../entities/Transaction'
 import { verifyAccess } from 'src/auth/verifyAccess'
-
-enum OrderDirection {
-  ASC = 'ASC',
-  DESC = 'DESC',
-}
-
-enum OrderByField {
-  id = 'id',
-  booking_date = 'booking_date',
-}
-
-class ListTransactionsDto {
-  @Type(() => Number) @IsInt() @IsOptional() limit: number
-  @Type(() => Number) @IsInt() @IsOptional() offset: number
-
-  @IsEnum(OrderByField) @IsOptional() order_by: string
-  @IsEnum(OrderDirection) @IsOptional() order_direction: OrderDirection
-}
+import { SearchInput } from 'src/search/searchInput'
+import { SearchResults } from 'src/search/searchResults'
 
 class TriggerImportDto {
   @Type(() => Date)
@@ -67,25 +52,17 @@ export class ImportController {
   async list(
     @Req() { user }: AuthenticatedRequest,
     @Param('userId', ParseIntPipe) userId: number,
-    @Query()
-    {
-      order_by = OrderByField.booking_date,
-      order_direction = OrderDirection.DESC,
-      offset = 0,
-      limit = 25,
-    }: ListTransactionsDto,
-  ) {
+    @Query() query: SearchInput,
+  ): Promise<SearchResults<TransactionEntity>> {
     verifyAccess(user, userId, [RoleEnum.ADMIN])
 
-    const [data, count] = await this.transactionsService.find({
-      where: { user_id: userId },
-      order: {
-        [order_by]: order_direction === 'ASC' ? 'ASC' : 'DESC',
-      },
-      take: limit,
-      skip: offset,
-    })
+    const searchInput: SearchInput = {
+      limit: query.limit,
+      offset: query.offset,
+      orderByDirection: query.orderByDirection,
+      orderByField: query.orderByField,
+    }
 
-    return { data, count }
+    return this.transactionsService.list(searchInput, userId)
   }
 }
