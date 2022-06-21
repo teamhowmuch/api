@@ -11,10 +11,6 @@ export class EmissionEventsService {
     @InjectRepository(EmissionEvent) private emissionEventRepo: Repository<EmissionEvent>,
   ) {}
 
-  async find(userId: number) {
-    return this.emissionEventRepo.find({ where: { user_id: userId }, order: { timestamp: 'DESC' } })
-  }
-
   async list(searchInput: SearchInput, userId: number): Promise<SearchResults<EmissionEvent>> {
     const { limit, offset, orderByDirection, orderByField } = searchInput
     const builder = this.emissionEventRepo.createQueryBuilder('emission-events')
