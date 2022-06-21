@@ -3,7 +3,7 @@ import { BankConnectionsService } from '../bank-connections/bank-connections.ser
 import { Transaction } from '../bank-connections/models/transaction'
 import { DateFilter, NordigenService } from '../bank-connections/nordigen.service'
 import { Transaction as TransactionEntity } from '../entities/Transaction'
-import { FindManyOptions, FindOneOptions, LessThan, Repository } from 'typeorm'
+import { FindOneOptions, LessThan, Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RequisitionStatus, UserBankConnection } from '../entities/UserBankConnection'
 import { TransactionProcessor } from './transactionProcessor.service'
@@ -13,6 +13,8 @@ import { Cron, CronExpression } from '@nestjs/schedule'
 import { AccountDetails } from 'src/bank-connections/models/AccountDetails'
 import { UsersService } from 'src/users/users.service'
 import { clean } from './clean'
+import { SearchResults } from 'src/search/searchResults'
+import { SearchInput } from 'src/search/searchInput'
 
 @Injectable()
 export class TransactionsService {
@@ -239,8 +241,27 @@ export class TransactionsService {
     }
   }
 
-  async find(options: FindManyOptions<TransactionEntity>) {
-    return this.transactionRepo.findAndCount(options)
+  async list(searchInput: SearchInput, userId: number): Promise<SearchResults<TransactionEntity>> {
+    const { limit, offset, orderByDirection, orderByField } = searchInput
+    const builder = this.transactionRepo.createQueryBuilder('transactions')
+    builder.where('user_id = :userId', { userId: `${userId}` })
+
+    if (orderByDirection && orderByField) {
+      builder.orderBy(`${orderByField}`, `${orderByDirection}`)
+    }
+    if (limit) {
+      builder.limit(limit)
+    }
+    if (offset) {
+      builder.offset(offset)
+    }
+
+    const count = await builder.getCount()
+    const data = await builder.getMany()
+    return {
+      count,
+      data,
+    } as SearchResults<TransactionEntity>
   }
 
   async updateTransaction(entity: TransactionEntity) {
