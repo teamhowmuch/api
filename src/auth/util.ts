@@ -1,5 +1,5 @@
 import { randomInt } from 'crypto'
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
 
 export async function generatePin(): Promise<{ pin: string; hashed: string }> {
   let length = 5

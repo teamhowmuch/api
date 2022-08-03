@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 import { UserOtp } from 'src/entities/UserOtp'
 import { generatePin } from './util'
-import { compare } from 'bcrypt'
+import { compare } from 'bcryptjs'
 import { notify } from 'node-notifier'
 import { MailService } from './mail.service'
 
