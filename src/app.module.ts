@@ -5,16 +5,8 @@ import { AppService } from './app.service'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
-import { BankConnectionsModule } from './bank-connections/bank-connections.module'
 import * as Entities from './entities'
-import { TransactionModule } from './transactions/transaction.module'
-import { ProductsModule } from './products/products.module'
-import { EmissionEventsModule } from './emission-events/emission-events.module'
-import { CarsModule } from './cars/cars.module'
-import { MerchantsModule } from './merchants/merchants.module'
 import { SentryModule } from './sentry/sentry.module'
-import { FlightsModule } from './flights/flights.module'
-import { AirportsModule } from './airports/airports.module'
 import * as Sentry from '@sentry/node'
 import config from './config/config'
 import { APP_GUARD } from '@nestjs/core'
@@ -45,15 +37,7 @@ import { RolesGuard } from './auth/roles.guard'
     }),
     UsersModule,
     AuthModule,
-    BankConnectionsModule,
-    TransactionModule,
-    ProductsModule,
-    EmissionEventsModule,
-    CarsModule,
-    MerchantsModule,
     SentryModule,
-    FlightsModule,
-    AirportsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],

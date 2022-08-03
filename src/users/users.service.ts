@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async create({ email }: Pick<User, 'email'>): Promise<User> {
-    const exists = await this.userRepository.findOne({ email })
+    const exists = await this.userRepository.findOne({ where: { email } })
     if (exists) {
       throw new ConflictException('User with that email exists')
     }

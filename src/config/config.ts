@@ -8,8 +8,4 @@ export default () => ({
     password: process.env.DB_PASSWORD,
     db: process.env.DB_DB,
   },
-  nordigen: {
-    id: process.env.NORDIGEN_ID,
-    secret: process.env.NORDIGEN_KEY,
-  },
 })

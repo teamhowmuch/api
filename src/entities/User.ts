@@ -1,8 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { BaseEntity } from './BaseEntity'
-import { Car } from './Car'
-import { EmissionEvent } from './EmissionEvent'
-import { UserBankConnection } from './UserBankConnection'
 import { UserRole } from './UserRole'
 
 export interface AnyObject {
@@ -21,10 +18,4 @@ export class User extends BaseEntity {
   @Column({ type: 'json', nullable: true }) journey_data: AnyObject
 
   @OneToMany(() => UserRole, (role) => role.user) roles: UserRole[]
-  @OneToMany(() => UserBankConnection, (bankConnection) => bankConnection.user)
-  bankConnections: UserBankConnection[]
-
-  @OneToMany(() => Car, (car) => car.user) cars: Car[]
-  @OneToMany(() => EmissionEvent, (emissionEvent) => emissionEvent.user)
-  emissionEvents: EmissionEvent[]
 }
