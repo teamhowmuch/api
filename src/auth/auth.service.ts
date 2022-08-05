@@ -9,7 +9,6 @@ import { generatePin } from './util'
 import { compare } from 'bcryptjs'
 import { notify } from 'node-notifier'
 import { MailService } from './mail.service'
-import { UserRole } from 'src/entities/UserRole'
 
 @Injectable()
 export class AuthService {

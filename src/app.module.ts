@@ -13,6 +13,14 @@ import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
 
+console.log(
+  process.env.DB_HOST,
+  process.env.DB_PORT,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  process.env.DB_DB,
+)
+
 @Module({
   imports: [
     ConfigModule.forRoot({ load: [config], isGlobal: true }),
