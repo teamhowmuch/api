@@ -5,7 +5,8 @@ export class AddUserRoles1651665648027 implements MigrationInterface {
     queryRunner.query(`
             CREATE TYPE public.user_role_enum AS ENUM (
                 'ADMIN',
-                'USER'
+                'USER',
+                'CHATBOT'
             );    
 
             CREATE TABLE user_role (

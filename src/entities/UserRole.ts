@@ -12,6 +12,7 @@ import { User } from './User'
 export enum RoleEnum {
   ADMIN = 'ADMIN',
   USER = 'USER',
+  CHATBOT = 'CHATBOT',
 }
 
 @Entity()
