@@ -13,7 +13,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
 
-console.log('HELLO')
+console.log('HELLO?')
 console.log('SSL ON!')
 console.log(process.env.DB_HOST)
 console.log(process.env.DB_PORT)
