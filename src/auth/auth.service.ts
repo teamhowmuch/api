@@ -9,6 +9,7 @@ import { generatePin } from './util'
 import { compare } from 'bcryptjs'
 import { notify } from 'node-notifier'
 import { MailService } from './mail.service'
+import { UserRole } from 'src/entities/UserRole'
 
 @Injectable()
 export class AuthService {
@@ -62,9 +63,17 @@ export class AuthService {
 
   async validateLoginRequest(emailRaw: string, userEnteredOtp: string): Promise<User> {
     const email = emailRaw.toLowerCase()
-    const user = await this.usersService.findOne({ where: { email } })
+    const user = await this.usersService.findOne({ where: { email }, relations: ['roles'] })
     if (!user) {
       return null
+    }
+
+    if (user.roles.some((role) => role.role === 'CHATBOT')) {
+      if (process.env.CHATBOT_PASSWORD && userEnteredOtp === process.env.CHATBOT_PASSWORD) {
+        return user
+      } else {
+        return null
+      }
     }
 
     const storedOtp = await this.userOtpRepository.findOne({ where: { user_id: user.id } })
