@@ -10,7 +10,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "./node_modules/.bin/nest build",
+    "build": "echo ${PWD} && ./node_modules/.bin/nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "yarn start:dev",
     "start:dev": "nest start --watch",
