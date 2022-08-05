@@ -11,7 +11,7 @@ import * as Sentry from '@sentry/node'
 import config from './config/config'
 import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
-import { ChatsModule } from './chats/chats.module';
+import { ChatsModule } from './chats/chats.module'
 
 @Module({
   imports: [
@@ -25,9 +25,9 @@ import { ChatsModule } from './chats/chats.module';
       database: process.env.DB_DB,
       entities: Entities.Collection,
       useUTC: true,
-      synchronize: false,
+      synchronize: true,
       migrationsTableName: 'migrations',
-      migrationsRun: true,
+      migrationsRun: false,
       migrations: ['dist/migration/**/*.js'],
       // logging: true,
     }),

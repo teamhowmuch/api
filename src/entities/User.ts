@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm'
 import { BaseEntity } from './BaseEntity'
+import { UserChat } from './UserChat'
 import { UserRole } from './UserRole'
 
 export interface AnyObject {
@@ -18,4 +19,5 @@ export class User extends BaseEntity {
   @Column({ type: 'json', nullable: true }) journey_data: AnyObject
 
   @OneToMany(() => UserRole, (role) => role.user) roles: UserRole[]
+  @OneToMany(() => UserChat, (role) => role.user) chats: UserChat[]
 }
