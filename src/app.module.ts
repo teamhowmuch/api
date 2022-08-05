@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
 
+console.log('HELLO')
 console.log(
   process.env.DB_HOST,
   process.env.DB_PORT,
@@ -33,6 +34,7 @@ console.log(
       database: process.env.DB_DB,
       entities: Entities.Collection,
       useUTC: true,
+      ssl: true,
       synchronize: true,
       migrationsTableName: 'migrations',
       migrationsRun: false,
