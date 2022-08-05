@@ -11,6 +11,7 @@ import * as Sentry from '@sentry/node'
 import config from './config/config'
 import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
+import { ChatsModule } from './chats/chats.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { RolesGuard } from './auth/roles.guard'
     UsersModule,
     AuthModule,
     SentryModule,
+    ChatsModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],
