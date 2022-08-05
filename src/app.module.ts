@@ -33,7 +33,7 @@ console.log(process.env.DB_DB)
       database: process.env.DB_DB,
       entities: Entities.Collection,
       useUTC: true,
-      ssl: true,
+      ssl: process.env.NODE_ENV === 'production' ? { ca: process.env.SSL_CERT } : false,
       synchronize: true,
       migrationsTableName: 'migrations',
       migrationsRun: false,
