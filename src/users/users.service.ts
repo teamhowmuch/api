@@ -34,6 +34,15 @@ export class UsersService {
 
     await this.rolesService.assign(res.id, RoleEnum.USER)
 
+    // TODO 20220808 Ugly hack alert and security risk
+    // Assign Daan and Bot roles
+    if (email === 'daanaerts@gmail.com' || email === 'daan@howmuch.how') {
+      await this.rolesService.assign(res.id, RoleEnum.ADMIN)
+    }
+    if (email === 'bot@howmuch.how') {
+      await this.rolesService.assign(res.id, RoleEnum.CHATBOT)
+    }
+
     return res
   }
 

@@ -13,7 +13,7 @@ export class User extends BaseEntity {
   @Column() email: string
   @Column({ nullable: true }) name: string
   @Column({ default: true }) active: boolean
-  @Column() is_beta_tester: boolean
+  @Column({ nullable: true }) is_beta_tester: boolean
 
   @Column({ type: 'json', nullable: true }) onboarding_data: AnyObject
   @Column({ type: 'json', nullable: true }) journey_data: AnyObject
