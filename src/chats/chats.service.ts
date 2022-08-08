@@ -15,6 +15,10 @@ export class ChatsService {
     return this.userChatRepo.save(newChat)
   }
 
+  async getById(id: string) {
+    return this.userChatRepo.find({ where: { id } })
+  }
+
   async list() {
     return this.userChatRepo.find()
   }

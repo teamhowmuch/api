@@ -4,7 +4,7 @@ import { User } from './User'
 
 @Entity()
 export class UserChat extends BaseEntity {
-  @PrimaryGeneratedColumn() id: number
+  @PrimaryGeneratedColumn('uuid') id: string
 
   @Column({ type: 'json' }) data: any
 

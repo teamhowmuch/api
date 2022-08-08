@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Request, UseGuards } from '@nestjs/common'
 import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
 import { Roles } from 'src/auth/roles.decorator'
 import { RolesGuard } from 'src/auth/roles.guard'
@@ -13,7 +13,12 @@ export class ChatsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(@Request() { user }: AuthenticatedRequest, @Body() body: AnyObject) {
-    this.chatsService.create(user.id, body)
+    return this.chatsService.create(user.id, body)
+  }
+
+  @Get(':id')
+  async getById(@Param('id') id: string) {
+    return this.chatsService.getById(id)
   }
 
   @Get()
