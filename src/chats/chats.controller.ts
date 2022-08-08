@@ -1,6 +1,9 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common'
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
+import { AuthenticatedRequest, JwtAuthGuard } from 'src/auth/jwt-auth.guard'
+import { Roles } from 'src/auth/roles.decorator'
+import { RolesGuard } from 'src/auth/roles.guard'
 import { AnyObject } from 'src/entities/User'
+import { RoleEnum } from 'src/entities/UserRole'
 import { ChatsService } from './chats.service'
 
 @Controller('chats')
@@ -9,8 +12,14 @@ export class ChatsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() body: AnyObject) {
-    console.log('RECEIVED REQUEST WITH DATA', body)
-    this.chatsService.create(body)
+  async create(@Request() { user }: AuthenticatedRequest, @Body() body: AnyObject) {
+    this.chatsService.create(user.id, body)
+  }
+
+  @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(RoleEnum.ADMIN)
+  async list() {
+    this.chatsService.list()
   }
 }

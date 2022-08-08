@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { User } from 'src/entities/User'
 import { UserChat } from 'src/entities/UserChat'
 import { Repository } from 'typeorm'
 
@@ -7,7 +8,14 @@ import { Repository } from 'typeorm'
 export class ChatsService {
   constructor(@InjectRepository(UserChat) private userChatRepo: Repository<UserChat>) {}
 
-  async create(data: any) {
-    console.log('should now create stuff', data)
+  async create(userId: User['id'], data: any) {
+    const newChat = new UserChat()
+    newChat.user_id = userId
+    newChat.data = data
+    return this.userChatRepo.save(newChat)
+  }
+
+  async list() {
+    return this.userChatRepo.find()
   }
 }
