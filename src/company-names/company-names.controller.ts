@@ -1,7 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { execute, makePromise } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
-import gql from 'graphql-tag'
+import { GraphQLClient, gql } from 'graphql-request'
 
 interface Company {
   displayNameCompany: string
@@ -52,49 +50,26 @@ const healthQuery = gql`
 
 @Controller('company-names')
 export class CompanyNamesController {
+  private client = new GraphQLClient(process.env.HYGRAPH_ENDPOINT, {
+    headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
+  })
+
   @Get('/banks')
   async getBankNames() {
-    const uri = process.env.HYGRAPH_ENDPOINT
-    const link = createHttpLink({
-      uri,
-      headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
-    })
-    const { data } = await makePromise(
-      execute(link, {
-        query: banksQuery,
-      }),
-    )
-    return data.companies.map((c: Company) => c.displayNameCompany)
+    const res = await this.client.request(banksQuery)
+    return res.companies.map((c: Company) => c.displayNameCompany)
   }
 
   @Get('/health')
   async getHealthNames() {
-    const uri = process.env.HYGRAPH_ENDPOINT
-    const link = createHttpLink({
-      uri,
-      headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
-    })
-    const { data } = await makePromise(
-      execute(link, {
-        query: healthQuery,
-      }),
-    )
-    return data.companies.map((c: Company) => c.displayNameCompany)
+    const res = await this.client.request(healthQuery)
+    return res.companies.map((c: Company) => c.displayNameCompany)
   }
 
   @Get('/travel')
   async getTravelNames() {
-    const uri = process.env.HYGRAPH_ENDPOINT
-    const link = createHttpLink({
-      uri,
-      headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
-    })
-    const { data } = await makePromise(
-      execute(link, {
-        query: travelQuery,
-      }),
-    )
-    return data.companies.map((c: Company) => c.displayNameCompany)
+    const res = await this.client.request(travelQuery)
+    return res.companies.map((c: Company) => c.displayNameCompany)
   }
 
   //   @Get('/health')
