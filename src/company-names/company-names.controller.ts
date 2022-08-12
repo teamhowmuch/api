@@ -9,7 +9,7 @@ interface Company {
 
 const banksQuery = gql`
   query BanksQuery {
-    companies(where: { sellsBankaccount: true }) {
+    companies(where: { sellsBankaccount: true }, first: 100) {
       displayNameCompany
     }
   }
@@ -17,14 +17,14 @@ const banksQuery = gql`
 
 const travelQuery = gql`
   query TravelQuery {
-    companies(where: { sellsTravelInsurance: true }) {
+    companies(where: { sellsTravelInsurance: true }, first: 100) {
       displayNameCompany
     }
   }
 `
 const healthQuery = gql`
   query HealthQuery {
-    companies(where: { sellsHealthInsurance: true }) {
+    companies(where: { sellsHealthInsurance: true }, first: 100) {
       displayNameCompany
     }
   }
