@@ -12,6 +12,7 @@ import config from './config/config'
 import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
+import { CompanyNamesModule } from './company-names/company-names.module'
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { ChatsModule } from './chats/chats.module'
     AuthModule,
     SentryModule,
     ChatsModule,
+    CompanyNamesModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],
