@@ -57,7 +57,6 @@ export class CompanyNamesController {
     const uri = process.env.HYGRAPH_ENDPOINT
     const link = createHttpLink({
       uri,
-      fetch,
       headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
     })
     const { data } = await makePromise(
@@ -73,7 +72,6 @@ export class CompanyNamesController {
     const uri = process.env.HYGRAPH_ENDPOINT
     const link = createHttpLink({
       uri,
-      fetch,
       headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
     })
     const { data } = await makePromise(
@@ -89,7 +87,6 @@ export class CompanyNamesController {
     const uri = process.env.HYGRAPH_ENDPOINT
     const link = createHttpLink({
       uri,
-      fetch,
       headers: { Authorization: `Bearer ${process.env.HYGRAPH_TOKEN as string}` },
     })
     const { data } = await makePromise(
