@@ -8,10 +8,10 @@ import { LocalStrategy } from './local.strategy'
 import { JwtStrategy } from './jwt.strategy'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserOtp } from 'src/entities/UserOtp'
-import { MailService } from './mail.service'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { UserRole } from 'src/entities/UserRole'
 import { User } from 'src/entities/User'
+import { EmailModule } from 'src/email/email.module'
 
 @Module({
   imports: [
@@ -29,8 +29,9 @@ import { User } from 'src/entities/User'
       },
       inject: [ConfigService],
     }),
+    EmailModule,
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, MailService],
+  providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

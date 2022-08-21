@@ -1,18 +1,34 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { User } from 'src/entities/User'
+import { EmailService } from 'src/email/email.service'
 import { UserChat } from 'src/entities/UserChat'
+import { UsersService } from 'src/users/users.service'
 import { Repository } from 'typeorm'
+import { CreateChatDto } from './ChatDto'
 
 @Injectable()
 export class ChatsService {
-  constructor(@InjectRepository(UserChat) private userChatRepo: Repository<UserChat>) {}
+  private readonly logger = new Logger(ChatsService.name)
 
-  async create(userId: User['id'], data: any) {
+  constructor(
+    @InjectRepository(UserChat) private userChatRepo: Repository<UserChat>,
+    private userService: UsersService,
+    private emailService: EmailService,
+  ) {}
+
+  async create(data: CreateChatDto) {
+    const user = await this.userService.createOrFind({ email: data.email })
     const newChat = new UserChat()
-    newChat.user_id = userId
+    newChat.user_id = user.id
     newChat.data = data
-    return this.userChatRepo.save(newChat)
+    await this.userChatRepo.save(newChat)
+
+    try {
+      await this.emailService.sendEmail(data.email, 'chatResults', { chat_uuid: newChat.id })
+    } catch (error) {
+      this.logger.error(`Caught error while sending email to ${data.email}`)
+    }
+    return newChat
   }
 
   async getById(id: string) {

@@ -8,7 +8,7 @@ import { UserOtp } from 'src/entities/UserOtp'
 import { generatePin } from './util'
 import { compare } from 'bcryptjs'
 import { notify } from 'node-notifier'
-import { MailService } from './mail.service'
+import { EmailService } from '../email/email.service'
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
     @InjectRepository(UserOtp)
     private userOtpRepository: Repository<UserOtp>,
-    private mailService: MailService,
+    private emailService: EmailService,
   ) {}
 
   private async createNewOtp(user: User): Promise<{ otp: string }> {
@@ -43,7 +43,7 @@ export class AuthService {
       return
     }
 
-    this.mailService.sendOtp(email, otp)
+    this.emailService.sendOtp(email, otp)
   }
 
   async requestOtp(emailRaw: string): Promise<{ otp: string }> {

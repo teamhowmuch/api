@@ -22,14 +22,22 @@ export class UsersService {
     return res
   }
 
-  async create({ email }: Pick<User, 'email'>): Promise<User> {
+  async createOrFind({ email }: Pick<User, 'email'>): Promise<User> {
+    const found = await this.findOne({ where: { email } })
+    return found || this.create({ email })
+  }
+
+  async create({ email, name }: Pick<User, 'email'> & Partial<User>): Promise<User> {
     const exists = await this.userRepository.findOne({ where: { email } })
+
     if (exists) {
       throw new ConflictException('User with that email exists')
     }
 
     const user = new User()
     user.email = email
+    user.name = name
+
     const res = await this.userRepository.save(user)
 
     await this.rolesService.assign(res.id, RoleEnum.USER)
