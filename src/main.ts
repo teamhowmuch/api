@@ -7,7 +7,12 @@ const PORT = process.env.PORT || 3010
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  const allowedOrigins = ['34.77.31.159', '23.251.142.192']
+  const allowedOrigins = [
+    '34.77.31.159',
+    '23.251.142.192',
+    'https://bot-pages.vercel.app/',
+    'bot-pages.vercel.app/',
+  ]
   if (process.env.NODE_ENV === 'development') {
     allowedOrigins.push('localhost')
   }
