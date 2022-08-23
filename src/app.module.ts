@@ -13,7 +13,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
 import { CompanyNamesModule } from './company-names/company-names.module'
-import { EmailModule } from './email/email.module';
+import { EmailModule } from './email/email.module'
 
 @Module({
   imports: [
