@@ -16,7 +16,7 @@ export const COMPANY_TYPES = ['travel_insurance', 'health_insurance', 'banks'] a
 export type CompanyType = typeof COMPANY_TYPES[number]
 
 export interface CreateChatDto {
-  email: string
+  email?: string
   name?: string
 
   bot_version: string

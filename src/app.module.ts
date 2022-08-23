@@ -14,6 +14,7 @@ import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
 import { CompanyNamesModule } from './company-names/company-names.module'
 import { EmailModule } from './email/email.module'
+import { TrackingModule } from './tracking/tracking.module'
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { EmailModule } from './email/email.module'
     ChatsModule,
     CompanyNamesModule,
     EmailModule,
+    TrackingModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: RolesGuard }],

@@ -17,7 +17,10 @@ export class ChatsService {
   ) {}
 
   async create(data: CreateChatDto) {
-    const user = await this.userService.createOrFind({ email: data.email })
+    let user
+    if (data.email) {
+      user = await this.userService.createOrFind({ email: data.email })
+    }
     const newChat = new UserChat()
     newChat.user_id = user.id
     newChat.data = data
