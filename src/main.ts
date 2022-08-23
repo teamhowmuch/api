@@ -25,6 +25,7 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: allowedOrigins,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   })
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.use(cookieParser('geefaanwat'))
