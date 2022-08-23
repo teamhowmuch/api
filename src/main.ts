@@ -12,6 +12,7 @@ async function bootstrap() {
     '23.251.142.192',
     'https://bot-pages.vercel.app/',
     'bot-pages.vercel.app/',
+    /\.vercel\.app$/,
     'http://localhost:3000',
   ]
 
