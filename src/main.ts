@@ -14,6 +14,9 @@ async function bootstrap() {
   if (process.env.ALLOW_ORIGIN) {
     allowedOrigins.push('bot-pages.vercel.app')
   }
+
+  console.log('allow origins', allowedOrigins)
+
   app.enableCors({
     credentials: true,
     origin: allowedOrigins,
