@@ -12,7 +12,9 @@ async function bootstrap() {
     '23.251.142.192',
     'https://bot-pages.vercel.app/',
     'bot-pages.vercel.app/',
+    'http://localhost:3000',
   ]
+
   if (process.env.NODE_ENV === 'development') {
     allowedOrigins.push('localhost')
   }
@@ -25,8 +27,8 @@ async function bootstrap() {
   app.enableCors({
     credentials: true,
     origin: allowedOrigins,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   })
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.use(cookieParser('geefaanwat'))
 
