@@ -20,6 +20,8 @@ export class ChatsService {
     let user
     if (data.email) {
       user = await this.userService.createOrFind({ email: data.email })
+    } else {
+      user = await this.userService.create({ email: `anonymous-${data.chat_id}@howmuch.how` })
     }
     const newChat = new UserChat()
     newChat.user_id = user.id

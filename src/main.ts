@@ -7,28 +7,8 @@ const PORT = process.env.PORT || 3010
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  const allowedOrigins = [
-    '34.77.31.159',
-    '23.251.142.192',
-    'https://bot-pages.vercel.app/',
-    'bot-pages.vercel.app/',
-    /\.vercel\.app$/,
-    'http://localhost:3000',
-  ]
 
-  if (process.env.NODE_ENV === 'development') {
-    allowedOrigins.push('localhost')
-  }
-  if (process.env.ALLOW_ORIGIN) {
-    allowedOrigins.push('bot-pages.vercel.app')
-  }
-
-  console.log('allow origins', allowedOrigins)
-
-  app.enableCors({
-    credentials: true,
-    origin: allowedOrigins,
-  })
+  app.enableCors()
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
   app.use(cookieParser('geefaanwat'))
