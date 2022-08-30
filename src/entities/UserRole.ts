@@ -1,12 +1,5 @@
-import {
-  Entity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryColumn,
-  ManyToOne,
-  JoinColumn,
-  Column,
-} from 'typeorm'
+import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm'
+import { BaseEntity } from './BaseEntity'
 import { User } from './User'
 
 export enum RoleEnum {
@@ -16,20 +9,12 @@ export enum RoleEnum {
 }
 
 @Entity()
-export class UserRole {
-  @PrimaryColumn({ type: 'enum', enum: RoleEnum })
-  role: RoleEnum
+export class UserRole extends BaseEntity {
+  @PrimaryColumn({ type: 'enum', enum: RoleEnum }) role: RoleEnum
 
   @ManyToOne(() => User, (user) => user.roles)
   @JoinColumn({ name: 'user_id' })
   user: User
 
-  @Column()
-  user_id: number
-
-  @CreateDateColumn()
-  created_at: Date
-
-  @UpdateDateColumn()
-  updated_at: Date
+  @PrimaryColumn() user_id: number
 }

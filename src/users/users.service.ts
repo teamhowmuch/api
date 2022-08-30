@@ -24,12 +24,15 @@ export class UsersService {
 
   async createOrFind({ email }: Pick<User, 'email'>): Promise<User> {
     const found = await this.findOne({ where: { email } })
-    return found || this.create({ email })
+    if (found) {
+      return found
+    } else {
+      return this.create({ email })
+    }
   }
 
   async create({ email, name }: Pick<User, 'email'> & Partial<User>): Promise<User> {
     const exists = await this.userRepository.findOne({ where: { email } })
-
     if (exists) {
       throw new ConflictException('User with that email exists')
     }
@@ -39,7 +42,6 @@ export class UsersService {
     user.name = name
 
     const res = await this.userRepository.save(user)
-
     await this.rolesService.assign(res.id, RoleEnum.USER)
 
     // TODO 20220808 Ugly hack alert and security risk
@@ -50,7 +52,6 @@ export class UsersService {
     if (email === 'bot@howmuch.how') {
       await this.rolesService.assign(res.id, RoleEnum.CHATBOT)
     }
-
     return res
   }
 
