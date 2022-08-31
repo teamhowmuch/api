@@ -5,6 +5,7 @@ import { UserChat } from 'src/entities/UserChat'
 import { UsersService } from 'src/users/users.service'
 import { Repository } from 'typeorm'
 import { CreateChatDto } from './ChatDto'
+import { randomBytes } from 'crypto'
 
 @Injectable()
 export class ChatsService {
@@ -18,10 +19,13 @@ export class ChatsService {
 
   async create(data: CreateChatDto) {
     let user
+    console.log('creating chat for email:', data.email)
     if (data.email) {
       user = await this.userService.createOrFind({ email: data.email })
     } else {
-      user = await this.userService.create({ email: `anonymous-${data.chat_id}@howmuch.how` })
+      user = await this.userService.create({
+        email: `anonymous-${randomBytes(8).toString('hex')}@howmuch.how`,
+      })
     }
     const newChat = new UserChat()
     newChat.user_id = user.id
