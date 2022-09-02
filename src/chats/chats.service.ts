@@ -32,10 +32,12 @@ export class ChatsService {
     newChat.data = data
     await this.userChatRepo.save(newChat)
 
-    try {
-      await this.emailService.sendEmail(data.email, 'chatResults', { chat_uuid: newChat.id })
-    } catch (error) {
-      this.logger.error(`Caught error while sending email to ${data.email}`)
+    if (data.email) {
+      try {
+        await this.emailService.sendEmail(data.email, 'chatResults', { chat_uuid: newChat.id })
+      } catch (error) {
+        this.logger.error(`Caught error while sending email to ${data.email}`)
+      }
     }
     return newChat
   }
