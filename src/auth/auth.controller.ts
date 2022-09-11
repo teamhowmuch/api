@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
-import { IsEmail } from 'class-validator'
+import { IsEmail, IsString } from 'class-validator'
 import { AuthService } from './auth.service'
 import { AuthenticatedRequest } from './jwt-auth.guard'
 
@@ -13,7 +13,7 @@ export class LoginDto {
   @IsEmail()
   email: string
 
-  @IsEmail()
+  @IsString()
   otp: string
 }
 
