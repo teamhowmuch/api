@@ -7,7 +7,7 @@ import { HttpModule } from '@nestjs/axios'
 @Module({
   imports: [HttpModule],
   providers: [EmailService, McService],
-  exports: [EmailService],
+  exports: [EmailService, McService],
   controllers: [EmailController],
 })
 export class EmailModule {}

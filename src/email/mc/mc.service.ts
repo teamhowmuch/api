@@ -15,7 +15,7 @@ export class McService {
   }
 
   async updateContactTags(email: string, tags?: string[]) {
-    if (tags.length > 0) {
+    if (tags && tags.length > 0) {
       const emailHash = createHash('md5').update(email.toLowerCase()).digest('hex')
       const tagsObj = tags.map((tag) => ({
         name: tag,
@@ -25,15 +25,15 @@ export class McService {
       try {
         await mailchimp.lists.updateListMemberTags(LIST_ID, emailHash, tagsObj)
         console.log('updated', email, 'tags')
-        return true
+        return
       } catch (error) {
         console.error('error updating tags')
         console.error(error)
         throw error
       }
     } else {
-      console.log('subscriber', email, 'already exists')
-      return true
+      console.log('no tags to add')
+      return
     }
   }
 
@@ -41,7 +41,7 @@ export class McService {
     try {
       await mailchimp.lists.addListMember(LIST_ID, {
         email_address: email,
-        tags: [...tags],
+        tags: tags ? [...tags] : [],
         status: 'subscribed',
       })
       console.log('Successfully signed up', email)
