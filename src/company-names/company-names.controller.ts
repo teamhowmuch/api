@@ -20,6 +20,15 @@ const travelQuery = gql`
     }
   }
 `
+
+const carQuery = gql`
+  query CarQuery {
+    companies(where: { sellsCarInsurance: true }, first: 100) {
+      displayNameCompany
+    }
+  }
+`
+
 const healthQuery = gql`
   query HealthQuery {
     companies(where: { sellsHealthInsurance: true }, first: 100) {
@@ -63,6 +72,12 @@ export class CompanyNamesController {
   @Get('/health')
   async getHealthNames() {
     const res = await this.client.request(healthQuery)
+    return res.companies.map((c: Company) => c.displayNameCompany)
+  }
+
+  @Get('/car')
+  async getCarInsuranceNames() {
+    const res = await this.client.request(carQuery)
     return res.companies.map((c: Company) => c.displayNameCompany)
   }
 
