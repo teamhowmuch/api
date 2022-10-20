@@ -39,6 +39,17 @@ export class ChatsService {
         this.logger.error(`Caught error while sending email to ${data.email}`)
       }
     }
+
+    user.equality_score = data.values.gender_equality
+    user.fair_pay_score = data.values.fair_pay
+    user.climate_score = data.values.climate
+    user.anti_weapons_score = data.values.gender_equality
+    user.animal_score = data.values.animal_welfare
+    user.nature_score = data.values.biodiversity
+    user.anti_tax_avoidance_score = data.values.tax_evasion_sucks
+
+    await this.userService.update(user.id, user)
+
     return newChat
   }
 

@@ -31,6 +31,6 @@ export class AuthController {
   async requestOTP(@Body() body: ReqOtpDto) {
     const { email } = body
     await this.authService.requestOtp(email)
-    return
+    return { result: 'ok' }
   }
 }

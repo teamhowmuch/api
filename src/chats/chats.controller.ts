@@ -17,7 +17,6 @@ export class ChatsController {
   async create(@Body() body: CreateChatDto) {
     const res = await this.chatsService.create(body)
     if (res.data && res.data.email) {
-      console.log('adding contact?', res.data.email)
       await this.mcService.signupContact(res.data.email)
     }
     return res

@@ -15,7 +15,7 @@ export class EmailService {
 
   async sendOtp(email: string, otp: string) {
     const mail: sg.MailDataRequired = {
-      from: 'hello@howmuch.how',
+      from: 'hello@grobot.nl',
       to: email,
       templateId: EMAIL_TEMPLATES.otp,
       dynamicTemplateData: { otp },
@@ -24,6 +24,23 @@ export class EmailService {
       await sg.send(mail)
     } catch (error) {
       this.logger.error('Error sending Sendgrid email')
+      this.logger.error(error.response?.body)
+      throw error
+    }
+    return
+  }
+
+  async sendChangeEmailOtp(email: string, otp: string) {
+    const mail: sg.MailDataRequired = {
+      from: 'hello@grobot.nl',
+      to: email,
+      templateId: EMAIL_TEMPLATES.changeEmail,
+      dynamicTemplateData: { otp },
+    }
+    try {
+      await sg.send(mail)
+    } catch (error) {
+      this.logger.log('Error sending Sendgrid email')
       this.logger.error(error.response?.body)
       throw error
     }
