@@ -14,8 +14,8 @@ import { RolesGuard } from './auth/roles.guard'
 import { ChatsModule } from './chats/chats.module'
 import { CompanyNamesModule } from './company-names/company-names.module'
 import { EmailModule } from './email/email.module'
-import { CompaniesModule } from './companies/companies.module';
-import { GqlModule } from './gql/gql.module';
+import { CompaniesModule } from './companies/companies.module'
+import { GqlModule } from './gql/gql.module'
 
 @Module({
   imports: [

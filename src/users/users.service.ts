@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -15,7 +14,7 @@ import { notify } from 'node-notifier'
 import { EmailService } from 'src/email/email.service'
 import { compare } from 'bcryptjs'
 
-import { differenceInMinutes, differenceInSeconds } from 'date-fns'
+import { differenceInMinutes } from 'date-fns'
 
 @Injectable()
 export class UsersService {

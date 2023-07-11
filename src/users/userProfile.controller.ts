@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, Patch, Post, Request, UseGuards } from
 
 import { UsersService } from './users.service'
 import { AuthenticatedRequest, JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { IsBoolean, IsEmail, IsObject, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsEmail, IsNumber, IsObject, IsOptional, IsString } from 'class-validator'
 
 class PatchProfileDto {
   @IsOptional()
@@ -24,6 +24,10 @@ class PatchProfileDto {
   @IsOptional()
   @IsBoolean()
   is_beta_tester?: boolean
+
+  @IsOptional()
+  @IsNumber()
+  climate_score: number
 }
 
 class VerifyEmailDto {
@@ -39,7 +43,10 @@ export class UserProfileController {
   @Get('')
   get(@Request() req: AuthenticatedRequest) {
     const { user } = req
-    return this.userService.findOne({ where: { id: user.id }, loadRelationIds: true })
+    return this.userService.findOne({
+      where: { id: user.id },
+      loadRelationIds: true,
+    })
   }
 
   @UseGuards(JwtAuthGuard)
@@ -47,14 +54,7 @@ export class UserProfileController {
   @HttpCode(204)
   async patch(@Body() body: PatchProfileDto, @Request() req: AuthenticatedRequest) {
     const { user } = req
-    const { name, email_change_request, onboarding_data, journey_data, is_beta_tester } = body
-    await this.userService.update(user.id, {
-      name,
-      email_change_request,
-      onboarding_data,
-      journey_data,
-      is_beta_tester,
-    })
+    await this.userService.update(user.id, body)
   }
 
   @UseGuards(JwtAuthGuard)
